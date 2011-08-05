@@ -1,0 +1,89 @@
+<html>
+<head>
+    <script type="text/javascript" src="../src/date.field.js"></script>
+    <script type="text/javascript" src="../src/date.field.year.js"></script>
+    <script type="text/javascript" src="../src/date.field.month.js"></script>
+
+    <script type="text/javascript" src="./test.js"></script>
+    <script type="text/javascript" src="./test.date.field.year.js"></script>
+    <script type="text/javascript" src="./test.date.field.month.js"></script>
+
+    <style type="text/css">
+        li.success {
+            background: green;
+        }
+
+        li.failure {
+            color: red;
+        }
+
+        li.failure ul li.success {
+            display: none;
+        }
+
+        li.success ul {
+            display: none;
+        }
+    </style>
+</head>
+<body onload="run();">
+<ul id="root"></ul>
+<script type="text/javascript">
+    function $(id) {
+        return document.getElementById(id);
+    }
+
+    function run() {
+        runSuite("Date.Field.Year.Test", Date.Field.Year.Test);
+        runSuite("Date.Field.Month.Test", Date.Field.Month.Test);
+
+        append("root", "Finished");
+    }
+
+    function runSuite(name, test) {
+        var success = true;
+
+        append("root", name + " <span id='" + name+ "_result'></span><ul id='" + name + "'></ul>");
+
+        $(name + "_result").innerHTML = "Running...";
+
+        var cs, cf;
+
+        cs = cf = 0;
+
+        for (var i in test) {
+            var f = test[i];
+
+            if (typeof (f) === "function") {
+                try {
+                    f.call(this);
+
+                    append(name, "Success " + i).setAttribute("class", "success");
+
+                    cs++;
+                } catch (e) {
+                    append(name, "Failure " + i + ": " + e).setAttribute("class", "failure");
+
+                    success = false;
+
+                    cf++;
+                }
+            }
+        }
+
+        $(name + "_result").innerHTML = success ? "(" + cs + ") Success" : "(" + cf + ") Failure. (" + cs + ") Success.";
+        $(name).parentNode.setAttribute("class", success ? "success" : "failure");
+    }
+
+    function append(id, html) {
+        var elem = document.createElement("li");
+
+        $(id).appendChild(elem);
+
+        elem.innerHTML = html;
+
+        return elem;
+    }
+</script>
+</body>
+</html>
