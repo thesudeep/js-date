@@ -1,3 +1,0 @@
-Months = function() {
-
-}
