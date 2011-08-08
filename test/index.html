@@ -3,10 +3,12 @@
     <script type="text/javascript" src="../src/date.field.js"></script>
     <script type="text/javascript" src="../src/date.field.year.js"></script>
     <script type="text/javascript" src="../src/date.field.month.js"></script>
+    <script type="text/javascript" src="../src/date.field.date.js"></script>
 
     <script type="text/javascript" src="./test.js"></script>
     <script type="text/javascript" src="./test.date.field.year.js"></script>
     <script type="text/javascript" src="./test.date.field.month.js"></script>
+    <script type="text/javascript" src="./test.date.field.date.js"></script>
 
     <style type="text/css">
         li.success {
@@ -36,6 +38,7 @@
     function run() {
         runSuite("Date.Field.Year.Test", Date.Field.Year.Test);
         runSuite("Date.Field.Month.Test", Date.Field.Month.Test);
+        runSuite("Date.Field.Date.Test", Date.Field.Date.Test);
 
         append("root", "Finished");
     }

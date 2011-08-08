@@ -12,6 +12,31 @@ Date.Field.Month.Test.testCreation_Empty = function() {
     assertEquals(new Date().getUTCMonth() + 1, month.value());
 };
 
+Date.Field.Month.Test.testDuration_Leap_Feb_by_constuctor = function() {
+    var month = new Date.Field.Month(2, 2000);
+
+    assertEquals(29 * Date.Field.MILLS_PER_DAY, month.duration());
+};
+
+Date.Field.Month.Test.testDuration_Norm_Feb_by_constuctor = function() {
+    var month = new Date.Field.Month(2, 2001);
+
+    assertEquals(28 * Date.Field.MILLS_PER_DAY, month.duration());
+};
+
+Date.Field.Month.Test.testSetValue_Leap_Feb_by_value = function() {
+    var month = new Date.Field.Month().value(2, 2000);
+
+    assertEquals(29 * Date.Field.MILLS_PER_DAY, month.duration());
+};
+
+Date.Field.Month.Test.testSetValue_Norm_Feb_by_value = function() {
+    var month = new Date.Field.Month().value(2, 2001);
+
+    assertEquals(28 * Date.Field.MILLS_PER_DAY, month.duration());
+};
+
+
 Date.Field.Month.Test.testSetValue = function() {
     var month = new Date.Field.Month().value(1);
 
@@ -24,28 +49,22 @@ Date.Field.Month.Test.testGetMills_Epoch = function() {
     assertEquals(0, month.mills());
 };
 
-Date.Field.Month.Test.testGetMills_Mills_946684800000 = function() {
+Date.Field.Month.Test.testGetMills_Mills_January = function() {
     var month = new Date.Field.Month().mills(946684800001);
 
-    assertEquals(946684800000, month.mills());
+    assertEquals(0, month.mills());
 };
 
-Date.Field.Month.Test.testGetMills_Mills_1304208000000 = function() {
+Date.Field.Month.Test.testGetMills_Mills_May = function() {
     var month = new Date.Field.Month().mills(1304208000123);
 
-    assertEquals(1304208000000, month.mills());
+    assertEquals(10368000000, month.mills());
 };
 
 Date.Field.Month.Test.testGetMills_March = function() {
     var month = new Date.Field.Month().value(Date.Field.Month.MARCH);
 
-    var date = new Date();
-
-    date.setUTCMonth(2);
-    date.setUTCDate(1);
-    date.setUTCHours(0, 0, 0, 0);
-
-    assertEquals(date.getTime(), month.mills());
+    assertEquals(5097600000, month.mills());
 };
 
 Date.Field.Month.Test.testSetMills_plus1_March_Start = function() {

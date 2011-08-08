@@ -1,19 +1,27 @@
-Date.Field.Month = function(month) {
-    var MILLS_BY_NORMAL_MONTHS = [0, 2678400000,5097600000,7776000000,10368000000,13046400000,15638400000,18316800000,20995200000,23587200000,26265600000,28857600000];
-    var MILLS_BY_LEAP_MONTHS = [0, 2678400000,5184000000,7862400000,10454400000,13132800000,15724800000,18403200000,21081600000,23673600000,26352000000,28944000000];
+Date.Field.Month = function(month, year) {
+    var MILLS_BY_NORMAL_MONTHS = [0, 2678400000, 5097600000, 7776000000, 10368000000, 13046400000, 15638400000, 18316800000, 20995200000, 23587200000, 26265600000, 28857600000, 31536000000];
+    var MILLS_BY_LEAP_MONTHS =   [0, 2678400000, 5184000000, 7862400000, 10454400000, 13132800000, 15724800000, 18403200000, 21081600000, 23673600000, 26352000000, 28944000000, 31622400000];
 
     var self = this;
 
-    this._year = new Date.Field.Year();
+    this.duration = function() {
+        return self._year.isLeap() ?
+                MILLS_BY_LEAP_MONTHS[self._val + 1] - MILLS_BY_LEAP_MONTHS[self._val] :
+                MILLS_BY_NORMAL_MONTHS[self._val + 1] - MILLS_BY_NORMAL_MONTHS[self._val];
+    };
 
-    this.mills = function(value) {
+    this.mills = function(value, year) {
         if (arguments.length === 0) {
-            return self._year.mills() + (self._year.isLeap() ? MILLS_BY_LEAP_MONTHS[self._val] : MILLS_BY_NORMAL_MONTHS[self._val]);
+            return (self._year.isLeap() ? MILLS_BY_LEAP_MONTHS[self._val] : MILLS_BY_NORMAL_MONTHS[self._val]);
         }
 
         value = Date.Field.validateInt(value);
 
-        self._year.mills(value);
+        if (arguments.length === 1) {
+            self._year.mills(value);
+        } else {
+            self._year.value(year);
+        }
 
         // Copied from JodaTime.
 
@@ -44,9 +52,13 @@ Date.Field.Month = function(month) {
         return self;
     };
 
-    this.value = function(month) {
+    this.value = function(month, year) {
         if (arguments.length === 0) {
             return self._val + 1;
+        }
+
+        if (arguments.length === 2) {
+            self._year.value(year);
         }
 
         self._val = Date.Field.Month.validate(month) - 1;
@@ -54,10 +66,19 @@ Date.Field.Month = function(month) {
         return self;
     };
 
-    if (arguments.length === 0) {
-        this.mills(new Date().getTime());
-    } else {
-        this.value(month);
+    switch (arguments.length) {
+        case 0:
+            this._year = new Date.Field.Year();
+            this.mills(new Date().getTime(), this._year.value());
+            break;
+        case 1:
+            this._year = new Date.Field.Year();
+            this.value(month, this._year.value());
+            break;
+        case 2:
+            this._year = new Date.Field.Year(year);
+            this.value(month, this._year.value());
+            break;
     }
 };
 
