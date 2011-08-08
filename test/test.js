@@ -21,3 +21,17 @@ function assertFail(fn) {
         fail("Expected exception missing");
     }
 }
+
+function assertWithTime(mills, fn) {
+    var copyFn = Date.prototype.getTime;
+
+    try {
+        Date.prototype.getTime = function() {
+            return mills;
+        }
+
+        fn.call(this);
+    } finally {
+        Date.prototype.getTime = copyFn;
+    }
+}

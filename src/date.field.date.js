@@ -75,7 +75,7 @@ Date.Field.Date.validate = function(date, month, year) {
     date = Date.Field.validateInt(date);
 
     Date.Field.assertTrue(date >= Date.Field.Date.MIN_DATE && date <= max,
-            "Month is expected to be in range [" + Date.Field.Date.MIN_DATE + ".." + max + "] but was: " + date);
+            "Date is expected to be in range [" + Date.Field.Date.MIN_DATE + ".." + max + "] but was: " + date);
 
     return date;
 };

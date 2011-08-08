@@ -7,9 +7,11 @@ Date.Field.Year.Test.testCreation = function() {
 };
 
 Date.Field.Year.Test.testCreation_Empty = function() {
-    var year = new Date.Field.Year();
+    assertWithTime(946684800012, function () {
+        var year = new Date.Field.Year();
 
-    assertEquals(new Date().getUTCFullYear(), year.value());
+        assertEquals(2000, year.value());
+    });
 };
 
 Date.Field.Year.Test.testSetValue = function() {
