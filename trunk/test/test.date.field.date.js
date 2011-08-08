@@ -7,9 +7,11 @@ Date.Field.Date.Test.testCreation = function() {
 };
 
 Date.Field.Date.Test.testCreation_Empty = function() {
-    var date = new Date.Field.Date();
+    assertWithTime(10 * Date.Field.MILLS_PER_DAY + 1231, function () {
+        var date = new Date.Field.Date();
 
-    assertEquals(new Date().getUTCDate(), date.value());
+        assertEquals(11, date.value());
+    });
 };
 
 Date.Field.Date.Test.testSetValue = function() {

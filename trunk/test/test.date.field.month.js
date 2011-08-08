@@ -7,9 +7,11 @@ Date.Field.Month.Test.testCreation = function() {
 };
 
 Date.Field.Month.Test.testCreation_Empty = function() {
-    var month = new Date.Field.Month();
+    assertWithTime(1304208000123, function () {
+        var month = new Date.Field.Month();
 
-    assertEquals(new Date().getUTCMonth() + 1, month.value());
+        assertEquals(Date.Field.Month.MAY, month.value());
+    });
 };
 
 Date.Field.Month.Test.testDuration_Leap_Feb_by_constuctor = function() {
