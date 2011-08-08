@@ -39,7 +39,7 @@ Date.Field.Minute.Test.testGetMills_Mills_2m = function() {
 };
 
 Date.Field.Minute.Test.testSetMills_2m_Start = function() {
-    var minute = new Date.Field.Minute().mills(Date.Field.MILLS_PER_MINUTE * 2 + 1221);
+    var minute = new Date.Field.Minute().mills(Date.Field.MILLS_PER_MINUTE * 2);
 
     assertEquals(2, minute.value());
 };
