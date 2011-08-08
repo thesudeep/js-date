@@ -11,15 +11,22 @@
  * it easily.
  */
 Calendar = function() {
-    var SECOND = 1000;
-    var MINUTE = 60 * SECOND;
-    var HOUR = 60 * MINUTE;
-    var DATE = 24 * HOUR;
+    var instant = new Date().getTime();
 
-    var attributes = initAttrs();
-    var functions = initFuncs();
+    var data = {
+        year: new Date.Field.Year().mills(instant),
+        month: new Date.Field.Month().mills(instant),
+        date: new Date.Field.Date().mills(instant),
+        hour: new Date.Field.Hour().mills(instant),
+        minute: new Date.Field.Minute().mills(instant),
+        second: new Date.Field.Second().mills(instant),
+        mills: new Date.Field.Millisecond().mills(instant)
+    };
 
-    var data = {year: 0, month: 0, date: 0, hour: 0, minute: 0, second: 0, mills: 0};
+    data.month._year = data.year;
+    data.date._month = data.month;
+
+
     var normalize = {
         year: _normalizeYear,
         month: _normalizeMonth,
@@ -37,7 +44,7 @@ Calendar = function() {
         },
         mills: _normalizeMills
     };
-    var _self = this;
+    var self = this;
     var _sm = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
     var _lm = [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 
@@ -47,13 +54,13 @@ Calendar = function() {
         } else if (arguments.length == 1) {
             return attributes[field];
         } else {
-            value = functions[field].converter.call(_self, value);
+            value = functions[field].converter.call(self, value);
 
             attributes[field] = value;
 
-            functions[field].normalizer.call(_self, value);
+            functions[field].normalizer.call(self, value);
 
-            return _self;
+            return self;
         }
     }
 
@@ -143,23 +150,6 @@ Calendar = function() {
         };
     }
 
-    function _get(name, args) {
-        if (args.length == 0) {
-            return data[name];
-        } else {
-            var value = parseInt(args[0]);
-
-            if (isNaN(value)) {
-                throw new Error("Invalid calendar input for (" + name + ") field: " + args[0]);
-            }
-
-            data[name] = value;
-            normalize[name].call(_self, 0);
-
-            return _self;
-        }
-    }
-
     function month(delta) {
         var d = delta == 1 ? 0 : -1;
 
@@ -171,7 +161,7 @@ Calendar = function() {
     }
 
     function _day() {
-        return quotRem(Math.floor(_self.time() / DATE), 7).rem;
+        return quotRem(Math.floor(self.time() / DATE), 7).rem;
     }
 
     function _normalizeYear(i) {
@@ -227,6 +217,16 @@ Calendar = function() {
         _normalizeDate(tmp.quot);
     }
 
+    function _get(name, args, fn) {
+        if (args.length == 0) {
+            return data[name].value();
+        } else {
+            fn.call(this, value);
+
+            return self;
+        }
+    }
+
     /* -- Interface -- */
     this.field = function(field, value) {
         if (args.length == 0) {
@@ -239,38 +239,92 @@ Calendar = function() {
             }
 
             data[name] = value;
-            normalize[name].call(_self, 0);
+            normalize[name].call(self, 0);
 
-            return _self;
+            return self;
         }
-    }
+    };
 
     this.year = function (year) {
-        return _get("year", arguments);
+        return _get("year", arguments, function(value) {
+            instant -= data.year.mills();
+            data.year.value(value);
+            instant += data.year.mills();
+        });
     };
 
     this.month = function (month) {
-        return _get("month", arguments);
+        return _get("month", arguments, function(value) {
+            var years = Date.Util.quotRem(value, Date.Field.Month.MAX_MONTH);
+
+            if (years.quot !== 0) {
+                self.year(data.year.value() + years.quot);
+            }
+
+            instant -= data.month.mills();
+            data.month.value(years.rem, data.year.value());
+            instant += data.month.mills();
+        });
     };
 
     this.date = function (date) {
-        return _get("date", arguments);
+        return _get("date", arguments, function(value) {
+            instant += value * Date.Field.MILLS_PER_DAY - data.date.mills();
+
+            data.year.mills(instant);
+            data.month.mills(instant);
+            data.date.mills(instant);
+        });
     };
 
     this.hour = function (hour) {
-        return _get("hour", arguments);
+        return _get("hour", arguments, function(value) {
+            instant += value * Date.Field.MILLS_PER_HOUR - data.hour.mills();
+
+            data.year.mills(instant);
+            data.month.mills(instant);
+            data.date.mills(instant);
+            data.hour.mills(instant);
+        });
     };
 
     this.minute = function (minute) {
-        return _get("minute", arguments);
+        return _get("minute", arguments, function(value) {
+            instant += value * Date.Field.MILLS_PER_MINUTE - data.minute.mills();
+
+            data.year.mills(instant);
+            data.month.mills(instant);
+            data.date.mills(instant);
+            data.hour.mills(instant);
+            data.minute.mills(instant);
+        });
     };
 
     this.second = function (second) {
-        return _get("second", arguments);
+        return _get("second", arguments, function(value) {
+            instant += value * Date.Field.MILLS_PER_SECOND - data.second.mills();
+
+            data.year.mills(instant);
+            data.month.mills(instant);
+            data.date.mills(instant);
+            data.hour.mills(instant);
+            data.minute.mills(instant);
+            data.second.mills(instant);
+        });
     };
 
     this.mills = function (mills) {
-        return _get("mills", arguments);
+        return _get("mills", arguments, function(value) {
+            instant += value - data.mills.mills();
+
+            data.year.mills(instant);
+            data.month.mills(instant);
+            data.date.mills(instant);
+            data.hour.mills(instant);
+            data.minute.mills(instant);
+            data.second.mills(instant);
+            data.mills.mills(instant);
+        });
     };
 
     this.day = function (day) {
@@ -285,46 +339,29 @@ Calendar = function() {
 
             _normalizeDate(_day() - day);
 
-            return _self;
+            return self;
         }
     };
 
-    this.time = function (time) {
-        function years() {
-            return (data.year - 1970) * 365 + data.year / 4 + data.year / 400 - data.year / 100 - 477 - (isLeap() ? -1 : 0); //492 + 4 - 19 == 477
-        }
-
-        function months() {
-            var s = 0;
-            var m = isLeap() ? _lm : _sm;
-
-            for (var i = 0; i < data.month; i++) {
-                s += m[i];
-            }
-
-            return s;
-        }
-
+    this.time = function (value) {
         if (arguments.length == 0) {
-            return (years() + months() + data.date) * DATE + data.hour * HOUR + data.minute * MINUTE + data.second * SECOND + data.mills;
+            return instant;
         } else {
-            var value = parseInt(time);
+            value = Date.Util.validateInt(value);
 
-            if (isNaN(value)) {
-                throw new Error("Invalid calendar input for (time) field: " + time);
-            }
-
-            data = {year: 1970, month: 0, date: 0, hour: 0, minute: 0, second: 0, mills: 0};
-
-            _normalizeMills(value);
+            data.year.mills(value);
+            data.month.mills(value);
+            data.date.mills(value);
+            data.hour.mills(value);
+            data.minute.mills(value);
+            data.second.mills(value);
+            data.mills.mills(value);
         }
     };
 
     this.toString = function() {
-
-    }
-
-    this.time(new Date().getTime());
+        return "{" + instant + ": " + data.year.value() + "-" + data.month.value() + "-" + data.date.value() + "-" + data.hour.value() + "-" + data.minute.value() + "-" + data.second.value() + "-" + data.mills.value() + "}"
+    };
 };
 
 /**

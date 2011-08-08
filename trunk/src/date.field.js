@@ -70,25 +70,3 @@ Date.Field.MINUTES_PER_WEEK = Date.Field.MINUTES_PER_DAY * Date.Field.DAYS_PER_W
 Date.Field.SECONDS_PER_WEEK = Date.Field.SECONDS_PER_DAY * Date.Field.DAYS_PER_WEEK;
 /** Milliseconds in a typical week (ISO). Due to time zone offset changes, the number of milliseconds per week can vary. */
 Date.Field.MILLS_PER_WEEK = Date.Field.MILLS_PER_DAY * Date.Field.DAYS_PER_WEEK;
-
-Date.Field.quotRem = function(divisor, divider) {
-    var rem = (divider + (divisor % divider)) % divider;
-
-    return {
-        quot: Math.floor((divisor - rem) / divider),
-        rem: rem
-    };
-}
-
-Date.Field.assertTrue = function(condition, message) {
-    if (!condition) {
-        throw new Error(message);
-    }
-};
-Date.Field.validateInt = function(value) {
-    var i = parseInt(value, 10);
-
-    Date.Field.assertTrue(!isNaN(i) && String(value).match(/^-?\d+$/), "Expected integer but was: " + value);
-
-    return i;
-};
