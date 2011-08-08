@@ -33,7 +33,7 @@ Date.Field.Hour.Test.testGetMills_Mills_10h = function() {
 };
 
 Date.Field.Hour.Test.testGetMills_Mills_2h = function() {
-    var hour = new Date.Field.Hour().mills(Date.Field.MILLS_PER_HOUR * 2 + 1221);
+    var hour = new Date.Field.Hour().mills(Date.Field.MILLS_PER_HOUR * 2);
 
     assertEquals(2 * Date.Field.MILLS_PER_HOUR, hour.mills());
 };
