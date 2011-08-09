@@ -6,7 +6,7 @@ Date.Field.Date = function(date, month, year) {
             return self._val * Date.Field.MILLS_PER_DAY;
         }
 
-        value = Date.Field.validateInt(value);
+        value = Date.Util.validateInt(value);
 
         if (arguments === 3) {
             self._month.value(month, year);
@@ -72,9 +72,9 @@ Date.Field.Date.validate = function(date, month, year) {
             break;
     }
 
-    date = Date.Field.validateInt(date);
+    date = Date.Util.validateInt(date);
 
-    Date.Field.assertTrue(date >= Date.Field.Date.MIN_DATE && date <= max,
+    Date.Util.assertTrue(date >= Date.Field.Date.MIN_DATE && date <= max,
             "Date is expected to be in range [" + Date.Field.Date.MIN_DATE + ".." + max + "] but was: " + date);
 
     return date;

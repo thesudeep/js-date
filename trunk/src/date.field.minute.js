@@ -6,9 +6,9 @@ Date.Field.Minute = function(minute) {
             return self._val * Date.Field.MILLS_PER_MINUTE;
         }
 
-        value = Date.Field.validateInt(value);
+        value = Date.Util.validateInt(value);
 
-        self._val = Date.Field.quotRem(Date.Field.quotRem(value, Date.Field.MILLS_PER_HOUR).rem, Date.Field.MILLS_PER_MINUTE).quot;
+        self._val = Date.Util.quotRem(Date.Util.quotRem(value, Date.Field.MILLS_PER_HOUR).rem, Date.Field.MILLS_PER_MINUTE).quot;
 
         return self;
     };
@@ -34,9 +34,9 @@ Date.Field.Minute.MIN_MINUTE = 0;
 Date.Field.Minute.MAX_MINUTE = Date.Field.MINUTES_PER_HOUR - 1;
 
 Date.Field.Minute.validate = function(minute) {
-    minute = Date.Field.validateInt(minute);
+    minute = Date.Util.validateInt(minute);
 
-    Date.Field.assertTrue(minute >= Date.Field.Minute.MIN_MINUTE && minute <= Date.Field.Minute.MAX_MINUTE,
+    Date.Util.assertTrue(minute >= Date.Field.Minute.MIN_MINUTE && minute <= Date.Field.Minute.MAX_MINUTE,
             "Minutes are expected to be in range [" + Date.Field.Minute.MIN_MINUTE + ".." + Date.Field.Minute.MAX_MINUTE + "] but was: " + minute);
 
     return minute;

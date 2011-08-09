@@ -6,9 +6,9 @@ Date.Field.Millisecond = function(millisecond) {
             return self._val;
         }
 
-        value = Date.Field.validateInt(value);
+        value = Date.Util.validateInt(value);
 
-        self._val = Date.Field.quotRem(value, Date.Field.MILLS_PER_SECOND).rem;
+        self._val = Date.Util.quotRem(value, Date.Field.MILLS_PER_SECOND).rem;
 
         return self;
     };
@@ -34,9 +34,9 @@ Date.Field.Millisecond.MIN_MILLS = 0;
 Date.Field.Millisecond.MAX_MILLS = Date.Field.MILLS_PER_SECOND - 1;
 
 Date.Field.Millisecond.validate = function(millisecond) {
-    millisecond = Date.Field.validateInt(millisecond);
+    millisecond = Date.Util.validateInt(millisecond);
 
-    Date.Field.assertTrue(millisecond >= Date.Field.Millisecond.MIN_MILLS && millisecond <= Date.Field.Millisecond.MAX_MILLS,
+    Date.Util.assertTrue(millisecond >= Date.Field.Millisecond.MIN_MILLS && millisecond <= Date.Field.Millisecond.MAX_MILLS,
             "Seconds are expected to be in range [" + Date.Field.Millisecond.MIN_MILLS + ".." + Date.Field.Millisecond.MAX_MILLS + "] but was: " + millisecond);
 
     return millisecond;
