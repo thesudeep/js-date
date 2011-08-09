@@ -15,7 +15,7 @@ Date.Field.Month = function(month, year) {
             return (self._year.isLeap() ? MILLS_BY_LEAP_MONTHS[self._val] : MILLS_BY_NORMAL_MONTHS[self._val]);
         }
 
-        value = Date.Field.validateInt(value);
+        value = Date.Util.validateInt(value);
 
         if (arguments.length === 1) {
             self._year.mills(value);
@@ -111,9 +111,9 @@ Date.Field.Month.MIN_MONTH = Date.Field.Month.JANUARY;
 Date.Field.Month.MAX_MONTH = Date.Field.Month.DECEMBER;
 
 Date.Field.Month.validate = function(month) {
-    month = Date.Field.validateInt(month);
+    month = Date.Util.validateInt(month);
 
-    Date.Field.assertTrue(month >= Date.Field.Month.MIN_MONTH && month <= Date.Field.Month.MAX_MONTH,
+    Date.Util.assertTrue(month >= Date.Field.Month.MIN_MONTH && month <= Date.Field.Month.MAX_MONTH,
             "Month is expected to be in range [" + Date.Field.Month.MIN_MONTH + ".." + Date.Field.Month.MAX_MONTH + "] but was: " + month);
 
     return month;

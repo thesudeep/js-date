@@ -27,7 +27,7 @@ Date.Field.Year = function(year) {
             return yearMills(self._val);
         }
 
-        value = Date.Field.validateInt(value);
+        value = Date.Util.validateInt(value);
 
         var halfYearMills = Date.Field.Year.MILLS_PER_YEAR / 2;
         var halfValue = value / 2 + MILLS_0000_TO_1970 / 2;
@@ -78,11 +78,11 @@ Date.Field.Year.MILLS_PER_NORMAL_YEAR = 365 * Date.Field.MILLS_PER_DAY;
 Date.Field.Year.MILLS_PER_LEAP_YEAR = Date.Field.Year.MILLS_PER_NORMAL_YEAR + Date.Field.MILLS_PER_DAY;
 
 Date.Field.Year.validate = function(year) {
-    year = Date.Field.validateInt(year);
+    year = Date.Util.validateInt(year);
 
-    Date.Field.assertTrue(year != 0, "Year 0 does not exist. Please note that according to implemented calendar 1 BC is followed by 1 AD, neither 0 AD nor 0 BC.");
+    Date.Util.assertTrue(year != 0, "Year 0 does not exist. Please note that according to implemented calendar 1 BC is followed by 1 AD, neither 0 AD nor 0 BC.");
 
-    Date.Field.assertTrue(year >= Date.Field.Year.MIN_YEAR && year <= Date.Field.Year.MAX_YEAR,
+    Date.Util.assertTrue(year >= Date.Field.Year.MIN_YEAR && year <= Date.Field.Year.MAX_YEAR,
             "Year is expected to be in range [" + Date.Field.Year.MIN_YEAR + ".." + Date.Field.Year.MAX_YEAR + "] but was: " + year);
 
     return year;

@@ -1,3 +1,5 @@
+Date.Util = {};
+
 Date.Util.quotRem = function(divisor, divider) {
     var rem = (divider + (divisor % divider)) % divider;
 
@@ -16,7 +18,7 @@ Date.Util.assertTrue = function(condition, message) {
 Date.Util.validateInt = function(value) {
     var i = parseInt(value, 10);
 
-    Date.Field.assertTrue(!isNaN(i) && String(value).match(/^-?\d+$/), "Expected integer but was: " + value);
+    Date.Util.assertTrue(!isNaN(i) && String(value).match(/^-?\d+$/), "Expected integer but was: " + value);
 
     return i;
 };
