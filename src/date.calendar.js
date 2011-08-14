@@ -24,6 +24,8 @@ Date.Calendar = function(time, timeZone) {
         data.minute.mills(withOffset);
         data.second.mills(withOffset);
         data.mills.mills(withOffset);
+
+        data.weekOfYear.mills(withOffset - data.year.mills());
     }
 
     function _get(name, args, fn) {
@@ -43,6 +45,8 @@ Date.Calendar = function(time, timeZone) {
     var data = {
         year: new Date.Field.Year(),
         month: new Date.Field.Month(),
+        weekOfYear: new Date.Field.Week(),
+        weekOfMonth: new Date.Field.WeekOfMonth(),
         date: new Date.Field.Date(),
         day: new Date.Field.Day(),
         hour: new Date.Field.Hour(),
@@ -79,6 +83,30 @@ Date.Calendar = function(time, timeZone) {
             instant -= data.month.mills();
             data.month.value(years.rem + 1, data.year.value());
             instant += data.month.mills();
+        });
+    };
+
+    this.weekOfYear = function (week) {
+        return _get("weekOfYear", arguments, function(value) {
+            value = Date.Field.Week.validate(value);
+
+            instant -= data.weekOfYear.mills();
+            data.weekOfYear.value(value);
+            instant += data.weekOfYear.mills();
+
+            adjust();
+        });
+    };
+
+    this.weekOfMonth = function (week) {
+        return _get("weekOfYear", arguments, function(value) {
+            value = Date.Field.WeekOfMonth.validate(value);
+
+            instant -= data.weekOfMonth.mills();
+            data.weekOfMonth.value(value);
+            instant += data.weekOfMonth.mills();
+
+            adjust();
         });
     };
 
@@ -138,6 +166,20 @@ Date.Calendar = function(time, timeZone) {
 
             adjust();
         });
+    };
+
+    this.timeZone = function (tz) {
+        if (!Date.Util.exists(tz)) {
+            return timeZone;
+        }
+
+        Date.Util.assertTrue(timeZone instanceof Date.TimeZone, "TimeZone should be an instance of Date.TimeZone class");
+
+        timeZone = tz;
+
+        adjust();
+
+        return self;
     };
 
     this.time = function (value) {
