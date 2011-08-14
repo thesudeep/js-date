@@ -1,4 +1,6 @@
 Date.TimeZone = function (id, name, rules) {
+    var self = this;
+
     this.id = id;
     this.name = name;
 
@@ -103,8 +105,15 @@ Date.TimeZone = function (id, name, rules) {
             return rule.offset + dstOffset;
         }
 
-        return 0;
+        throw new Error("Cannot find appropriate rule for the time zone " + self.id);
     };
 };
 
-Date.TimeZone.RuleSet = {};
+Date.TimeZone.RuleSet = {
+    UTC: [{
+        offset: 0,
+        weekStart: Date.Field.Day.MONDAY
+    }]
+};
+
+Date.TimeZone.UTC = new Date.TimeZone("UTC", "Coordinated Universal Time", Date.TimeZone.RuleSet.UTC);

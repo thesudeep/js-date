@@ -10,22 +10,21 @@
  * <p>The class also provides additional fields and methods (sugar) to operating
  * it easily.
  */
-Date.Calendar = function(time) {
-    var self = this;
-    var instant = arguments.length === 0? new Date().getTime() : Date.Util.validateInt(time);
+Date.Calendar = function(time, timeZone) {
+    timeZone = Date.Util.exists(timeZone, Date.TimeZone.UTC);
 
-    var data = {
-        year: new Date.Field.Year().mills(instant),
-        month: new Date.Field.Month().mills(instant),
-        date: new Date.Field.Date().mills(instant),
-        hour: new Date.Field.Hour().mills(instant),
-        minute: new Date.Field.Minute().mills(instant),
-        second: new Date.Field.Second().mills(instant),
-        mills: new Date.Field.Millisecond().mills(instant)
-    };
+    function adjust() {
+        withOffset = instant + timeZone.offset(instant);
 
-    data.month._year = data.year;
-    data.date._month = data.month;
+        data.year.mills(withOffset);
+        data.month.mills(withOffset);
+        data.date.mills(withOffset);
+        data.day.mills(withOffset);
+        data.hour.mills(withOffset);
+        data.minute.mills(withOffset);
+        data.second.mills(withOffset);
+        data.mills.mills(withOffset);
+    }
 
     function _get(name, args, fn) {
         if (args.length == 0) {
@@ -36,6 +35,26 @@ Date.Calendar = function(time) {
             return self;
         }
     }
+
+    var self = this;
+
+    var withOffset, instant = arguments.length === 0 ? new Date().getTime() : Date.Util.validateInt(time);
+
+    var data = {
+        year: new Date.Field.Year(),
+        month: new Date.Field.Month(),
+        date: new Date.Field.Date(),
+        day: new Date.Field.Day(),
+        hour: new Date.Field.Hour(),
+        minute: new Date.Field.Minute(),
+        second: new Date.Field.Second(),
+        mills: new Date.Field.Millisecond()
+    };
+
+    data.month._year = data.year;
+    data.date._month = data.month;
+
+    adjust();
 
     /* -- Interface -- */
 
@@ -73,9 +92,19 @@ Date.Calendar = function(time) {
 
             instant += value * Date.Field.MILLS_PER_DAY - data.date.mills();
 
-            data.year.mills(instant);
-            data.month.mills(instant);
-            data.date.mills(instant);
+            adjust();
+        });
+    };
+
+    this.day = function (day) {
+        return _get("day", arguments, function(value) {
+            value = Date.Field.Day.validate(value);
+
+            instant -= data.day.mills();
+            data.day.value(value);
+            instant += data.day.mills();
+
+            adjust();
         });
     };
 
@@ -83,10 +112,7 @@ Date.Calendar = function(time) {
         return _get("hour", arguments, function(value) {
             instant += value * Date.Field.MILLS_PER_HOUR - data.hour.mills();
 
-            data.year.mills(instant);
-            data.month.mills(instant);
-            data.date.mills(instant);
-            data.hour.mills(instant);
+            adjust();
         });
     };
 
@@ -94,11 +120,7 @@ Date.Calendar = function(time) {
         return _get("minute", arguments, function(value) {
             instant += value * Date.Field.MILLS_PER_MINUTE - data.minute.mills();
 
-            data.year.mills(instant);
-            data.month.mills(instant);
-            data.date.mills(instant);
-            data.hour.mills(instant);
-            data.minute.mills(instant);
+            adjust();
         });
     };
 
@@ -106,12 +128,7 @@ Date.Calendar = function(time) {
         return _get("second", arguments, function(value) {
             instant += value * Date.Field.MILLS_PER_SECOND - data.second.mills();
 
-            data.year.mills(instant);
-            data.month.mills(instant);
-            data.date.mills(instant);
-            data.hour.mills(instant);
-            data.minute.mills(instant);
-            data.second.mills(instant);
+            adjust();
         });
     };
 
@@ -119,30 +136,8 @@ Date.Calendar = function(time) {
         return _get("mills", arguments, function(value) {
             instant += value - data.mills.mills();
 
-            data.year.mills(instant);
-            data.month.mills(instant);
-            data.date.mills(instant);
-            data.hour.mills(instant);
-            data.minute.mills(instant);
-            data.second.mills(instant);
-            data.mills.mills(instant);
+            adjust();
         });
-    };
-
-    this.day = function (day) {
-        if (arguments.length == 0) {
-            return _day();
-        } else {
-            var value = parseInt(arguments[0]);
-
-            if (isNaN(value)) {
-                throw new Error("Invalid calendar input for (day) field: " + arguments[0]);
-            }
-
-            _normalizeDate(_day() - day);
-
-            return self;
-        }
     };
 
     this.time = function (value) {
