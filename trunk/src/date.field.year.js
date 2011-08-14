@@ -77,6 +77,9 @@ Date.Field.Year.MILLS_PER_YEAR = 365.2425 * Date.Field.MILLS_PER_DAY;;
 Date.Field.Year.MILLS_PER_NORMAL_YEAR = 365 * Date.Field.MILLS_PER_DAY;
 Date.Field.Year.MILLS_PER_LEAP_YEAR = Date.Field.Year.MILLS_PER_NORMAL_YEAR + Date.Field.MILLS_PER_DAY;
 
+Date.Field.Year.DAYS_0000_TO_1970 = 719527;
+Date.Field.Year.MILLS_0000_TO_1970 = Date.Field.Year.DAYS_0000_TO_1970 * Date.Field.MILLS_PER_DAY;
+
 Date.Field.Year.validate = function(year) {
     year = Date.Util.validateInt(year);
 
