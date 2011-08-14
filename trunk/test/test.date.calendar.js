@@ -1,14 +1,14 @@
 Date.Calendar.Test = {};
 
 Date.Calendar.Test.testCreation = function() {
-    var calendar = new Date.Calendar(33 * Date.Field.MILLS_PER_DAY + 1231);
+    var calendar = new Date.Calendar(time(1970, 2, 3, 4, 5, 6, 231));
 
     assertEquals(1970, calendar.year());
     assertEquals(2, calendar.month());
     assertEquals(3, calendar.date());
-    assertEquals(0, calendar.hour());
-    assertEquals(0, calendar.minute());
-    assertEquals(1, calendar.second());
+    assertEquals(4, calendar.hour());
+    assertEquals(5, calendar.minute());
+    assertEquals(6, calendar.second());
     assertEquals(231, calendar.mills());
 };
 
@@ -84,6 +84,30 @@ Date.Calendar.Test.testDate_Zero = function() {
     assertFail(function() {
         new Date.Calendar(0).date(0);
     });
+};
+
+Date.Calendar.Test.testDay_Positive = function() {
+    var calendar = new Date.Calendar(time(2011, 1, 1, 0, 0, 0, 0)).day(Date.Field.Day.SUNDAY);
+
+    assertEquals(2011, calendar.year());
+    assertEquals(Date.Field.Month.JANUARY, calendar.month());
+    assertEquals(2, calendar.date());
+};
+
+Date.Calendar.Test.testDay_Zero = function() {
+    var calendar = new Date.Calendar(time(2011, 1, 1, 0, 0, 0, 0)).day(Date.Field.Day.SATURDAY);
+
+    assertEquals(2011, calendar.year());
+    assertEquals(Date.Field.Month.JANUARY, calendar.month());
+    assertEquals(1, calendar.date());
+};
+
+Date.Calendar.Test.testDay_Negative = function() {
+    var calendar = new Date.Calendar(time(2011, 1, 1, 0, 0, 0, 0)).day(Date.Field.Day.MONDAY);
+
+    assertEquals(2010, calendar.year());
+    assertEquals(Date.Field.Month.DECEMBER, calendar.month());
+    assertEquals(27, calendar.date());
 };
 
 Date.Calendar.Test.testHour_Positive = function() {
