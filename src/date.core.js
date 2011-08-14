@@ -1,7 +1,10 @@
-
-Date.prototype.calendar = function() {
+Date.prototype.calendar = function(timeZone) {
     if (this._calendar === undefined) {
-        this._calendar = new Calendar();
+        this._calendar = new Date.Calendar();
+    }
+
+    if (timeZone !== undefined) {
+        this._calendar.timeZone(timeZone);
     }
 
     if (this._time === undefined || this._time !== this.getTime()) {
@@ -10,7 +13,7 @@ Date.prototype.calendar = function() {
     }
 
     return this._calendar;
-}
+};
 
 /** Returns the year (four digits) */
 Date.prototype.getFullYear = function () {
@@ -137,7 +140,7 @@ Date.prototype.setMilliseconds = function (mills) {
 
 /** Returns the time difference between GMT and local time, in minutes */
 Date.prototype.getTimezoneOffset = function () {
-    return 0;
+    return this._calendar.timeZone().offset();
 };
 
 /**
@@ -146,58 +149,76 @@ Date.prototype.getTimezoneOffset = function () {
  * @deprecated use the toUTCString() method instead
  */
 Date.prototype.toGMTString = function() {
-    var cal = this.calendar();
-
-    return "{" + cal.year() + ", " + (cal.month() + 1) + ", " + (cal.date() + 1) + ", " + cal.hour() + ", " + cal.minute() + ", " + cal.second() + ", " + cal.mills() + "}";
+    return this.toUTCString();
 };
 
 /** Returns the date portion of a Date object as a string, using locale conventions */
 Date.prototype.toLocaleDateString = function() {
-    var cal = this.calendar();
+    if (!this._utcFormatter) {
+        this._utcFormatter = new Date.Formatter("yyyy-MM-dd");
+    }
 
-    return "{" + cal.year() + ", " + (cal.month() + 1) + ", " + (cal.date() + 1) + ", " + cal.hour() + ", " + cal.minute() + ", " + cal.second() + ", " + cal.mills() + "}";
+    return this._utcFormatter(this.calendar());
 };
 
 /** Returns the time portion of a Date object as a string, using locale conventions */
 Date.prototype.toLocaleTimeString = function() {
-    var cal = this.calendar();
+    if (!this._utcFormatter) {
+        this._utcFormatter = new Date.Formatter("HH:mm:ss");
+    }
 
-    return "{" + cal.year() + ", " + (cal.month() + 1) + ", " + (cal.date() + 1) + ", " + cal.hour() + ", " + cal.minute() + ", " + cal.second() + ", " + cal.mills() + "}";
+    return this._utcFormatter(this.calendar());
 };
 
 /** Converts the date portion of a Date object into a readable string */
 Date.prototype.toDateString = function() {
-    var cal = this.calendar();
+    if (!this._utcFormatter) {
+        this._utcFormatter = new Date.Formatter("yyyy-MM-dd");
+    }
 
-    return "{" + cal.year() + ", " + (cal.month() + 1) + ", " + (cal.date() + 1) + ", " + cal.hour() + ", " + cal.minute() + ", " + cal.second() + ", " + cal.mills() + "}";
+    return this._utcFormatter(this.calendar());
 };
 
 /** Converts a Date object to a string, using locale conventions */
 Date.prototype.toLocaleString = function() {
-    var cal = this.calendar();
+    if (!this._utcFormatter) {
+        this._utcFormatter = new Date.Formatter("yyyy-MM-ddTHH:mm:ss");
+    }
 
-    return "{" + cal.year() + ", " + (cal.month() + 1) + ", " + (cal.date() + 1) + ", " + cal.hour() + ", " + cal.minute() + ", " + cal.second() + ", " + cal.mills() + "}";
+    return this._utcFormatter(this.calendar());
 };
 
 /** Converts the time portion of a Date object to a string */
 Date.prototype.toTimeString = function() {
-    var cal = this.calendar();
+    if (!this._utcFormatter) {
+        this._utcFormatter = new Date.Formatter("HH:mm:ss");
+    }
 
-    return "{" + cal.year() + ", " + (cal.month() + 1) + ", " + (cal.date() + 1) + ", " + cal.hour() + ", " + cal.minute() + ", " + cal.second() + ", " + cal.mills() + "}";
+    return this._utcFormatter(this.calendar());
 };
 
 /** Converts a Date object to a string, according to universal time */
 Date.prototype.toUTCString = function() {
-    var cal = this.calendar();
+    if (!this._utcFormatter) {
+        this._utcFormatter = new Date.Formatter("yyyy-MM-ddTHH:mm:ss");
+    }
 
-    return "{" + cal.year() + ", " + (cal.month() + 1) + ", " + (cal.date() + 1) + ", " + cal.hour() + ", " + cal.minute() + ", " + cal.second() + ", " + cal.mills() + "}";
+    var tz = this.calendar().timeZone();
+
+    try {
+        return this._utcFormatter(this.calendar(Date.TimeZone.UTC));
+    } finally {
+        this.calendar(tz);
+    }
 };
 
 /** Converts a Date object to a string */
 Date.prototype.toString = function() {
-    var cal = this.calendar();
+    if (!this._utcFormatter) {
+        this._utcFormatter = new Date.Formatter("yyyy-MM-ddTHH:mm:ss Z");
+    }
 
-    return "{" + cal.year() + ", " + (cal.month() + 1) + ", " + (cal.date() + 1) + ", " + cal.hour() + ", " + cal.minute() + ", " + cal.second() + ", " + cal.mills() + "}";
+    return this._utcFormatter(this.calendar());
 }
 
 //Date.UTC = function(year, month, date, hours, seconds, mills) {
