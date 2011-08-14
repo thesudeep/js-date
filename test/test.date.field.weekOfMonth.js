@@ -29,19 +29,19 @@ Date.Field.WeekOfMonth.Test.testGetMills_Epoch = function() {
 Date.Field.WeekOfMonth.Test.testGetMills_Mills = function() {
     var week = new Date.Field.WeekOfMonth().mills(time(2011, 9, 5));
 
-    assertEquals(Date.Field.MILLS_PER_WEEK, week.mills());
+    assertEquals(Date.Field.MILLS_PER_DAY * 4, week.mills());
 };
 
 Date.Field.WeekOfMonth.Test.testGetMills_Value = function() {
     var week = new Date.Field.WeekOfMonth(1, 10, 2011).value(6);
 
-    assertEquals(Date.Field.MILLS_PER_WEEK * 5, week.mills());
+    assertEquals(Date.Field.MILLS_PER_DAY * 30, week.mills());
 };
 
 Date.Field.WeekOfMonth.Test.testGetMills_Last_6 = function() {
     var week = new Date.Field.WeekOfMonth(1, 10, 2011).value(Date.Field.WeekOfMonth.LAST_WEEK);
 
-    assertEquals(Date.Field.MILLS_PER_WEEK * 5, week.mills());
+    assertEquals(Date.Field.MILLS_PER_DAY * 30, week.mills());
 };
 
 Date.Field.WeekOfMonth.Test.testGetMills_Last_5 = function() {
