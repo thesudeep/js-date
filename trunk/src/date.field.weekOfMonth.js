@@ -1,9 +1,11 @@
 Date.Field.WeekOfMonth = function(week, month, year, firstDay) {
     var self = this;
 
+    firstDay = Date.Field.Day.validate(Date.Util.exists(firstDay, Date.Field.Day.MIN_DAY));
+
     this.mills = function(value, month, year) {
         if (arguments.length === 0) {
-            return self._val * Date.Field.MILLS_PER_WEEK;
+            return self._val * Date.Field.MILLS_PER_WEEK - self._day.mills();
         }
 
         value = Date.Util.validateInt(value);
@@ -18,7 +20,7 @@ Date.Field.WeekOfMonth = function(week, month, year, firstDay) {
 
         self._day.mills(start);
 
-        var delta = Date.Util.quotRem(self._day.value() - Date.Field.Day.FIRST_DAY, Date.Field.MILLS_PER_DAY).rem;
+        var delta = Date.Util.quotRem(self._day.value() - firstDay, Date.Field.MILLS_PER_DAY).rem;
 
         self._val = Date.Util.quotRem(delta + Date.Util.quotRem(value - start, Date.Field.MILLS_PER_DAY).quot, Date.Field.DAYS_PER_WEEK).quot;
 
@@ -83,6 +85,7 @@ Date.Field.WeekOfMonth.validate = function(week, month, year, firstDay) {
     }
 
     var m;
+    firstDay = Date.Field.Day.validate(Date.Util.exists(firstDay, Date.Field.Day.MIN_DAY));
 
     switch (arguments.length) {
         case 3:
@@ -98,7 +101,7 @@ Date.Field.WeekOfMonth.validate = function(week, month, year, firstDay) {
 
 
     var day = new Date.Field.Day().mills(m.mills() + m._year.mills());
-    var delta = Date.Util.quotRem(day.value() - Date.Field.Day.FIRST_DAY, Date.Field.MILLS_PER_DAY).rem;
+    var delta = Date.Util.quotRem(day.value() - firstDay, Date.Field.MILLS_PER_DAY).rem;
 
     var quotRem = Date.Util.quotRem(delta + Date.Util.quotRem(m.duration(), Date.Field.MILLS_PER_DAY).quot, Date.Field.DAYS_PER_WEEK);
 

@@ -35,10 +35,33 @@ Date.TimeZone = function (id, name, rules) {
         return obj ? obj.mills() : 0;
     }
 
+    function calcDelta(obj, month, weekStart) {
+        var delta;
+
+        if (obj.date) {
+            delta = toTime(_get(Date.Field.Date, obj.date, month, weekStart));
+        } else {
+            delta = toTime(_get(Date.Field.WeekOfMonth, obj.week, month, year)) +
+                    toTime(_get(Date.Field.Day, obj.day, weekStart));
+
+            if (delta > month.duration()) {
+                delta -= Date.Field.MILLS_PER_WEEK;
+            }
+        }
+
+        return delta;
+    }
+
     function calculateDST(rule) {
         if (!rule.dst || !rule.dst.start || !rule.dst.stop) {
             return null;
         }
+
+        var weekStart = new (function () {
+            this.value = function() {
+                return Date.Util.exists(rule.weekStart, Date.Field.Day.MIN_DAY);
+            }
+        });
 
         Date.Util.assertTrue(rule.dst.start.month, "Month is missing in DST start settings");
         Date.Util.assertTrue(rule.dst.stop.month, "Month is missing in DST stop settings");
@@ -58,33 +81,12 @@ Date.TimeZone = function (id, name, rules) {
         var startHour = _get(Date.Field.Hour, rule.dst.start.hour);
         var stopHour = _get(Date.Field.Hour, rule.dst.stop.hour);
 
-        var startTime = toTime(year) + toTime(startMonth);
-        var stopTime = toTime(year) + toTime(stopMonth);
-
-        if (rule.dst.start.date) {
-            startTime += toTime(_get(Date.Field.Date, rule.dst.start.date, startMonth, year));
-        } else {
-            var delta = toTime(_get(Date.Field.WeekOfMonth, rule.dst.start.week, startMonth, year)) +
-                    toTime(_get(Date.Field.Day, rule.dst.start.day)) +
-                    (Date.Field.Day.MIN_DAY - Date.Field.WeekOfMonth.FIRST_DAY) * Date.Field.MILLS_PER_DAY;
-
-            if (delta > startMonth.duration()) {
-                delta -= Date.Field.MILLS_PER_WEEK;
-            }
-
-            startTime += delta;
-        }
-
-        if (rule.dst.stop.date) {
-            stopTime += toTime(_get(Date.Field.Date, rule.dst.stop.date, stopMonth, year));
-        } else {
-            stopTime += toTime(_get(Date.Field.WeekOfMonth, rule.dst.stop.week, stopMonth, year));
-            stopTime += toTime(_get(Date.Field.Day, rule.dst.stop.day)) + (Date.Field.Day.MIN_DAY - Date.Field.WeekOfMonth.FIRST_DAY) * Date.Field.MILLS_PER_DAY;
-        }
+        var startTime = toTime(year) + toTime(startMonth) + calcDelta(rule.dst.start, startMonth, weekStart);
+        var stopTime = toTime(year) + toTime(stopMonth) + calcDelta(rule.dst.stop, stopMonth, weekStart);
 
         return {
-            start: startTime + toTime(startHour) + rule.offset,
-            end: stopTime + toTime(stopHour) + rule.offset + rule.dst.offset
+            start: startTime + toTime(startHour) - rule.offset,
+            end: stopTime + toTime(stopHour) - rule.offset - rule.dst.offset
         }
     }
 
