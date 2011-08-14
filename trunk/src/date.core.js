@@ -64,47 +64,6 @@ DateFormat = function(pattern) {
     };
 }
 
-TimeZone = function (id, name, rules) {
-    this.id = id;
-    this.name = name;
-
-    function toNumber(value) {
-        if (value instanceof Date) {
-            return value.getTime();
-        } else if (isNaN(parseInt(value))) {
-            return 0;
-        } else {
-            return value;
-        }
-    }
-
-    function findRule(time) {
-        var _time = toNumber(time);
-
-        for (var rule in rules) {
-            if (rule && rule.applyDate <= _time && (rule.cancelDate === undefined || rule.cancelDate > _time)) {
-                return rule;
-            }
-        }
-    }
-
-    function inDaylightTime(time) {
-
-    }
-
-    function getRawOffset(time) {
-
-    }
-
-    function getDSTOffset(time) {
-
-    }
-
-    this.offset = function(time) {
-        return inDaylightTime(time) ? getRawOffset(time) + getDSTOffset(time) : getRawOffset(time);
-    };
-};
-
 Date.prototype.calendar = function() {
     if (this._calendar === undefined) {
         this._calendar = new Calendar();

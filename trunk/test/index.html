@@ -9,6 +9,12 @@
     <script type="text/javascript" src="../src/date.field.minute.js"></script>
     <script type="text/javascript" src="../src/date.field.second.js"></script>
     <script type="text/javascript" src="../src/date.field.millisecond.js"></script>
+
+    <script type="text/javascript" src="../src/date.field.day.js"></script>
+    <script type="text/javascript" src="../src/date.field.week.js"></script>
+    <script type="text/javascript" src="../src/date.field.weekOfMonth.js"></script>
+    <script type="text/javascript" src="../src/date.timezone.js"></script>
+    <script type="text/javascript" src="../src/date.timezone.CET.js"></script>
     <script type="text/javascript" src="../src/date.calendar.js"></script>
 
     <script type="text/javascript" src="./test.js"></script>
@@ -18,6 +24,12 @@
     <script type="text/javascript" src="./test.date.field.hour.js"></script>
     <script type="text/javascript" src="./test.date.field.minute.js"></script>
     <script type="text/javascript" src="./test.date.field.second.js"></script>
+    <script type="text/javascript" src="./test.date.field.millisecond.js"></script>
+
+    <script type="text/javascript" src="./test.date.field.day.js"></script>
+    <script type="text/javascript" src="./test.date.field.week.js"></script>
+    <script type="text/javascript" src="./test.date.field.weekOfMonth.js"></script>
+    <script type="text/javascript" src="./test.date.timezone.js"></script>
     <script type="text/javascript" src="./test.date.calendar.js"></script>
 
     <style type="text/css">
@@ -53,7 +65,12 @@
         runSuite("Date.Field.Minute.Test", Date.Field.Minute.Test);
         runSuite("Date.Field.Second.Test", Date.Field.Second.Test);
         runSuite("Date.Field.Millisecond.Test", Date.Field.Millisecond.Test);
+
+        runSuite("Date.Field.Day.Test", Date.Field.Day.Test);
+        runSuite("Date.Field.Week.Test", Date.Field.Week.Test);
+        runSuite("Date.Field.WeekOfMonth.Test", Date.Field.WeekOfMonth.Test);
         runSuite("Date.Calendar.Test", Date.Calendar.Test);
+        runSuite("Date.TimeZone.Test", Date.TimeZone.Test);
 
         append("root", "Finished");
     }

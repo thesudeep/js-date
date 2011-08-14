@@ -1,19 +1,5 @@
 Date.Field = {};
 // These are ints not enumerations as they represent genuine int values
-/** Constant (1) representing Monday, the first day of the week (ISO) */
-Date.Field.MONDAY = 1;
-/** Constant (2) representing Tuesday, the second day of the week (ISO) */
-Date.Field.TUESDAY = 2;
-/** Constant (3) representing Wednesday, the third day of the week (ISO) */
-Date.Field.WEDNESDAY = 3;
-/** Constant (4) representing Thursday, the fourth day of the week (ISO) */
-Date.Field.THURSDAY = 4;
-/** Constant (5) representing Friday, the fifth day of the week (ISO) */
-Date.Field.FRIDAY = 5;
-/** Constant (6) representing Saturday, the sixth day of the week (ISO) */
-Date.Field.SATURDAY = 6;
-/** Constant (7) representing Sunday, the seventh day of the week (ISO) */
-Date.Field.SUNDAY = 7;
 /** Constant (0) representing AM, the morning (from Calendar) */
 Date.Field.AM = 0;
 /** Constant (1) representing PM, the afternoon (from Calendar) */
