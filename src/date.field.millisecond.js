@@ -1,4 +1,4 @@
-Date.Field.Millisecond = function(millisecond) {
+DateTime.Field.Millisecond = function(millisecond) {
     var self = this;
 
     this.mills = function(value) {
@@ -6,9 +6,9 @@ Date.Field.Millisecond = function(millisecond) {
             return self._val;
         }
 
-        value = Date.Util.validateInt(value);
+        value = DateTime.Util.validateInt(value);
 
-        self._val = Date.Util.quotRem(value, Date.Field.MILLS_PER_SECOND).rem;
+        self._val = DateTime.Util.quotRem(value, DateTime.Field.MILLS_PER_SECOND).rem;
 
         return self;
     };
@@ -18,7 +18,7 @@ Date.Field.Millisecond = function(millisecond) {
             return self._val;
         }
 
-        self._val = Date.Field.Millisecond.validate(millisecond);
+        self._val = DateTime.Field.Millisecond.validate(millisecond);
 
         return self;
     };
@@ -26,18 +26,18 @@ Date.Field.Millisecond = function(millisecond) {
     if (arguments.length === 1) {
         this.value(millisecond);
     } else {
-        this.mills(new Date().getTime());
+        this.mills(DateTime.currentTimeMillis());
     }
 };
 
-Date.Field.Millisecond.MIN_MILLS = 0;
-Date.Field.Millisecond.MAX_MILLS = Date.Field.MILLS_PER_SECOND - 1;
+DateTime.Field.Millisecond.MIN_MILLS = 0;
+DateTime.Field.Millisecond.MAX_MILLS = DateTime.Field.MILLS_PER_SECOND - 1;
 
-Date.Field.Millisecond.validate = function(millisecond) {
-    millisecond = Date.Util.validateInt(millisecond);
+DateTime.Field.Millisecond.validate = function(millisecond) {
+    millisecond = DateTime.Util.validateInt(millisecond);
 
-    Date.Util.assertTrue(millisecond >= Date.Field.Millisecond.MIN_MILLS && millisecond <= Date.Field.Millisecond.MAX_MILLS,
-            "Seconds are expected to be in range [" + Date.Field.Millisecond.MIN_MILLS + ".." + Date.Field.Millisecond.MAX_MILLS + "] but was: " + millisecond);
+    DateTime.Util.assertTrue(millisecond >= DateTime.Field.Millisecond.MIN_MILLS && millisecond <= DateTime.Field.Millisecond.MAX_MILLS,
+            "Seconds are expected to be in range [" + DateTime.Field.Millisecond.MIN_MILLS + ".." + DateTime.Field.Millisecond.MAX_MILLS + "] but was: " + millisecond);
 
     return millisecond;
 };

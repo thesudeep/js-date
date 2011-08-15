@@ -10,8 +10,8 @@
  * <p>The class also provides additional fields and methods (sugar) to operating
  * it easily.
  */
-Date.Calendar = function(time, timeZone) {
-    timeZone = Date.Util.exists(timeZone, Date.TimeZone.UTC);
+DateTime.Calendar = function(time, timeZone) {
+    timeZone = DateTime.Util.exists(timeZone, DateTime.TimeZone.DEFAULT);
 
     function adjust() {
         withOffset = instant + timeZone.offset(instant);
@@ -26,6 +26,7 @@ Date.Calendar = function(time, timeZone) {
         data.mills.mills(withOffset);
 
         data.weekOfYear.mills(withOffset - data.year.mills());
+        data.weekOfMonth.mills(withOffset, data.month.value(), data.year.value())
     }
 
     function _get(name, args, fn) {
@@ -40,23 +41,25 @@ Date.Calendar = function(time, timeZone) {
 
     var self = this;
 
-    var withOffset, instant = arguments.length === 0 ? new Date().getTime() : Date.Util.validateInt(time);
+    var withOffset, instant = arguments.length === 0 ? DateTime.currentTimeMillis() : DateTime.Util.validateInt(time);
 
     var data = {
-        year: new Date.Field.Year(),
-        month: new Date.Field.Month(),
-        weekOfYear: new Date.Field.Week(),
-        weekOfMonth: new Date.Field.WeekOfMonth(),
-        date: new Date.Field.Date(),
-        day: new Date.Field.Day(),
-        hour: new Date.Field.Hour(),
-        minute: new Date.Field.Minute(),
-        second: new Date.Field.Second(),
-        mills: new Date.Field.Millisecond()
+        year: new DateTime.Field.Year(),
+        month: new DateTime.Field.Month(),
+        weekOfYear: new DateTime.Field.Week(),
+        weekOfMonth: new DateTime.Field.WeekOfMonth(),
+        date: new DateTime.Field.Date(),
+        day: new DateTime.Field.Day(),
+        hour: new DateTime.Field.Hour(),
+        minute: new DateTime.Field.Minute(),
+        second: new DateTime.Field.Second(),
+        mills: new DateTime.Field.Millisecond()
     };
 
     data.month._year = data.year;
     data.date._month = data.month;
+    data.weekOfMonth._month = data.month;
+    data.weekOfMonth._day = data.day;
 
     adjust();
 
@@ -72,9 +75,9 @@ Date.Calendar = function(time, timeZone) {
 
     this.month = function (month) {
         return _get("month", arguments, function(value) {
-            Date.Util.assertTrue(value !== 0, "Zero month does not exist");
+            DateTime.Util.assertTrue(value !== 0, "Zero month does not exist");
 
-            var years = Date.Util.quotRem(value, Date.Field.Month.MAX_MONTH);
+            var years = DateTime.Util.quotRem(value, DateTime.Field.Month.MAX_MONTH);
 
             if (years.quot !== 0) {
                 self.year(data.year.value() + years.quot);
@@ -88,7 +91,7 @@ Date.Calendar = function(time, timeZone) {
 
     this.weekOfYear = function (week) {
         return _get("weekOfYear", arguments, function(value) {
-            value = Date.Field.Week.validate(value);
+            value = DateTime.Field.Week.validate(value);
 
             instant -= data.weekOfYear.mills();
             data.weekOfYear.value(value);
@@ -99,8 +102,8 @@ Date.Calendar = function(time, timeZone) {
     };
 
     this.weekOfMonth = function (week) {
-        return _get("weekOfYear", arguments, function(value) {
-            value = Date.Field.WeekOfMonth.validate(value);
+        return _get("weekOfMonth", arguments, function(value) {
+            value = DateTime.Field.WeekOfMonth.validate(value);
 
             instant -= data.weekOfMonth.mills();
             data.weekOfMonth.value(value);
@@ -112,13 +115,13 @@ Date.Calendar = function(time, timeZone) {
 
     this.date = function (date) {
         return _get("date", arguments, function(value) {
-            Date.Util.assertTrue(value !== 0, "Zero date does not exist");
+            DateTime.Util.assertTrue(value !== 0, "Zero date does not exist");
 
             if (value > 0) {
                 value--;
             }
 
-            instant += value * Date.Field.MILLS_PER_DAY - data.date.mills();
+            instant += value * DateTime.Field.MILLS_PER_DAY - data.date.mills();
 
             adjust();
         });
@@ -126,7 +129,7 @@ Date.Calendar = function(time, timeZone) {
 
     this.day = function (day) {
         return _get("day", arguments, function(value) {
-            value = Date.Field.Day.validate(value);
+            value = DateTime.Field.Day.validate(value);
 
             instant -= data.day.mills();
             data.day.value(value);
@@ -138,7 +141,7 @@ Date.Calendar = function(time, timeZone) {
 
     this.hour = function (hour) {
         return _get("hour", arguments, function(value) {
-            instant += value * Date.Field.MILLS_PER_HOUR - data.hour.mills();
+            instant += value * DateTime.Field.MILLS_PER_HOUR - data.hour.mills();
 
             adjust();
         });
@@ -146,7 +149,7 @@ Date.Calendar = function(time, timeZone) {
 
     this.minute = function (minute) {
         return _get("minute", arguments, function(value) {
-            instant += value * Date.Field.MILLS_PER_MINUTE - data.minute.mills();
+            instant += value * DateTime.Field.MILLS_PER_MINUTE - data.minute.mills();
 
             adjust();
         });
@@ -154,7 +157,7 @@ Date.Calendar = function(time, timeZone) {
 
     this.second = function (second) {
         return _get("second", arguments, function(value) {
-            instant += value * Date.Field.MILLS_PER_SECOND - data.second.mills();
+            instant += value * DateTime.Field.MILLS_PER_SECOND - data.second.mills();
 
             adjust();
         });
@@ -169,11 +172,11 @@ Date.Calendar = function(time, timeZone) {
     };
 
     this.timeZone = function (tz) {
-        if (!Date.Util.exists(tz)) {
+        if (!DateTime.Util.exists(tz)) {
             return timeZone;
         }
 
-        Date.Util.assertTrue(timeZone instanceof Date.TimeZone, "TimeZone should be an instance of Date.TimeZone class");
+        DateTime.Util.assertTrue(timeZone instanceof DateTime.TimeZone, "TimeZone should be an instance of DateTime.TimeZone class");
 
         timeZone = tz;
 
@@ -186,15 +189,9 @@ Date.Calendar = function(time, timeZone) {
         if (arguments.length == 0) {
             return instant;
         } else {
-            value = Date.Util.validateInt(value);
+            instant = DateTime.Util.validateInt(value);
 
-            data.year.mills(value);
-            data.month.mills(value);
-            data.date.mills(value);
-            data.hour.mills(value);
-            data.minute.mills(value);
-            data.second.mills(value);
-            data.mills.mills(value);
+            adjust();
         }
     };
 
@@ -207,32 +204,32 @@ Date.Calendar = function(time, timeZone) {
  * Field number for <code>get</code> and <code>set</code> indicating the
  * era, e.g., AD or BC in the Julian calendar.
  */
-Date.Calendar.ERA = 0;
+DateTime.Calendar.ERA = 0;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
  * year.
  */
-Date.Calendar.YEAR = 1;
+DateTime.Calendar.YEAR = 1;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
  * month. The first month of the year in the Gregorian and Julian calendars is
  * <code>JANUARY</code> which is 0.
  */
-Date.Calendar.MONTH = 2;
+DateTime.Calendar.MONTH = 2;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
  * week number within the current year. The first week of the year has value 1.
  */
-Date.Calendar.WEEK_OF_YEAR = 3;
+DateTime.Calendar.WEEK_OF_YEAR = 3;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
  * week number within the current month. The first week of the month has value 1.
  */
-Date.Calendar.WEEK_OF_MONTH = 4;
+DateTime.Calendar.WEEK_OF_MONTH = 4;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
@@ -241,7 +238,7 @@ Date.Calendar.WEEK_OF_MONTH = 4;
  *
  * @see #DAY_OF_MONTH
  */
-Date.Calendar.DATE = 5;
+DateTime.Calendar.DATE = 5;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
@@ -250,19 +247,19 @@ Date.Calendar.DATE = 5;
  *
  * @see #DATE
  */
-Date.Calendar.DAY_OF_MONTH = 5;
+DateTime.Calendar.DAY_OF_MONTH = 5;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the day
  * number within the current year.  The first day of the year has value 1.
  */
-Date.Calendar.DAY_OF_YEAR = 6;
+DateTime.Calendar.DAY_OF_YEAR = 6;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the day
  * of the week.
  */
-Date.Calendar.DAY_OF_WEEK = 7;
+DateTime.Calendar.DAY_OF_WEEK = 7;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating
@@ -271,7 +268,7 @@ Date.Calendar.DAY_OF_WEEK = 7;
  *
  * @see #HOUR
  */
-Date.Calendar.AM_PM = 8;
+DateTime.Calendar.AM_PM = 8;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
@@ -282,7 +279,7 @@ Date.Calendar.AM_PM = 8;
  * @see #AM_PM
  * @see #HOUR_OF_DAY
  */
-Date.Calendar.HOUR = 9;
+DateTime.Calendar.HOUR = 9;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
@@ -291,28 +288,28 @@ Date.Calendar.HOUR = 9;
  *
  * @see #HOUR
  */
-Date.Calendar.HOUR_OF_DAY = 10;
+DateTime.Calendar.HOUR_OF_DAY = 10;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
  * minute within the hour.
  * E.g., at 10:04:15.250 PM the <code>MINUTE</code> is 4.
  */
-Date.Calendar.MINUTE = 11;
+DateTime.Calendar.MINUTE = 11;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
  * second within the minute.
  * E.g., at 10:04:15.250 PM the <code>SECOND</code> is 15.
  */
-Date.Calendar.SECOND = 12;
+DateTime.Calendar.SECOND = 12;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
  * millisecond within the second.
  * E.g., at 10:04:15.250 PM the <code>MILLISECOND</code> is 250.
  */
-Date.Calendar.MILLISECOND = 13;
+DateTime.Calendar.MILLISECOND = 13;
 
 /**
  * Field number for <code>get</code> and <code>set</code>
@@ -323,7 +320,7 @@ Date.Calendar.MILLISECOND = 13;
  * <code>TimeZone</code> implementation subclass supports
  * historical GMT offset changes.
  */
-Date.Calendar.ZONE_OFFSET = 14;
+DateTime.Calendar.ZONE_OFFSET = 14;
 
 /**
  * Field number for <code>get</code> and <code>set</code> indicating the
@@ -332,4 +329,4 @@ Date.Calendar.ZONE_OFFSET = 14;
  * This field reflects the correct daylight saving offset value of
  * the time zone of this <code>Calendar</code>.
  */
-Date.Calendar.DST_OFFSET = 15;
+DateTime.Calendar.DST_OFFSET = 15;

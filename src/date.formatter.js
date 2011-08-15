@@ -1,6 +1,6 @@
-Date.Formatter = (function() {
+DateTime.Formatter = (function() {
     function trail(value, count, symbol) {
-        symbol = Date.Util.exists(symbol, "0");
+        symbol = DateTime.Util.exists(symbol, "0");
 
         var text = "";
 
@@ -121,7 +121,7 @@ Date.Formatter = (function() {
 
     var TimeZoneOffset = function(count) {
         this.format = function(calendar) {
-            var offset = Date.Util.quotRem(Date.Util.quotRem(calendar.timeZone().offset(calendar.time()), Date.Field.MILLS_PER_MINUTE).quot, Date.Field.MINUTES_PER_HOUR);
+            var offset = DateTime.Util.quotRem(DateTime.Util.quotRem(calendar.timeZone().offset(calendar.time()), DateTime.Field.MILLS_PER_MINUTE).quot, DateTime.Field.MINUTES_PER_HOUR);
 
             return (offset.quot < 0 ? "-" : "+") + trail(offset.quot, 2) + trail(offset.rem, 2);
         }
@@ -177,8 +177,8 @@ Date.Formatter = (function() {
         this.format = function(time) {
             var text = "", calendar = time;
 
-            if (!(time instanceof Date.Calendar)) {
-                calendar = new Date.Calendar(time);
+            if (!(time instanceof DateTime.Calendar)) {
+                calendar = new DateTime.Calendar(time);
             }
 
             for (var i in a) {

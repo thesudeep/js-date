@@ -1,7 +1,4 @@
-Date.Field.Year = function(year) {
-    var DAYS_0000_TO_1970 = 719527;
-    var MILLS_0000_TO_1970 = DAYS_0000_TO_1970 * Date.Field.MILLS_PER_DAY;
-
+DateTime.Field.Year = function(year) {
     var self = this;
 
     function calendarYear(year) {
@@ -11,15 +8,15 @@ Date.Field.Year = function(year) {
     function yearMills(year) {
         var leapYears = Math.floor(year / 4) - Math.floor(year / 100) + Math.floor(year / 400);
 
-        if (Date.Field.Year.isLeap(calendarYear(year))) {
+        if (DateTime.Field.Year.isLeap(calendarYear(year))) {
             leapYears--;
         }
 
-        return (year * 365 + (leapYears - DAYS_0000_TO_1970)) * Date.Field.MILLS_PER_DAY;
+        return (year * 365 + (leapYears - DateTime.Field.Year.DAYS_0000_TO_1970)) * DateTime.Field.MILLS_PER_DAY;
     }
 
     this.isLeap = function() {
-        return Date.Field.Year.isLeap(calendarYear(self._val));
+        return DateTime.Field.Year.isLeap(calendarYear(self._val));
     };
 
     this.mills = function(value) {
@@ -27,10 +24,10 @@ Date.Field.Year = function(year) {
             return yearMills(self._val);
         }
 
-        value = Date.Util.validateInt(value);
+        value = DateTime.Util.validateInt(value);
 
-        var halfYearMills = Date.Field.Year.MILLS_PER_YEAR / 2;
-        var halfValue = value / 2 + MILLS_0000_TO_1970 / 2;
+        var halfYearMills = DateTime.Field.Year.MILLS_PER_YEAR / 2;
+        var halfValue = value / 2 + DateTime.Field.Year.MILLS_0000_TO_1970 / 2;
 
         var year = Math.floor(halfValue / halfYearMills);
         var yearStart = yearMills(year);
@@ -38,7 +35,7 @@ Date.Field.Year = function(year) {
 
         if (diff < 0) {
             year--;
-        } else if (diff >= (Date.Field.Year.isLeap(calendarYear(year)) ? Date.Field.Year.MILLS_PER_LEAP_YEAR : Date.Field.Year.MILLS_PER_NORMAL_YEAR)) {
+        } else if (diff >= (DateTime.Field.Year.isLeap(calendarYear(year)) ? DateTime.Field.Year.MILLS_PER_LEAP_YEAR : DateTime.Field.Year.MILLS_PER_NORMAL_YEAR)) {
             year++
         }
 
@@ -52,7 +49,7 @@ Date.Field.Year = function(year) {
             return self._val <= 0 ? self._val - 1 : self._val;
         }
 
-        year = Date.Field.Year.validate(year);
+        year = DateTime.Field.Year.validate(year);
 
         if (year < 0) {
             year++;
@@ -64,35 +61,35 @@ Date.Field.Year = function(year) {
     };
 
     if (arguments.length === 0) {
-        this.mills(new Date().getTime());
+        this.mills(DateTime.currentTimeMillis());
     } else {
         this.value(year);
     }
 };
 
-Date.Field.Year.EPOCH = 1970;
-Date.Field.Year.MIN_YEAR = -292275054;
-Date.Field.Year.MAX_YEAR = 292278993;
-Date.Field.Year.MILLS_PER_YEAR = 365.2425 * Date.Field.MILLS_PER_DAY;;
-Date.Field.Year.MILLS_PER_NORMAL_YEAR = 365 * Date.Field.MILLS_PER_DAY;
-Date.Field.Year.MILLS_PER_LEAP_YEAR = Date.Field.Year.MILLS_PER_NORMAL_YEAR + Date.Field.MILLS_PER_DAY;
+DateTime.Field.Year.EPOCH = 1970;
+DateTime.Field.Year.MIN_YEAR = -292275054;
+DateTime.Field.Year.MAX_YEAR = 292278993;
+DateTime.Field.Year.MILLS_PER_YEAR = 365.2425 * DateTime.Field.MILLS_PER_DAY;;
+DateTime.Field.Year.MILLS_PER_NORMAL_YEAR = 365 * DateTime.Field.MILLS_PER_DAY;
+DateTime.Field.Year.MILLS_PER_LEAP_YEAR = DateTime.Field.Year.MILLS_PER_NORMAL_YEAR + DateTime.Field.MILLS_PER_DAY;
 
-Date.Field.Year.DAYS_0000_TO_1970 = 719527;
-Date.Field.Year.MILLS_0000_TO_1970 = Date.Field.Year.DAYS_0000_TO_1970 * Date.Field.MILLS_PER_DAY;
+DateTime.Field.Year.DAYS_0000_TO_1970 = 719527;
+DateTime.Field.Year.MILLS_0000_TO_1970 = DateTime.Field.Year.DAYS_0000_TO_1970 * DateTime.Field.MILLS_PER_DAY;
 
-Date.Field.Year.validate = function(year) {
-    year = Date.Util.validateInt(year);
+DateTime.Field.Year.validate = function(year) {
+    year = DateTime.Util.validateInt(year);
 
-    Date.Util.assertTrue(year != 0, "Year 0 does not exist. Please note that according to implemented calendar 1 BC is followed by 1 AD, neither 0 AD nor 0 BC.");
+    DateTime.Util.assertTrue(year != 0, "Year 0 does not exist. Please note that according to implemented calendar 1 BC is followed by 1 AD, neither 0 AD nor 0 BC.");
 
-    Date.Util.assertTrue(year >= Date.Field.Year.MIN_YEAR && year <= Date.Field.Year.MAX_YEAR,
-            "Year is expected to be in range [" + Date.Field.Year.MIN_YEAR + ".." + Date.Field.Year.MAX_YEAR + "] but was: " + year);
+    DateTime.Util.assertTrue(year >= DateTime.Field.Year.MIN_YEAR && year <= DateTime.Field.Year.MAX_YEAR,
+            "Year is expected to be in range [" + DateTime.Field.Year.MIN_YEAR + ".." + DateTime.Field.Year.MAX_YEAR + "] but was: " + year);
 
     return year;
 };
 
-Date.Field.Year.isLeap = function(year) {
-    year = Date.Field.Year.validate(year);
+DateTime.Field.Year.isLeap = function(year) {
+    year = DateTime.Field.Year.validate(year);
 
     if (year < 0) {
         year++;
