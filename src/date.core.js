@@ -15,15 +15,19 @@ DateTime = function() {
         } catch (e) {
             calendar.time(DateTime._Date.parse(arguments[0]).getTime());
         }
-    } else {
-        arguments.length >= 1 && calendar.year(arguments[0] <= 0 ? arguments[0] - 1 : arguments[0]);
-        arguments.length >= 2 && calendar.month(arguments[1] + 1);
-        arguments.length >= 3 && calendar.date(arguments[2]);
-        arguments.length >= 4 && calendar.hour(arguments[3]);
-        arguments.length >= 5 && calendar.minute(arguments[4]);
-        arguments.length >= 6 && calendar.second(arguments[5]);
-        arguments.length >= 7 && calendar.mills(arguments[6]);
+    } else if (arguments.length > 1) {
+        calendar.year(arguments[0] <= 0 ? arguments[0] - 1 : arguments[0]);
+        calendar.month(arguments.length >= 2 ? arguments[1] + DateTime.Field.Month.MIN_MONTH : DateTime.Field.Month.MIN_MONTH);
+        calendar.date(arguments.length >= 3 ? arguments[2] : DateTime.Field.Date.MIN_DATE);
+        calendar.hour(arguments.length >= 4 ? arguments[3] : DateTime.Field.Hour.MIN_HOUR);
+        calendar.minute(arguments.length >= 5 ? arguments[4] : DateTime.Field.Minute.MIN_MINUTE);
+        calendar.second(arguments.length >= 6 ? arguments[5] : DateTime.Field.Second.MIN_SECOND);
+        calendar.mills(arguments.length >= 7 ? arguments[6] : DateTime.Field.Millisecond.MIN_MILLS);
     }
+
+    this.calendar = function() {
+        return new DateTime.Calendar(calendar.time());
+    };
 
     /** Returns the year (four digits) */
     this.getFullYear = function () {
@@ -82,7 +86,7 @@ DateTime = function() {
     /** Sets the year (four digits) */
     this.setFullYear = function (year, month, date) {
         calendar.year(year);
-        month !== undefined && calendar.month(month);
+        month !== undefined && calendar.month(month + DateTime.Field.Month.MIN_MONTH);
         date !== undefined && calendar.date(date);
     };
 
@@ -97,7 +101,7 @@ DateTime = function() {
 
     /** Sets the month (from 0-11) */
     this.setMonth = function (month, date) {
-        calendar.month(month);
+        calendar.month(month + DateTime.Field.Month.MIN_MONTH);
         date && calendar.date(date);
     };
 
@@ -251,6 +255,24 @@ DateTime = function() {
     };
 
     /**
+     *  <p> The valueOf() method returns the primitive value of a Date object. </p>
+     *  <p> Note: The primitive value is returned as the number of millisecond since midnight January 1, 1970 (same as getTime())! </p>
+     *  <p> Note: This method is usually called automatically by JavaScript behind the scenes, and not explicitly in code. </p>
+     */
+    this.valueOf = function() {
+        return calendar.time();
+    };
+
+    /**
+     *  <p> The valueOf() method returns the primitive value of a Date object. </p>
+     *  <p> Note: The primitive value is returned as the number of millisecond since midnight January 1, 1970 (same as getTime())! </p>
+     *  <p> Note: This method is usually called automatically by JavaScript behind the scenes, and not explicitly in code. </p>
+     */
+    this.equals = function(o) {
+        return o instanceof DateTime && o.valueOf() === self.valueOf();
+    };
+
+    /**
      * Converts a Date object to a string, according to universal time.
      *
      * @deprecated use the toUTCString() method instead
@@ -296,6 +318,17 @@ DateTime = function() {
         return new DateTime.Formatter(pattern).format(calendar);
     };
 
+    for (var m in calendar) {
+        if (typeof(calendar[m]) === "function" && this[m] === undefined) {
+            this[m] = (function(methodName) {
+                return function() {
+                    calendar[methodName].apply(calendar, arguments);
+
+                    return self;
+                }
+            })(m);
+        }
+    }
 };
 
 DateTime._init_ = function() {

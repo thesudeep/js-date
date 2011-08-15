@@ -75,16 +75,14 @@ DateTime.Calendar = function(time, timeZone) {
 
     this.month = function (month) {
         return _get("month", arguments, function(value) {
-            DateTime.Util.assertTrue(value !== 0, "Zero month does not exist");
-
-            var years = DateTime.Util.quotRem(value, DateTime.Field.Month.MAX_MONTH);
+            var years = DateTime.Util.quotRem(value - DateTime.Field.Month.MIN_MONTH, DateTime.Field.Month.MAX_MONTH);
 
             if (years.quot !== 0) {
                 self.year(data.year.value() + years.quot);
             }
 
             instant -= data.month.mills();
-            data.month.value(years.rem + 1, data.year.value());
+            data.month.value(years.rem + DateTime.Field.Month.MIN_MONTH, data.year.value());
             instant += data.month.mills();
         });
     };
@@ -113,15 +111,15 @@ DateTime.Calendar = function(time, timeZone) {
         });
     };
 
+    this.plusDate = function(date) {
+        self.date(self.date() + DateTime.Util.validateInt(date));
+
+        return self;
+    };
+
     this.date = function (date) {
         return _get("date", arguments, function(value) {
-            DateTime.Util.assertTrue(value !== 0, "Zero date does not exist");
-
-            if (value > 0) {
-                value--;
-            }
-
-            instant += value * DateTime.Field.MILLS_PER_DAY - data.date.mills();
+            instant += (value - DateTime.Field.Date.MIN_DATE) * DateTime.Field.MILLS_PER_DAY - data.date.mills();
 
             adjust();
         });

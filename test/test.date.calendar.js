@@ -48,20 +48,28 @@ DateTime.Calendar.Test.testMonth_Positive = function() {
     var calendar = new DateTime.Calendar(0).month(14);
 
     assertEquals(1971, calendar.year());
-    assertEquals(DateTime.Field.Month.MARCH, calendar.month());
+    assertEquals(DateTime.Field.Month.FEBRUARY, calendar.month());
+};
+
+DateTime.Calendar.Test.testMonth_PositiveSmall = function() {
+    var calendar = new DateTime.Calendar(0).month(DateTime.Field.Month.AUGUST);
+
+    assertEquals(1970, calendar.year());
+    assertEquals(DateTime.Field.Month.AUGUST, calendar.month());
 };
 
 DateTime.Calendar.Test.testMonth_Negative = function() {
     var calendar = new DateTime.Calendar(0).month(-1);
 
     assertEquals(1969, calendar.year());
-    assertEquals(DateTime.Field.Month.DECEMBER, calendar.month());
+    assertEquals(DateTime.Field.Month.NOVEMBER, calendar.month());
 };
 
 DateTime.Calendar.Test.testMonth_Zero = function() {
-    assertFail(function() {
-        new DateTime.Calendar(0).month(0);
-    });
+    var calendar = new DateTime.Calendar(0).month(0);
+
+    assertEquals(1969, calendar.year());
+    assertEquals(DateTime.Field.Month.DECEMBER, calendar.month());
 };
 
 DateTime.Calendar.Test.testDate_Positive = function() {
@@ -72,18 +80,60 @@ DateTime.Calendar.Test.testDate_Positive = function() {
     assertEquals(1, calendar.date());
 };
 
+DateTime.Calendar.Test.testDate_PositiveSmall = function() {
+    var calendar = new DateTime.Calendar(0).date(5);
+
+    assertEquals(1970, calendar.year());
+    assertEquals(DateTime.Field.Month.JANUARY, calendar.month());
+    assertEquals(5, calendar.date());
+};
+
 DateTime.Calendar.Test.testDate_Negative = function() {
     var calendar = new DateTime.Calendar(0).date(-1);
+
+    assertEquals(1969, calendar.year());
+    assertEquals(DateTime.Field.Month.DECEMBER, calendar.month());
+    assertEquals(30, calendar.date());
+};
+
+DateTime.Calendar.Test.testDate_Zero = function() {
+    var calendar = new DateTime.Calendar(0).date(0);
 
     assertEquals(1969, calendar.year());
     assertEquals(DateTime.Field.Month.DECEMBER, calendar.month());
     assertEquals(31, calendar.date());
 };
 
-DateTime.Calendar.Test.testDate_Zero = function() {
-    assertFail(function() {
-        new DateTime.Calendar(0).date(0);
-    });
+DateTime.Calendar.Test.testPlusDate_Positive = function() {
+    var calendar = new DateTime.Calendar(0).date(31).plusDate(28).plusDate(1);
+
+    assertEquals(1970, calendar.year());
+    assertEquals(DateTime.Field.Month.MARCH, calendar.month());
+    assertEquals(1, calendar.date());
+};
+
+DateTime.Calendar.Test.testPlusDate_PositiveSmall = function() {
+    var calendar = new DateTime.Calendar(0).date(5).plusDate(1);
+
+    assertEquals(1970, calendar.year());
+    assertEquals(DateTime.Field.Month.JANUARY, calendar.month());
+    assertEquals(6, calendar.date());
+};
+
+DateTime.Calendar.Test.testPlusDate_Negative = function() {
+    var calendar = new DateTime.Calendar(0).date(10).plusDate(-5);
+
+    assertEquals(1970, calendar.year());
+    assertEquals(DateTime.Field.Month.JANUARY, calendar.month());
+    assertEquals(5, calendar.date());
+};
+
+DateTime.Calendar.Test.testPlusDate_Zero = function() {
+    var calendar = new DateTime.Calendar(0).date(1).plusDate(0);
+
+    assertEquals(1970, calendar.year());
+    assertEquals(DateTime.Field.Month.JANUARY, calendar.month());
+    assertEquals(1, calendar.date());
 };
 
 DateTime.Calendar.Test.testDay_Positive = function() {
