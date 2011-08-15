@@ -1,5 +1,6 @@
 <html>
 <head>
+    <script type="text/javascript" src="../src/date.core.js"></script>
     <script type="text/javascript" src="../src/date.util.js"></script>
     <script type="text/javascript" src="../src/date.field.js"></script>
     <script type="text/javascript" src="../src/date.field.year.js"></script>
@@ -60,20 +61,20 @@
     }
 
     function run() {
-        runSuite("Date.Field.Year.Test", Date.Field.Year.Test);
-        runSuite("Date.Field.Month.Test", Date.Field.Month.Test);
-        runSuite("Date.Field.Date.Test", Date.Field.Date.Test);
-        runSuite("Date.Field.Hour.Test", Date.Field.Hour.Test);
-        runSuite("Date.Field.Minute.Test", Date.Field.Minute.Test);
-        runSuite("Date.Field.Second.Test", Date.Field.Second.Test);
-        runSuite("Date.Field.Millisecond.Test", Date.Field.Millisecond.Test);
+        runSuite("DateTime.Field.Year.Test", DateTime.Field.Year.Test);
+        runSuite("DateTime.Field.Month.Test", DateTime.Field.Month.Test);
+        runSuite("DateTime.Field.Date.Test", DateTime.Field.Date.Test);
+        runSuite("DateTime.Field.Hour.Test", DateTime.Field.Hour.Test);
+        runSuite("DateTime.Field.Minute.Test", DateTime.Field.Minute.Test);
+        runSuite("DateTime.Field.Second.Test", DateTime.Field.Second.Test);
+        runSuite("DateTime.Field.Millisecond.Test", DateTime.Field.Millisecond.Test);
 
-        runSuite("Date.Field.Day.Test", Date.Field.Day.Test);
-        runSuite("Date.Field.Week.Test", Date.Field.Week.Test);
-        runSuite("Date.Field.WeekOfMonth.Test", Date.Field.WeekOfMonth.Test);
-        runSuite("Date.TimeZone.Test", Date.TimeZone.Test);
-        runSuite("Date.Calendar.Test", Date.Calendar.Test);
-        runSuite("Date.Formatter.Test", Date.Formatter.Test);
+        runSuite("DateTime.Field.Day.Test", DateTime.Field.Day.Test);
+        runSuite("DateTime.Field.Week.Test", DateTime.Field.Week.Test);
+        runSuite("DateTime.Field.WeekOfMonth.Test", DateTime.Field.WeekOfMonth.Test);
+        runSuite("DateTime.TimeZone.Test", DateTime.TimeZone.Test);
+        runSuite("DateTime.Calendar.Test", DateTime.Calendar.Test);
+        runSuite("DateTime.Formatter.Test", DateTime.Formatter.Test);
 
         append("root", "Finished");
     }

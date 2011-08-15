@@ -1,10 +1,10 @@
-Date.TimeZone = function (id, name, rules) {
+DateTime.TimeZone = function (id, name, rules) {
     var self = this;
 
     this.id = id;
     this.name = name;
 
-    var year = new Date.Field.Year();
+    var year = new DateTime.Field.Year();
 
     function findRule() {
         for (var i in rules) {
@@ -41,13 +41,13 @@ Date.TimeZone = function (id, name, rules) {
         var delta;
 
         if (obj.date) {
-            delta = toTime(_get(Date.Field.Date, obj.date, month, weekStart));
+            delta = toTime(_get(DateTime.Field.Date, obj.date, month, weekStart));
         } else {
-            delta = toTime(_get(Date.Field.WeekOfMonth, obj.week, month, year)) +
-                    toTime(_get(Date.Field.Day, obj.day, weekStart));
+            delta = toTime(_get(DateTime.Field.WeekOfMonth, obj.week, month, year)) +
+                    toTime(_get(DateTime.Field.Day, obj.day, weekStart));
 
             if (delta > month.duration()) {
-                delta -= Date.Field.MILLS_PER_WEEK;
+                delta -= DateTime.Field.MILLS_PER_WEEK;
             }
         }
 
@@ -61,27 +61,27 @@ Date.TimeZone = function (id, name, rules) {
 
         var weekStart = new (function () {
             this.value = function() {
-                return Date.Util.exists(rule.weekStart, Date.Field.Day.MIN_DAY);
+                return DateTime.Util.exists(rule.weekStart, DateTime.Field.Day.MIN_DAY);
             }
         });
 
-        Date.Util.assertTrue(rule.dst.start.month, "Month is missing in DST start settings");
-        Date.Util.assertTrue(rule.dst.stop.month, "Month is missing in DST stop settings");
+        DateTime.Util.assertTrue(rule.dst.start.month, "Month is missing in DST start settings");
+        DateTime.Util.assertTrue(rule.dst.stop.month, "Month is missing in DST stop settings");
 
-        Date.Util.assertTrue(rule.dst.start.hour, "Hour is missing in DST start settings");
-        Date.Util.assertTrue(rule.dst.stop.hour, "Hour is missing in DST stop settings");
+        DateTime.Util.assertTrue(rule.dst.start.hour, "Hour is missing in DST start settings");
+        DateTime.Util.assertTrue(rule.dst.stop.hour, "Hour is missing in DST stop settings");
 
-        Date.Util.assertTrue(rule.dst.start.date || rule.dst.start.week && rule.dst.start.day, "Missing required DST start settings");
-        Date.Util.assertTrue(rule.dst.stop.date || rule.dst.stop.week && rule.dst.stop.day, "Missing required DST stop settings");
+        DateTime.Util.assertTrue(rule.dst.start.date || rule.dst.start.week && rule.dst.start.day, "Missing required DST start settings");
+        DateTime.Util.assertTrue(rule.dst.stop.date || rule.dst.stop.week && rule.dst.stop.day, "Missing required DST stop settings");
 
-        Date.Util.assertTrue(!rule.dst.start.date || !rule.dst.start.week && !rule.dst.start.day, "Ambiguous DST start settings");
-        Date.Util.assertTrue(!rule.dst.stop.date || !rule.dst.stop.week && !rule.dst.stop.day, "Ambiguous DST stop settings");
+        DateTime.Util.assertTrue(!rule.dst.start.date || !rule.dst.start.week && !rule.dst.start.day, "Ambiguous DST start settings");
+        DateTime.Util.assertTrue(!rule.dst.stop.date || !rule.dst.stop.week && !rule.dst.stop.day, "Ambiguous DST stop settings");
 
-        var startMonth = _get(Date.Field.Month, rule.dst.start.month, year);
-        var stopMonth = _get(Date.Field.Month, rule.dst.stop.month, year);
+        var startMonth = _get(DateTime.Field.Month, rule.dst.start.month, year);
+        var stopMonth = _get(DateTime.Field.Month, rule.dst.stop.month, year);
 
-        var startHour = _get(Date.Field.Hour, rule.dst.start.hour);
-        var stopHour = _get(Date.Field.Hour, rule.dst.stop.hour);
+        var startHour = _get(DateTime.Field.Hour, rule.dst.start.hour);
+        var stopHour = _get(DateTime.Field.Hour, rule.dst.stop.hour);
 
         var startTime = toTime(year) + toTime(startMonth) + calcDelta(rule.dst.start, startMonth, weekStart);
         var stopTime = toTime(year) + toTime(stopMonth) + calcDelta(rule.dst.stop, stopMonth, weekStart);
@@ -109,11 +109,12 @@ Date.TimeZone = function (id, name, rules) {
     };
 };
 
-Date.TimeZone.RuleSet = {
+DateTime.TimeZone.RuleSet = {
     UTC: [{
         offset: 0,
-        weekStart: Date.Field.Day.MONDAY
+        weekStart: DateTime.Field.Day.MONDAY
     }]
 };
 
-Date.TimeZone.UTC = new Date.TimeZone("UTC", "Coordinated Universal Time", Date.TimeZone.RuleSet.UTC);
+DateTime.TimeZone.UTC = new DateTime.TimeZone("UTC", "Coordinated Universal Time", DateTime.TimeZone.RuleSet.UTC);
+DateTime.TimeZone.DEFAULT = DateTime.TimeZone.UTC;

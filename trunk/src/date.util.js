@@ -1,6 +1,6 @@
-Date.Util = {};
+DateTime.Util = {};
 
-Date.Util.exists = function(parameter, replacement) {
+DateTime.Util.exists = function(parameter, replacement) {
     var b = parameter !== undefined && parameter !== null;
 
     if (arguments.length === 2) {
@@ -10,7 +10,7 @@ Date.Util.exists = function(parameter, replacement) {
     return b;
 };
 
-Date.Util.quotRem = function(divisor, divider) {
+DateTime.Util.quotRem = function(divisor, divider) {
     var rem = (divider + (divisor % divider)) % divider;
 
     return {
@@ -19,16 +19,16 @@ Date.Util.quotRem = function(divisor, divider) {
     };
 };
 
-Date.Util.assertTrue = function(condition, message) {
+DateTime.Util.assertTrue = function(condition, message) {
     if (!condition) {
         throw new Error(message);
     }
 };
 
-Date.Util.validateInt = function(value) {
+DateTime.Util.validateInt = function(value) {
     var i = parseInt(value, 10);
 
-    Date.Util.assertTrue(!isNaN(i) && String(value).match(/^-?\d+$/) && String(i).match(/^-?\d+$/), "Expected integer but was: " + value);
+    DateTime.Util.assertTrue(!isNaN(i) && String(value).match(/^-?\d+$/) && String(i).match(/^-?\d+$/), "Expected integer but was: " + value);
 
     return i;
 };

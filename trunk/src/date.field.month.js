@@ -1,4 +1,4 @@
-Date.Field.Month = function(month, year) {
+DateTime.Field.Month = function(month, year) {
     var MILLS_BY_NORMAL_MONTHS = [0, 2678400000, 5097600000, 7776000000, 10368000000, 13046400000, 15638400000, 18316800000, 20995200000, 23587200000, 26265600000, 28857600000, 31536000000];
     var MILLS_BY_LEAP_MONTHS =   [0, 2678400000, 5184000000, 7862400000, 10454400000, 13132800000, 15724800000, 18403200000, 21081600000, 23673600000, 26352000000, 28944000000, 31622400000];
 
@@ -15,7 +15,7 @@ Date.Field.Month = function(month, year) {
             return (self._year.isLeap() ? MILLS_BY_LEAP_MONTHS[self._val] : MILLS_BY_NORMAL_MONTHS[self._val]);
         }
 
-        value = Date.Util.validateInt(value);
+        value = DateTime.Util.validateInt(value);
 
         if (arguments.length === 1) {
             self._year.mills(value);
@@ -61,60 +61,60 @@ Date.Field.Month = function(month, year) {
             self._year.value(year);
         }
 
-        self._val = Date.Field.Month.validate(month) - 1;
+        self._val = DateTime.Field.Month.validate(month) - 1;
 
         return self;
     };
 
     switch (arguments.length) {
         case 0:
-            this._year = new Date.Field.Year();
-            this.mills(new Date().getTime(), this._year.value());
+            this._year = new DateTime.Field.Year();
+            this.mills(DateTime.currentTimeMillis(), this._year.value());
             break;
         case 1:
-            this._year = new Date.Field.Year();
+            this._year = new DateTime.Field.Year();
             this.value(month, this._year.value());
             break;
         case 2:
-            this._year = new Date.Field.Year(year);
+            this._year = new DateTime.Field.Year(year);
             this.value(month, this._year.value());
             break;
     }
 };
 
 /** Constant (1) representing January, the first month (ISO) */
-Date.Field.Month.JANUARY = 1;
+DateTime.Field.Month.JANUARY = 1;
 /** Constant (2) representing February, the second month (ISO) */
-Date.Field.Month.FEBRUARY = 2;
+DateTime.Field.Month.FEBRUARY = 2;
 /** Constant (3) representing March, the third month (ISO) */
-Date.Field.Month.MARCH = 3;
+DateTime.Field.Month.MARCH = 3;
 /** Constant (4) representing April, the fourth month (ISO) */
-Date.Field.Month.APRIL = 4;
+DateTime.Field.Month.APRIL = 4;
 /** Constant (5) representing May, the fifth month (ISO) */
-Date.Field.Month.MAY = 5;
+DateTime.Field.Month.MAY = 5;
 /** Constant (6) representing June, the sixth month (ISO) */
-Date.Field.Month.JUNE = 6;
+DateTime.Field.Month.JUNE = 6;
 /** Constant (7) representing July, the seventh month (ISO) */
-Date.Field.Month.JULY = 7;
+DateTime.Field.Month.JULY = 7;
 /** Constant (8) representing August, the eighth month (ISO) */
-Date.Field.Month.AUGUST = 8;
+DateTime.Field.Month.AUGUST = 8;
 /** Constant (9) representing September, the nineth month (ISO) */
-Date.Field.Month.SEPTEMBER = 9;
+DateTime.Field.Month.SEPTEMBER = 9;
 /** Constant (10) representing October, the tenth month (ISO) */
-Date.Field.Month.OCTOBER = 10;
+DateTime.Field.Month.OCTOBER = 10;
 /** Constant (11) representing November, the eleventh month (ISO) */
-Date.Field.Month.NOVEMBER = 11;
+DateTime.Field.Month.NOVEMBER = 11;
 /** Constant (12) representing December, the twelfth month (ISO) */
-Date.Field.Month.DECEMBER = 12;
+DateTime.Field.Month.DECEMBER = 12;
 
-Date.Field.Month.MIN_MONTH = Date.Field.Month.JANUARY;
-Date.Field.Month.MAX_MONTH = Date.Field.Month.DECEMBER;
+DateTime.Field.Month.MIN_MONTH = DateTime.Field.Month.JANUARY;
+DateTime.Field.Month.MAX_MONTH = DateTime.Field.Month.DECEMBER;
 
-Date.Field.Month.validate = function(month) {
-    month = Date.Util.validateInt(month);
+DateTime.Field.Month.validate = function(month) {
+    month = DateTime.Util.validateInt(month);
 
-    Date.Util.assertTrue(month >= Date.Field.Month.MIN_MONTH && month <= Date.Field.Month.MAX_MONTH,
-            "Month is expected to be in range [" + Date.Field.Month.MIN_MONTH + ".." + Date.Field.Month.MAX_MONTH + "] but was: " + month);
+    DateTime.Util.assertTrue(month >= DateTime.Field.Month.MIN_MONTH && month <= DateTime.Field.Month.MAX_MONTH,
+            "Month is expected to be in range [" + DateTime.Field.Month.MIN_MONTH + ".." + DateTime.Field.Month.MAX_MONTH + "] but was: " + month);
 
     return month;
 };

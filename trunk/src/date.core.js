@@ -1,230 +1,318 @@
-Date.prototype.calendar = function(timeZone) {
-    if (this._calendar === undefined) {
-        this._calendar = new Date.Calendar();
+DateTime = function() {
+    var self = this;
+    var calendar = new DateTime.Calendar();
+    var utcCalendar = new DateTime.Calendar(0, Date.TimeZone.UTC);
+
+    function utc() {
+        utcCalendar.time(calendar);
+
+        return utcCalendar;
     }
 
-    if (timeZone !== undefined) {
-        this._calendar.timeZone(timeZone);
+    if (arguments.length === 1) {
+        try {
+            calendar.time(Date.Util.validateInt(arguments[0]));
+        } catch (e) {
+            calendar.time(DateTime._Date.parse(arguments[0]).getTime());
+        }
+    } else {
+        arguments.length >= 1 && calendar.year(arguments[0] <= 0 ? arguments[0] - 1 : arguments[0]);
+        arguments.length >= 2 && calendar.month(arguments[1] + 1);
+        arguments.length >= 3 && calendar.date(arguments[2]);
+        arguments.length >= 4 && calendar.hour(arguments[3]);
+        arguments.length >= 5 && calendar.minute(arguments[4]);
+        arguments.length >= 6 && calendar.second(arguments[5]);
+        arguments.length >= 7 && calendar.mills(arguments[6]);
     }
 
-    if (this._time === undefined || this._time !== this.getTime()) {
-        this._time = this.getTime();
-        this._calendar.time(this._time)
-    }
+    /** Returns the year (four digits) */
+    this.getFullYear = function () {
+        return calendar.year();
+    };
 
-    return this._calendar;
+    /**
+     * Returns the year (four digits)
+     *
+     * @deprecated use the getFullYear() method instead
+     */
+    this.getYear = function () {
+        return self.getFullYear();
+    };
+
+    /** Returns the month (from 0-11) */
+    this.getMonth = function () {
+        return calendar.month() - DateTime.Field.Month.MIN_MONTH;
+    };
+
+    /** Returns the day of the month (from 1-31) */
+    this.getDate = function () {
+        return calendar.date();
+    };
+
+    /** Returns the day of the week (from 0-6) */
+    this.getDay = function () {
+        return calendar.day() % DateTime.Field.Day.MAX_DAY;
+    };
+
+    /** Returns the hour (from 0-23) */
+    this.getHours = function () {
+        return calendar.hour();
+    };
+
+    /** Returns the minutes (from 0-59) */
+    this.getMinutes = function () {
+        return calendar.minute();
+    };
+
+    /** Returns the seconds (from 0-59) */
+    this.getSeconds = function () {
+        return calendar.second();
+    };
+
+    /** Returns the milliseconds (from 0-999) */
+    this.getMilliseconds = function () {
+        return calendar.mills();
+    };
+
+    /** Returns the number of milliseconds since midnight Jan 1, 1970 */
+    this.getTime = function () {
+        return calendar.time();
+    };
+
+    /** Sets the year (four digits) */
+    this.setFullYear = function (year, month, date) {
+        calendar.year(year);
+        month !== undefined && calendar.month(month);
+        date !== undefined && calendar.date(date);
+    };
+
+    /**
+     * Sets the year (four digits)
+     *
+     * @deprecated use the setFullYear() method instead
+     */
+    this.setYear = function (year) {
+        self.setFullYear(year);
+    };
+
+    /** Sets the month (from 0-11) */
+    this.setMonth = function (month, date) {
+        calendar.month(month);
+        date && calendar.date(date);
+    };
+
+    /** Sets the day of the month (from 1-31) */
+    this.setDate = function (date) {
+        calendar.date(date);
+    };
+
+    /** Sets the hour (from 0-23) */
+    this.setHours = function (hour, min, sec, mills) {
+        calendar.hour(hour);
+        min !== undefined && calendar.minute(min);
+        sec !== undefined && calendar.second(sec);
+        mills !== undefined && calendar.mills(mills);
+    };
+
+    /** Set the minutes (from 0-59) */
+    this.setMinutes = function (min, sec, mills) {
+        calendar.minute(min);
+        sec !== undefined && calendar.second(sec);
+        mills !== undefined && calendar.mills(mills);
+    };
+
+    /** Sets the seconds (from 0-59) */
+    this.setSeconds = function (sec, mills) {
+        calendar.second(sec);
+        mills !== undefined && calendar.mills(mills);
+    };
+
+    /** Sets the milliseconds (from 0-999) */
+    this.setMilliseconds = function (mills) {
+        calendar.mills(mills);
+    };
+
+    /** Returns the number of milliseconds since midnight Jan 1, 1970 */
+    this.setTime = function (time) {
+        calendar.time(time);
+    };
+
+    /** Returns the time difference between GMT and local time, in minutes */
+    this.getTimezoneOffset = function () {
+        return calendar.timeZone().offset();
+    };
+
+    /** Returns the day of the month, according to universal time (from 1-31) */
+    this.getUTCDate = function() {
+        return utc().date();
+    };
+
+    /** Returns the day of the week, according to universal time (from 0-6) */
+    this.getUTCDay = function() {
+        return utc().day() % DateTime.Field.Day.MAX_DAY;
+    };
+
+    /** Returns the year, according to universal time (four digits) */
+    this.getUTCFullYear = function() {
+        return utc().year();
+    };
+
+    /** Returns the hour, according to universal time (from 0-23) */
+    this.getUTCHours = function() {
+        return utc().hour();
+    };
+
+    /** Returns the milliseconds, according to universal time (from 0-999) */
+    this.getUTCMilliseconds = function() {
+        return utc().mills();
+    };
+
+    /** Returns the minutes, according to universal time (from 0-59) */
+    this.getUTCMinutes = function() {
+        return utc().minute();
+    };
+
+    /** Returns the month, according to universal time (from 0-11) */
+    this.getUTCMonth = function() {
+        return utc().month();
+    };
+
+    /** Returns the seconds, according to universal time (from 0-59) */
+    this.getUTCSeconds = function() {
+        return utc().second();
+    };
+
+    /** Sets the day of the month, according to universal time (from 1-31) */
+    this.setUTCDate = function(date) {
+        calendar.time(utc().date(date).time());
+    };
+
+    /** Sets the year, according to universal time (four digits) */
+    this.setUTCFullYear = function(year, month, date) {
+        var u = utcCalendar.time(calendar.time());
+
+        u.year(year);
+        month !== undefined && u.month(month);
+        date !== undefined && u.date(date);
+
+        calendar.time(u.time());
+    };
+
+    /** Sets the hour, according to universal time (from 0-23) */
+    this.setUTCHours = function(hour, min, sec, ms) {
+        var u = utcCalendar.time(calendar.time());
+
+        u.hour(hour);
+        min !== undefined && u.minute(min);
+        sec !== undefined && u.second(sec);
+        ms !== undefined && u.mills(ms);
+
+        calendar.time(u.time());
+    };
+
+    /** Sets the milliseconds, according to universal time (from 0-999) */
+    this.setUTCMilliseconds = function(ms) {
+        var u = utcCalendar.time(calendar.time());
+
+        u.mills(ms);
+
+        calendar.time(u.time());
+    };
+
+    /** Set the minutes, according to universal time (from 0-59) */
+    this.setUTCMinutes = function(min, sec, ms) {
+        var u = utcCalendar.time(calendar.time());
+
+        u.minute(min);
+        sec !== undefined && u.second(sec);
+        ms !== undefined && u.mills(ms);
+
+        calendar.time(u.time());
+    };
+
+    /** Sets the month, according to universal time (from 0-11) */
+    this.setUTCMonth = function(month, date) {
+        var u = utcCalendar.time(calendar.time());
+
+        u.month(month);
+        date !== undefined && u.date(date);
+
+        calendar.time(u.time());
+    };
+
+    /** Set the seconds, according to universal time (from 0-59) */
+    this.setUTCSeconds = function(sec, ms) {
+        var u = utcCalendar.time(calendar.time());
+
+        u.second(sec);
+        ms !== undefined && u.mills(ms);
+
+        calendar.time(u.time());
+    };
+
+    /**
+     * Converts a Date object to a string, according to universal time.
+     *
+     * @deprecated use the toUTCString() method instead
+     */
+    this.toGMTString = function() {
+        return self.toUTCString();
+    };
+
+    /** Returns the date portion of a Date object as a string, using locale conventions */
+    this.toLocaleDateString = function() {
+        return self.toString("yyyy-MM-dd");
+    };
+
+    /** Returns the time portion of a Date object as a string, using locale conventions */
+    this.toLocaleTimeString = function() {
+        return self.toString("HH:mm:ss");
+    };
+
+    /** Converts the date portion of a Date object into a readable string */
+    this.toDateString = function() {
+        return self.toString("yyyy-MM-dd");
+    };
+
+    /** Converts a Date object to a string, using locale conventions */
+    this.toLocaleString = function() {
+        return self.toString("yyyy-MM-ddTHH:mm:ss");
+    };
+
+    /** Converts the time portion of a Date object to a string */
+    this.toTimeString = function() {
+        return self.toString("HH:mm:ss");
+    };
+
+    /** Converts a Date object to a string, according to universal time */
+    this.toUTCString = function() {
+        return new DateTime.Formatter("yyyy-MM-ddTHH:mm:ss").format(utc());
+    };
+
+    /** Converts a Date object to a string */
+    this.toString = function(pattern) {
+        pattern = DateTime.Util.exists(pattern, "yyyy-MM-ddTHH:mm:ss Z");
+
+        return new DateTime.Formatter(pattern).format(calendar);
+    };
+
 };
 
-/** Returns the year (four digits) */
-Date.prototype.getFullYear = function () {
-    return this.calendar().year();
+DateTime._init_ = function() {
+    DateTime._Date = Date;
+
+    return DateTime;
 };
 
-/**
- * Returns the year (four digits)
- *
- * @deprecated use the getFullYear() method instead
- */
-Date.prototype.getYear = function () {
-    return this.getFullYear();
+DateTime.currentTimeMillis = function() {
+    return new DateTime._Date().getTime();
 };
 
-/** Returns the month (from 0-11) */
-Date.prototype.getMonth = function () {
-    return this.calendar().month();
-};
-
-/** Returns the day of the month (from 1-31) */
-Date.prototype.getDate = function () {
-    return this.calendar().date();
-};
-
-/** Returns the day of the week (from 0-6) */
-Date.prototype.getDay = function () {
-    return this.calendar().day();
-};
-
-/** Returns the hour (from 0-23) */
-Date.prototype.getHours = function () {
-    return this.calendar().hour();
-};
-
-/** Returns the minutes (from 0-59) */
-Date.prototype.getMinutes = function () {
-    return this.calendar().minute();
-};
-
-/** Returns the seconds (from 0-59) */
-Date.prototype.getSeconds = function () {
-    return this.calendar().second();
-};
-
-/** Returns the milliseconds (from 0-999) */
-Date.prototype.getMilliseconds = function () {
-    return this.calendar().mills();
-};
-
-/** Sets the year (four digits) */
-Date.prototype.setFullYear = function (year, month, date) {
-    this.calendar().year(year);
-    month && this.calendar().month(month);
-    date && this.calendar().date(date);
-
-    this.setTime(this.calendar().time());
-    this._time = this.getTime();
-};
-
-/**
- * Sets the year (four digits)
- *
- * @deprecated use the setFullYear() method instead
- */
-Date.prototype.setYear = function (year) {
-    this.setFullYear(year);
-};
-
-/** Sets the month (from 0-11) */
-Date.prototype.setMonth = function (month, date) {
-    this.calendar().month(month);
-    date && this.calendar().date(date);
-
-    this.setTime(this.calendar().time());
-    this._time = this.getTime();
-};
-
-/** Sets the day of the month (from 1-31) */
-Date.prototype.setDate = function (date) {
-    this.calendar().date(date);
-
-    this.setTime(this.calendar().time());
-    this._time = this.getTime();
-};
-
-/** Sets the hour (from 0-23) */
-Date.prototype.setHours = function (hour, min, sec, mills) {
-    this.calendar().hour(hour);
-    min && this.calendar().minute(min);
-    sec && this.calendar().second(sec);
-    mills && this.calendar().mills(mills);
-
-    this.setTime(this.calendar().time());
-    this._time = this.getTime();
-};
-
-/** Set the minutes (from 0-59) */
-Date.prototype.setMinutes = function (min, sec, mills) {
-    this.calendar().minute(min);
-    sec && this.calendar().second(sec);
-    mills && this.calendar().mills(mills);
-
-    this.setTime(this.calendar().time());
-    this._time = this.getTime();
-};
-
-/** Sets the seconds (from 0-59) */
-Date.prototype.setSeconds = function (sec, mills) {
-    this.calendar().second(sec);
-    mills && this.calendar().mills(mills);
-
-    this.setTime(this.calendar().time());
-    this._time = this.getTime();
-};
-
-/** Sets the milliseconds (from 0-999) */
-Date.prototype.setMilliseconds = function (mills) {
-    this.calendar().mills(mills);
-
-    this.setTime(this.calendar().time());
-    this._time = this.getTime();
-};
-
-/** Returns the time difference between GMT and local time, in minutes */
-Date.prototype.getTimezoneOffset = function () {
-    return this._calendar.timeZone().offset();
-};
-
-/**
- * Converts a Date object to a string, according to universal time.
- *
- * @deprecated use the toUTCString() method instead
- */
-Date.prototype.toGMTString = function() {
-    return this.toUTCString();
-};
-
-/** Returns the date portion of a Date object as a string, using locale conventions */
-Date.prototype.toLocaleDateString = function() {
-    if (!this._utcFormatter) {
-        this._utcFormatter = new Date.Formatter("yyyy-MM-dd");
-    }
-
-    return this._utcFormatter(this.calendar());
-};
-
-/** Returns the time portion of a Date object as a string, using locale conventions */
-Date.prototype.toLocaleTimeString = function() {
-    if (!this._utcFormatter) {
-        this._utcFormatter = new Date.Formatter("HH:mm:ss");
-    }
-
-    return this._utcFormatter(this.calendar());
-};
-
-/** Converts the date portion of a Date object into a readable string */
-Date.prototype.toDateString = function() {
-    if (!this._utcFormatter) {
-        this._utcFormatter = new Date.Formatter("yyyy-MM-dd");
-    }
-
-    return this._utcFormatter(this.calendar());
-};
-
-/** Converts a Date object to a string, using locale conventions */
-Date.prototype.toLocaleString = function() {
-    if (!this._utcFormatter) {
-        this._utcFormatter = new Date.Formatter("yyyy-MM-ddTHH:mm:ss");
-    }
-
-    return this._utcFormatter(this.calendar());
-};
-
-/** Converts the time portion of a Date object to a string */
-Date.prototype.toTimeString = function() {
-    if (!this._utcFormatter) {
-        this._utcFormatter = new Date.Formatter("HH:mm:ss");
-    }
-
-    return this._utcFormatter(this.calendar());
-};
-
-/** Converts a Date object to a string, according to universal time */
-Date.prototype.toUTCString = function() {
-    if (!this._utcFormatter) {
-        this._utcFormatter = new Date.Formatter("yyyy-MM-ddTHH:mm:ss");
-    }
-
-    var tz = this.calendar().timeZone();
-
-    try {
-        return this._utcFormatter(this.calendar(Date.TimeZone.UTC));
-    } finally {
-        this.calendar(tz);
-    }
-};
-
-/** Converts a Date object to a string */
-Date.prototype.toString = function() {
-    if (!this._utcFormatter) {
-        this._utcFormatter = new Date.Formatter("yyyy-MM-ddTHH:mm:ss Z");
-    }
-
-    return this._utcFormatter(this.calendar());
-}
-
-//Date.UTC = function(year, month, date, hours, seconds, mills) {
+Date = DateTime._init_();
+//DateTime.UTC = function(year, month, date, hours, seconds, mills) {
 //
 //};
 //
-//Date.parse = function(dateString) {
+//DateTime.parse = function(dateString) {
 //
 //};

@@ -1,23 +1,23 @@
-Date.TimeZone.RuleSet.CET = [
+DateTime.TimeZone.RuleSet.CET = [
     {
-        offset: Date.Field.MILLS_PER_HOUR,
-        weekStart: Date.Field.Day.MONDAY,
+        offset: DateTime.Field.MILLS_PER_HOUR,
+        weekStart: DateTime.Field.Day.MONDAY,
         dst: {
-            offset: Date.Field.MILLS_PER_HOUR,
+            offset: DateTime.Field.MILLS_PER_HOUR,
             start: {
-                month: Date.Field.Month.MARCH,
+                month: DateTime.Field.Month.MARCH,
                 date: 31,
-                day: Date.Field.Day.SUNDAY,
+                day: DateTime.Field.Day.SUNDAY,
                 hour: 2
             },
             stop: {
-                month: Date.Field.Month.OCTOBER,
+                month: DateTime.Field.Month.OCTOBER,
                 date: 31,
-                day: Date.Field.Day.SUNDAY,
+                day: DateTime.Field.Day.SUNDAY,
                 hour: 3
             }
         }
     }
 ];
 
-Date.TimeZone.CET = new Date.TimeZone("CET", "Central Europe Time", Date.TimeZone.RuleSet.CET);
+DateTime.TimeZone.CET = new DateTime.TimeZone("CET", "Central Europe Time", DateTime.TimeZone.RuleSet.CET);

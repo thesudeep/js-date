@@ -3,7 +3,7 @@ function fail(message) {
 }
 
 function time(year, month, date, hour, min, sec, ms) {
-    var d = new Date();
+    var d = new DateTime._Date();
 
     arguments.length >= 1 && d.setUTCFullYear(year);
     arguments.length >= 2 && d.setUTCMonth(month - 1);
@@ -37,15 +37,15 @@ function assertFail(fn) {
 }
 
 function assertWithTime(mills, fn) {
-    var copyFn = Date.prototype.getTime;
+    var copyFn = DateTime.currentTimeMillis;
 
     try {
-        Date.prototype.getTime = function() {
+        DateTime.currentTimeMillis = function() {
             return mills;
-        }
+        };
 
         fn.call(this);
     } finally {
-        Date.prototype.getTime = copyFn;
+        DateTime.currentTimeMillis = copyFn;
     }
 }
