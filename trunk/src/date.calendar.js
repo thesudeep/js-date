@@ -13,82 +13,48 @@
 DateTime.Calendar = function(time, timeZone) {
     timeZone = DateTime.exists(timeZone, DateTime.TimeZone.DEFAULT);
 
-    function adjust() {
-        withOffset = instant + timeZone.offset(instant);
-
-        data.year.mills(withOffset);
-        data.month.mills(withOffset);
-        data.date.mills(withOffset);
-        data.day.mills(withOffset);
-        data.hour.mills(withOffset);
-        data.minute.mills(withOffset);
-        data.second.mills(withOffset);
-        data.mills.mills(withOffset);
-
-        data.weekOfYear.mills(withOffset - data.year.mills());
-        data.weekOfMonth.mills(withOffset, data.month.value(), data.year.value())
-    }
-
-    function _get(name, args, fn) {
-        if (args.length == 0) {
-            return data[name].value();
-        } else {
-            fn.call(this, args[0]);
-
-            return self;
-        }
-    }
-
     var self = this;
 
     var withOffset, instant = arguments.length === 0 ? DateTime.currentTimeMillis() : DateTime.validateInt(time);
 
-    var data = {
-        year: new DateTime.Field.Year(),
-        month: new DateTime.Field.Month(),
-        weekOfYear: new DateTime.Field.Week(),
-        weekOfMonth: new DateTime.Field.WeekOfMonth(),
-        date: new DateTime.Field.Date(),
-        day: new DateTime.Field.Day(),
-        hour: new DateTime.Field.Hour(),
-        minute: new DateTime.Field.Minute(),
-        second: new DateTime.Field.Second(),
-        mills: new DateTime.Field.Millisecond()
-    };
+    function _get(Field, args, fn) {
+        var field = new Field().mills(instant);
 
-    data.month._year = data.year;
-    data.date._month = data.month;
-    data.weekOfMonth._month = data.month;
-    data.weekOfMonth._day = data.day;
+        if (args.length === 0) {
+            return field.value();
+        }
 
-    adjust();
+        fn.call(self, args[0], field);
+
+        return self;
+    }
 
     /* -- Interface -- */
 
     this.year = function (year) {
-        return _get("year", arguments, function(value) {
-            instant -= data.year.mills();
-            data.year.value(value);
-            instant += data.year.mills();
+        return _get(DateTime.Field.Year, arguments, function(value, year) {
+            instant -= year.mills();
+            year.value(value);
+            instant += year.mills();
         });
     };
 
     this.month = function (month) {
-        return _get("month", arguments, function(value) {
+        return _get(DateTime.Field.Month, arguments, function(value, month) {
             var years = DateTime.quotRem(value - DateTime.Field.Month.MIN_MONTH, DateTime.Field.Month.MAX_MONTH);
 
             if (years.quot !== 0) {
-                self.year(data.year.value() + years.quot);
+                self.year(years.quot += self.year.value());
             }
 
-            instant -= data.month.mills();
-            data.month.value(years.rem + DateTime.Field.Month.MIN_MONTH, data.year.value());
-            instant += data.month.mills();
+            instant -= month.mills();
+            month.value(years.rem + DateTime.Field.Month.MIN_MONTH, years.quot);
+            instant += month.mills();
         });
     };
 
     this.weekOfYear = function (week) {
-        return _get("weekOfYear", arguments, function(value) {
+        return _get("weekOfYear", arguments, function(value, week) {
             value = DateTime.Field.Week.validate(value);
 
             instant -= data.weekOfYear.mills();
@@ -170,9 +136,9 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.clearTime = function() {
-        instant -= data.hour.mills() + data.minute.mills() + data.second.mills() + data.mills.mills();
+	    var time = DateTime.quotRem(instant, DateTime.Field.MILLS_PER_DAY);
 
-        adjust();
+        instant -= time.rem;
 
         return self;
     };
@@ -196,8 +162,6 @@ DateTime.Calendar = function(time, timeZone) {
             return instant;
         } else {
             instant = DateTime.validateInt(value);
-
-            adjust();
         }
     };
 
