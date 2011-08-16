@@ -1,7 +1,6 @@
 <html>
 <head>
     <script type="text/javascript" src="../src/date.core.js"></script>
-    <script type="text/javascript" src="../src/date.util.js"></script>
     <script type="text/javascript" src="../src/date.field.js"></script>
     <script type="text/javascript" src="../src/date.field.year.js"></script>
     <script type="text/javascript" src="../src/date.field.month.js"></script>
@@ -53,14 +52,29 @@
         }
     </style>
 </head>
-<body onload="run();">
+<body onload="runNumber();">
 <ul id="root"></ul>
 <script type="text/javascript">
     function $(id) {
         return document.getElementById(id);
     }
 
+	function runNumber() {
+		var time = new Date().getTime();
+	    var count = 100;
+		
+		while (--count !== 0) {
+		    if (1313452800000 !== new Date().calendar().clearTime().time()) {
+				throw new Error("Invalid");
+			}
+		}
+
+        append("root", "Finished in " + (new Date().getTime() - time) + "ms");
+	}
+	
     function run() {
+		var time = new Date().getTime();
+		
         runSuite("DateTime.Field.Year.Test", DateTime.Field.Year.Test);
         runSuite("DateTime.Field.Month.Test", DateTime.Field.Month.Test);
         runSuite("DateTime.Field.Date.Test", DateTime.Field.Date.Test);
@@ -76,17 +90,19 @@
         runSuite("DateTime.Calendar.Test", DateTime.Calendar.Test);
         runSuite("DateTime.Formatter.Test", DateTime.Formatter.Test);
 
-        append("root", "Finished");
+        append("root", "Finished in " + (new Date().getTime() - time) + "ms");
     }
 
     function runSuite(name, test) {
         var success = true;
-
         append("root", name + " <span id='" + name+ "_result'></span><ul id='" + name + "'></ul>");
 
-        $(name + "_result").innerHTML = "Running...";
+        var resultContainer = $(name + "_result");
+        var suiteContainer = $(name);
 
-        var cs, cf;
+        resultContainer.innerHTML = "Running...";
+
+        var cs, cf, elem;
 
         cs = cf = 0;
 
@@ -97,11 +113,17 @@
                 try {
                     f.call(this);
 
-                    append(name, "Success " + i).setAttribute("class", "success");
+                    elem = append(name, "Success " + i);
 
+					elem.setAttribute("class", "success");
+					elem.setAttribute("className", "success");
+					
                     cs++;
                 } catch (e) {
-                    append(name, "Failure " + i + ": " + e).setAttribute("class", "failure");
+                    elem = append(name, "Failure " + i + ": " + e.message);
+					
+					elem.setAttribute("class", "failure");
+					elem.setAttribute("className", "failure");
 
                     success = false;
 
@@ -110,8 +132,9 @@
             }
         }
 
-        $(name + "_result").innerHTML = success ? "(" + cs + ") Success" : "(" + cf + ") Failure. (" + cs + ") Success.";
-        $(name).parentNode.setAttribute("class", success ? "success" : "failure");
+        resultContainer.innerHTML = success ? "(" + cs + ") Success" : "(" + cf + ") Failure. (" + cs + ") Success.";
+        suiteContainer.parentNode.setAttribute("class", success ? "success" : "failure");
+        suiteContainer.parentNode.setAttribute("className", success ? "success" : "failure");
     }
 
     function append(id, html) {
