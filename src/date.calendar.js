@@ -11,7 +11,7 @@
  * it easily.
  */
 DateTime.Calendar = function(time, timeZone) {
-    timeZone = DateTime.Util.exists(timeZone, DateTime.TimeZone.DEFAULT);
+    timeZone = DateTime.exists(timeZone, DateTime.TimeZone.DEFAULT);
 
     function adjust() {
         withOffset = instant + timeZone.offset(instant);
@@ -41,7 +41,7 @@ DateTime.Calendar = function(time, timeZone) {
 
     var self = this;
 
-    var withOffset, instant = arguments.length === 0 ? DateTime.currentTimeMillis() : DateTime.Util.validateInt(time);
+    var withOffset, instant = arguments.length === 0 ? DateTime.currentTimeMillis() : DateTime.validateInt(time);
 
     var data = {
         year: new DateTime.Field.Year(),
@@ -75,7 +75,7 @@ DateTime.Calendar = function(time, timeZone) {
 
     this.month = function (month) {
         return _get("month", arguments, function(value) {
-            var years = DateTime.Util.quotRem(value - DateTime.Field.Month.MIN_MONTH, DateTime.Field.Month.MAX_MONTH);
+            var years = DateTime.quotRem(value - DateTime.Field.Month.MIN_MONTH, DateTime.Field.Month.MAX_MONTH);
 
             if (years.quot !== 0) {
                 self.year(data.year.value() + years.quot);
@@ -112,7 +112,7 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.plusDate = function(date) {
-        self.date(self.date() + DateTime.Util.validateInt(date));
+        self.date(self.date() + DateTime.validateInt(date));
 
         return self;
     };
@@ -169,12 +169,20 @@ DateTime.Calendar = function(time, timeZone) {
         });
     };
 
+    this.clearTime = function() {
+        instant -= data.hour.mills() + data.minute.mills() + data.second.mills() + data.mills.mills();
+
+        adjust();
+
+        return self;
+    };
+
     this.timeZone = function (tz) {
-        if (!DateTime.Util.exists(tz)) {
+        if (!DateTime.exists(tz)) {
             return timeZone;
         }
 
-        DateTime.Util.assertTrue(timeZone instanceof DateTime.TimeZone, "TimeZone should be an instance of DateTime.TimeZone class");
+        DateTime.assertTrue(timeZone instanceof DateTime.TimeZone, "TimeZone should be an instance of DateTime.TimeZone class");
 
         timeZone = tz;
 
@@ -187,14 +195,20 @@ DateTime.Calendar = function(time, timeZone) {
         if (arguments.length == 0) {
             return instant;
         } else {
-            instant = DateTime.Util.validateInt(value);
+            instant = DateTime.validateInt(value);
 
             adjust();
         }
     };
 
-    this.toString = function() {
-        return "{" + instant + ": " + data.year.value() + "-" + data.month.value() + "-" + data.date.value() + "-" + data.hour.value() + "-" + data.minute.value() + "-" + data.second.value() + "-" + data.mills.value() + "}"
+    this.toDate = function() {
+        return new Date(self.time());
+    };
+
+    this.toString = function(pattern) {
+        pattern = DateTime.exists(pattern, "yyyy-MM-ddTHH:mm:ss Z");
+
+        return new DateTime.Formatter(pattern).format(self);
     };
 };
 

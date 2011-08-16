@@ -8,12 +8,12 @@ DateTime.Field.Week = function(week) {
             return self._val * DateTime.Field.MILLS_PER_WEEK;
         }
 
-        value = DateTime.Util.validateInt(value);
+        value = DateTime.validateInt(value);
 
         if (arguments.length === 1) {
-            self._val = DateTime.Util.quotRem(value, DateTime.Field.MILLS_PER_WEEK).quot;
+            self._val = DateTime.quotRem(value, DateTime.Field.MILLS_PER_WEEK).quot;
         } else {
-            self._val = DateTime.Util.quotRem(value - start, DateTime.Field.MILLS_PER_WEEK).quot;
+            self._val = DateTime.quotRem(value - start, DateTime.Field.MILLS_PER_WEEK).quot;
         }
 
         return self;
@@ -35,7 +35,7 @@ DateTime.Field.Week = function(week) {
 };
 
 DateTime.Field.Week.validate = function(week) {
-    week = DateTime.Util.validateInt(week);
+    week = DateTime.validateInt(week);
 
     return week;
 };

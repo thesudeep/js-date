@@ -6,9 +6,9 @@ DateTime.Field.Hour = function(hour) {
             return self._val * DateTime.Field.MILLS_PER_HOUR;
         }
 
-        value = DateTime.Util.validateInt(value);
+        value = DateTime.validateInt(value);
 
-        self._val = DateTime.Util.quotRem(DateTime.Util.quotRem(value, DateTime.Field.MILLS_PER_DAY).rem, DateTime.Field.MILLS_PER_HOUR).quot;
+        self._val = DateTime.quotRem(DateTime.quotRem(value, DateTime.Field.MILLS_PER_DAY).rem, DateTime.Field.MILLS_PER_HOUR).quot;
 
         return self;
     };
@@ -34,9 +34,9 @@ DateTime.Field.Hour.MIN_HOUR = 0;
 DateTime.Field.Hour.MAX_HOUR = DateTime.Field.HOURS_PER_DAY - 1;
 
 DateTime.Field.Hour.validate = function(hour) {
-    hour = DateTime.Util.validateInt(hour);
+    hour = DateTime.validateInt(hour);
 
-    DateTime.Util.assertTrue(hour >= DateTime.Field.Hour.MIN_HOUR && hour <= DateTime.Field.Hour.MAX_HOUR,
+    DateTime.assertTrue(hour >= DateTime.Field.Hour.MIN_HOUR && hour <= DateTime.Field.Hour.MAX_HOUR,
             "Hours are expected to be in range [" + DateTime.Field.Hour.MIN_HOUR + ".." + DateTime.Field.Hour.MAX_HOUR + "] but was: " + hour);
 
     return hour;

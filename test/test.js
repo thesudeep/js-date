@@ -3,7 +3,7 @@ function fail(message) {
 }
 
 function time(year, month, date, hour, min, sec, ms) {
-    var d = new DateTime._Date();
+    var d = new Date();
 
     arguments.length >= 1 && d.setUTCFullYear(year);
     arguments.length >= 2 && d.setUTCMonth(month - 1);

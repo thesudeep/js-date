@@ -1,14 +1,14 @@
 DateTime.Field.WeekOfMonth = function(week, month, year, firstDay) {
     var self = this;
 
-    firstDay = DateTime.Field.Day.validate(DateTime.Util.exists(firstDay, DateTime.Field.Day.MIN_DAY));
+    firstDay = DateTime.Field.Day.validate(DateTime.exists(firstDay, DateTime.Field.Day.MIN_DAY));
 
     this.mills = function(value, month, year) {
         if (arguments.length === 0) {
             return self._val * DateTime.Field.MILLS_PER_WEEK - self._day.mills();
         }
 
-        value = DateTime.Util.validateInt(value);
+        value = DateTime.validateInt(value);
 
         if (arguments === 3) {
             self._month.value(month, year);
@@ -20,9 +20,9 @@ DateTime.Field.WeekOfMonth = function(week, month, year, firstDay) {
 
         self._day.mills(start);
 
-        var delta = DateTime.Util.quotRem(self._day.value() - firstDay, DateTime.Field.MILLS_PER_DAY).rem;
+        var delta = DateTime.quotRem(self._day.value() - firstDay, DateTime.Field.MILLS_PER_DAY).rem;
 
-        self._val = DateTime.Util.quotRem(delta + DateTime.Util.quotRem(value - start, DateTime.Field.MILLS_PER_DAY).quot, DateTime.Field.DAYS_PER_WEEK).quot;
+        self._val = DateTime.quotRem(delta + DateTime.quotRem(value - start, DateTime.Field.MILLS_PER_DAY).quot, DateTime.Field.DAYS_PER_WEEK).quot;
 
         return self;
     };
@@ -81,11 +81,11 @@ DateTime.Field.WeekOfMonth.LAST_WEEK = Number.MAX_VALUE;
 
 DateTime.Field.WeekOfMonth.validate = function(week, month, year, firstDay) {
     if (week !== DateTime.Field.WeekOfMonth.LAST_WEEK) {
-        week = DateTime.Util.validateInt(week);
+        week = DateTime.validateInt(week);
     }
 
     var m;
-    firstDay = DateTime.Field.Day.validate(DateTime.Util.exists(firstDay, DateTime.Field.Day.MIN_DAY));
+    firstDay = DateTime.Field.Day.validate(DateTime.exists(firstDay, DateTime.Field.Day.MIN_DAY));
 
     switch (arguments.length) {
         case 3:
@@ -101,16 +101,16 @@ DateTime.Field.WeekOfMonth.validate = function(week, month, year, firstDay) {
 
 
     var day = new DateTime.Field.Day().mills(m.mills() + m._year.mills());
-    var delta = DateTime.Util.quotRem(day.value() - firstDay, DateTime.Field.MILLS_PER_DAY).rem;
+    var delta = DateTime.quotRem(day.value() - firstDay, DateTime.Field.MILLS_PER_DAY).rem;
 
-    var quotRem = DateTime.Util.quotRem(delta + DateTime.Util.quotRem(m.duration(), DateTime.Field.MILLS_PER_DAY).quot, DateTime.Field.DAYS_PER_WEEK);
+    var quotRem = DateTime.quotRem(delta + DateTime.quotRem(m.duration(), DateTime.Field.MILLS_PER_DAY).quot, DateTime.Field.DAYS_PER_WEEK);
 
     var max = quotRem.quot + (quotRem.rem !== 0 ? DateTime.Field.WeekOfMonth.MIN_WEEK : 0);
 
     if (week === DateTime.Field.WeekOfMonth.LAST_WEEK) {
         week = max;
     } else {
-        DateTime.Util.assertTrue(week >= DateTime.Field.WeekOfMonth.MIN_WEEK && week <= max,
+        DateTime.assertTrue(week >= DateTime.Field.WeekOfMonth.MIN_WEEK && week <= max,
                 "Week of month is expected to be in range [" + DateTime.Field.WeekOfMonth.MIN_WEEK + ".." + max + "] but was: " + week);
     }
 

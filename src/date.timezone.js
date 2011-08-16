@@ -61,21 +61,21 @@ DateTime.TimeZone = function (id, name, rules) {
 
         var weekStart = new (function () {
             this.value = function() {
-                return DateTime.Util.exists(rule.weekStart, DateTime.Field.Day.MIN_DAY);
+                return DateTime.exists(rule.weekStart, DateTime.Field.Day.MIN_DAY);
             }
         });
 
-        DateTime.Util.assertTrue(rule.dst.start.month, "Month is missing in DST start settings");
-        DateTime.Util.assertTrue(rule.dst.stop.month, "Month is missing in DST stop settings");
+        DateTime.assertTrue(rule.dst.start.month, "Month is missing in DST start settings");
+        DateTime.assertTrue(rule.dst.stop.month, "Month is missing in DST stop settings");
 
-        DateTime.Util.assertTrue(rule.dst.start.hour, "Hour is missing in DST start settings");
-        DateTime.Util.assertTrue(rule.dst.stop.hour, "Hour is missing in DST stop settings");
+        DateTime.assertTrue(rule.dst.start.hour, "Hour is missing in DST start settings");
+        DateTime.assertTrue(rule.dst.stop.hour, "Hour is missing in DST stop settings");
 
-        DateTime.Util.assertTrue(rule.dst.start.date || rule.dst.start.week && rule.dst.start.day, "Missing required DST start settings");
-        DateTime.Util.assertTrue(rule.dst.stop.date || rule.dst.stop.week && rule.dst.stop.day, "Missing required DST stop settings");
+        DateTime.assertTrue(rule.dst.start.date || rule.dst.start.week && rule.dst.start.day, "Missing required DST start settings");
+        DateTime.assertTrue(rule.dst.stop.date || rule.dst.stop.week && rule.dst.stop.day, "Missing required DST stop settings");
 
-        DateTime.Util.assertTrue(!rule.dst.start.date || !rule.dst.start.week && !rule.dst.start.day, "Ambiguous DST start settings");
-        DateTime.Util.assertTrue(!rule.dst.stop.date || !rule.dst.stop.week && !rule.dst.stop.day, "Ambiguous DST stop settings");
+        DateTime.assertTrue(!rule.dst.start.date || !rule.dst.start.week && !rule.dst.start.day, "Ambiguous DST start settings");
+        DateTime.assertTrue(!rule.dst.stop.date || !rule.dst.stop.week && !rule.dst.stop.day, "Ambiguous DST stop settings");
 
         var startMonth = _get(DateTime.Field.Month, rule.dst.start.month, year);
         var stopMonth = _get(DateTime.Field.Month, rule.dst.stop.month, year);
