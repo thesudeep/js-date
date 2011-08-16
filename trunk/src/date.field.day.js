@@ -1,24 +1,24 @@
 DateTime.Field.Day = function(day, firstDay) {
     var self = this;
 
-    firstDay = DateTime.Field.Day.validate(DateTime.Util.exists(firstDay, DateTime.Field.Day.MIN_DAY));
+    firstDay = DateTime.Field.Day.validate(DateTime.exists(firstDay, DateTime.Field.Day.MIN_DAY));
 
     this._val = 0;
 
     this.mills = function(value) {
-        if (!DateTime.Util.exists(value)) {
-            return DateTime.Util.quotRem(self._val + DateTime.Field.Day.MIN_DAY - firstDay, DateTime.Field.DAYS_PER_WEEK).rem * DateTime.Field.MILLS_PER_DAY;
+        if (!DateTime.exists(value)) {
+            return DateTime.quotRem(self._val + DateTime.Field.Day.MIN_DAY - firstDay, DateTime.Field.DAYS_PER_WEEK).rem * DateTime.Field.MILLS_PER_DAY;
         }
 
-        value = DateTime.Util.validateInt(value);
+        value = DateTime.validateInt(value);
 
-        self._val = DateTime.Util.quotRem(DateTime.Field.Day.THURSDAY - DateTime.Field.Day.MIN_DAY + DateTime.Util.quotRem(value, DateTime.Field.MILLS_PER_DAY).quot, DateTime.Field.DAYS_PER_WEEK).rem;
+        self._val = DateTime.quotRem(DateTime.Field.Day.THURSDAY - DateTime.Field.Day.MIN_DAY + DateTime.quotRem(value, DateTime.Field.MILLS_PER_DAY).quot, DateTime.Field.DAYS_PER_WEEK).rem;
 
         return self;
     };
 
     this.value = function(day) {
-        if (!DateTime.Util.exists(day)) {
+        if (!DateTime.exists(day)) {
             return self._val + DateTime.Field.Day.MIN_DAY;
         }
 
@@ -27,7 +27,7 @@ DateTime.Field.Day = function(day, firstDay) {
         return self;
     };
 
-    if (DateTime.Util.exists(day)) {
+    if (DateTime.exists(day)) {
         this.value(day);
     } else {
         this.mills(DateTime.currentTimeMillis());
@@ -53,9 +53,9 @@ DateTime.Field.Day.MIN_DAY = DateTime.Field.Day.MONDAY;
 DateTime.Field.Day.MAX_DAY = DateTime.Field.Day.SUNDAY;
 
 DateTime.Field.Day.validate = function(day) {
-    day = DateTime.Util.validateInt(day);
+    day = DateTime.validateInt(day);
 
-    DateTime.Util.assertTrue(day >= DateTime.Field.Day.MIN_DAY && day <= DateTime.Field.Day.MAX_DAY,
+    DateTime.assertTrue(day >= DateTime.Field.Day.MIN_DAY && day <= DateTime.Field.Day.MAX_DAY,
             "Day is expected to be in range [" + DateTime.Field.Day.MIN_DAY + ".." + DateTime.Field.Day.MAX_DAY + "] but was: " + day);
 
     return day;
