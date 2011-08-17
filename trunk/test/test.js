@@ -19,6 +19,20 @@ function time(year, month, date, hour, min, sec, ms) {
     return d.getTime();
 }
 
+function mock(obj) {
+    var mock = {};
+
+    for (var i in obj) {
+        mock[i] = (function(val) {
+            return function() {
+                return val;
+            }
+        })(obj[i]);
+    }
+
+    return mock;
+}
+
 function assertEquals(expected, actual) {
     if (expected != actual) {
         fail("Expected (" + expected + ") but was (" + actual + ")");
@@ -40,16 +54,16 @@ function assertFail(fn) {
 }
 
 function assertWithTime(millis, fn) {
-    var copyFn = DateTime.currentTimeMillis;
+    var copyFn = Date.prototype.getTime;
 
     try {
-        DateTime.currentTimeMillis = function() {
+        Date.prototype.getTime = function() {
             return millis;
         };
 
         fn.call(this);
     } finally {
-        DateTime.currentTimeMillis = copyFn;
+        Date.prototype.getTime = copyFn;
     }
 }
 
@@ -86,7 +100,7 @@ function runSuite(name, test) {
     for (var i in test) {
         var f = test[i];
 
-        if (typeof (f) === "function") {
+        if (typeof (f) === "function" && String(i).match(/^test.*$/)) {
             startTimer();
 
             try {
