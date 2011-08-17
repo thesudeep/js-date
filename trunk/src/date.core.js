@@ -2,6 +2,19 @@ DateTime = {
     currentTimeMillis: function() {
         return new Date().getTime();
     },
+    trail: function(value, count, symbol) {
+        symbol = DateTime.exists(symbol, "0");
+
+        var text = "";
+
+        for (var i = 0; i < count; i++) {
+            text += symbol;
+        }
+
+        text += value;
+
+        return text.substr(text.length - count)
+    },
     exists: function(parameter, replacement) {
         var b = parameter !== undefined && parameter !== null;
 

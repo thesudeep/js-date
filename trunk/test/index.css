@@ -1,0 +1,24 @@
+.success {
+    color: green;
+}
+
+span {
+    font-weight: bold;
+    font-family: monospace;
+}
+
+span.method {
+    text-decoration: underline;
+}
+
+.failure {
+    color: red;
+}
+
+li.failure ul li.success {
+    display: none;
+}
+
+li.success ul {
+    display: none;
+}
