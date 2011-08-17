@@ -7,7 +7,7 @@ DateTime.Field.Hour.Test.testCreation = function() {
 };
 
 DateTime.Field.Hour.Test.testCreation_Empty = function() {
-    assertWithTime(10 * DateTime.Field.MILLS_PER_HOUR + 1231, function () {
+    assertWithTime(10 * DateTime.MILLS_PER_HOUR + 1231, function () {
         var hour = new DateTime.Field.Hour();
 
         assertEquals(10, hour.value());
@@ -21,37 +21,37 @@ DateTime.Field.Hour.Test.testSetValue = function() {
 };
 
 DateTime.Field.Hour.Test.testGetMills_Epoch = function() {
-    var hour = new DateTime.Field.Hour().mills(10120);
+    var hour = new DateTime.Field.Hour().millis(10120);
 
-    assertEquals(0, hour.mills());
+    assertEquals(0, hour.millis());
 };
 
 DateTime.Field.Hour.Test.testGetMills_Mills_10h = function() {
-    var hour = new DateTime.Field.Hour().mills(10 * DateTime.Field.MILLS_PER_HOUR + 1231);
+    var hour = new DateTime.Field.Hour().millis(10 * DateTime.MILLS_PER_HOUR + 1231);
 
-    assertEquals(10 * DateTime.Field.MILLS_PER_HOUR, hour.mills());
+    assertEquals(10 * DateTime.MILLS_PER_HOUR, hour.millis());
 };
 
 DateTime.Field.Hour.Test.testGetMills_Mills_2h = function() {
-    var hour = new DateTime.Field.Hour().mills(DateTime.Field.MILLS_PER_HOUR * 2);
+    var hour = new DateTime.Field.Hour().millis(DateTime.MILLS_PER_HOUR * 2);
 
-    assertEquals(2 * DateTime.Field.MILLS_PER_HOUR, hour.mills());
+    assertEquals(2 * DateTime.MILLS_PER_HOUR, hour.millis());
 };
 
 DateTime.Field.Hour.Test.testSetMills_2h_Start = function() {
-    var hour = new DateTime.Field.Hour().mills(DateTime.Field.MILLS_PER_HOUR * 2 + 1221);
+    var hour = new DateTime.Field.Hour().millis(DateTime.MILLS_PER_HOUR * 2 + 1221);
 
     assertEquals(2, hour.value());
 };
 
 DateTime.Field.Hour.Test.testSetMills_2h_Before = function() {
-    var hour = new DateTime.Field.Hour().mills(DateTime.Field.MILLS_PER_HOUR * 2 - 1);
+    var hour = new DateTime.Field.Hour().millis(DateTime.MILLS_PER_HOUR * 2 - 1);
 
     assertEquals(1, hour.value());
 };
 
 DateTime.Field.Hour.Test.testSetMills_negative = function() {
-    var hour = new DateTime.Field.Hour().mills(-62130513600000);
+    var hour = new DateTime.Field.Hour().millis(-62130513600000);
 
     assertEquals(20, hour.value());
 };

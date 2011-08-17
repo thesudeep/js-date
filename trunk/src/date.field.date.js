@@ -1,9 +1,9 @@
 DateTime.Field.Date = function(date, month, year) {
     var self = this;
 
-    this.mills = function(value, month, year) {
+    this.millis = function(value, month, year) {
         if (arguments.length === 0) {
-            return self._val * DateTime.Field.MILLS_PER_DAY;
+            return self._val * DateTime.MILLS_PER_DAY;
         }
 
         value = DateTime.validateInt(value);
@@ -11,10 +11,10 @@ DateTime.Field.Date = function(date, month, year) {
         if (arguments === 3) {
             self._month.value(month, year);
         } else {
-            self._month.mills(value);
+            self._month.millis(value);
         }
 
-        self._val = Math.floor((value - self._month.mills() - self._month._year.mills()) / DateTime.Field.MILLS_PER_DAY);
+        self._val = Math.floor((value - self._month.millis() - self._month._year.millis()) / DateTime.MILLS_PER_DAY);
 
         return self;
     };
@@ -52,7 +52,7 @@ DateTime.Field.Date = function(date, month, year) {
             break;
         case 0 :
             this._month = new DateTime.Field.Month();
-            this.mills(DateTime.currentTimeMillis());
+            this.millis(DateTime.currentTimeMillis());
             break;
     }
 };
@@ -65,10 +65,10 @@ DateTime.Field.Date.validate = function(date, month, year) {
 
     switch (arguments.length) {
         case 3 :
-            max = Math.floor(new DateTime.Field.Month(month, year).duration() / DateTime.Field.MILLS_PER_DAY);
+            max = Math.floor(new DateTime.Field.Month(month, year).duration() / DateTime.MILLS_PER_DAY);
             break;
         case 2 :
-            max = Math.floor(new DateTime.Field.Month(month).duration() / DateTime.Field.MILLS_PER_DAY);
+            max = Math.floor(new DateTime.Field.Month(month).duration() / DateTime.MILLS_PER_DAY);
             break;
     }
 

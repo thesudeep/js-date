@@ -34,7 +34,7 @@ DateTime.TimeZone = function (id, name, rules) {
     }
 
     function toTime(obj) {
-        return obj ? obj.mills() : 0;
+        return obj ? obj.millis() : 0;
     }
 
     function calcDelta(obj, month, weekStart) {
@@ -47,7 +47,7 @@ DateTime.TimeZone = function (id, name, rules) {
                     toTime(_get(DateTime.Field.Day, obj.day, weekStart));
 
             if (delta > month.duration()) {
-                delta -= DateTime.Field.MILLS_PER_WEEK;
+                delta -= DateTime.MILLS_PER_WEEK;
             }
         }
 
@@ -93,7 +93,7 @@ DateTime.TimeZone = function (id, name, rules) {
     }
 
     this.offset = function(time) {
-        year.mills(time);
+        year.millis(time);
 
         var rule = findRule();
 

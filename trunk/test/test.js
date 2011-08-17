@@ -36,12 +36,12 @@ function assertFail(fn) {
     }
 }
 
-function assertWithTime(mills, fn) {
+function assertWithTime(millis, fn) {
     var copyFn = DateTime.currentTimeMillis;
 
     try {
         DateTime.currentTimeMillis = function() {
-            return mills;
+            return millis;
         };
 
         fn.call(this);

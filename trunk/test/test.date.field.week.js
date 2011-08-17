@@ -19,31 +19,31 @@ DateTime.Field.Week.Test.testSetValue = function() {
 };
 
 DateTime.Field.Week.Test.testGetMills_Epoch = function() {
-    var week = new DateTime.Field.Week().mills(10120);
+    var week = new DateTime.Field.Week().millis(10120);
 
-    assertEquals(0, week.mills());
+    assertEquals(0, week.millis());
 };
 
 DateTime.Field.Week.Test.testGetMills_Mills = function() {
-    var week = new DateTime.Field.Week().mills(DateTime.Field.MILLS_PER_WEEK * 100 + 1234);
+    var week = new DateTime.Field.Week().millis(DateTime.MILLS_PER_WEEK * 100 + 1234);
 
-    assertEquals(DateTime.Field.MILLS_PER_WEEK * 100, week.mills());
+    assertEquals(DateTime.MILLS_PER_WEEK * 100, week.millis());
 };
 
 DateTime.Field.Week.Test.testGetMills_Value = function() {
     var week = new DateTime.Field.Week().value(100);
 
-    assertEquals(DateTime.Field.MILLS_PER_WEEK * 100, week.mills());
+    assertEquals(DateTime.MILLS_PER_WEEK * 100, week.millis());
 };
 
 DateTime.Field.Week.Test.testSetMills_Without_Start = function() {
-    var week = new DateTime.Field.Week().mills(DateTime.Field.MILLS_PER_WEEK * 100 + 1234);
+    var week = new DateTime.Field.Week().millis(DateTime.MILLS_PER_WEEK * 100 + 1234);
 
     assertEquals(100, week.value());
 };
 
 DateTime.Field.Week.Test.testSetMills_With_Start = function() {
-    var week = new DateTime.Field.Week().mills(DateTime.Field.MILLS_PER_WEEK * 100 + 1234, 1235);
+    var week = new DateTime.Field.Week().millis(DateTime.MILLS_PER_WEEK * 100 + 1234, 1235);
 
     assertEquals(99, week.value());
 };

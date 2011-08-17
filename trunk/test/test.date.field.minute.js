@@ -7,7 +7,7 @@ DateTime.Field.Minute.Test.testCreation = function() {
 };
 
 DateTime.Field.Minute.Test.testCreation_Empty = function() {
-    assertWithTime(10 * DateTime.Field.MILLS_PER_MINUTE + 1231, function () {
+    assertWithTime(10 * DateTime.MILLS_PER_MINUTE + 1231, function () {
         var minute = new DateTime.Field.Minute();
 
         assertEquals(10, minute.value());
@@ -21,37 +21,37 @@ DateTime.Field.Minute.Test.testSetValue = function() {
 };
 
 DateTime.Field.Minute.Test.testGetMills_Epoch = function() {
-    var minute = new DateTime.Field.Minute().mills(10120);
+    var minute = new DateTime.Field.Minute().millis(10120);
 
-    assertEquals(0, minute.mills());
+    assertEquals(0, minute.millis());
 };
 
 DateTime.Field.Minute.Test.testGetMills_Mills_10m = function() {
-    var minute = new DateTime.Field.Minute().mills(10 * DateTime.Field.MILLS_PER_MINUTE + 1231);
+    var minute = new DateTime.Field.Minute().millis(10 * DateTime.MILLS_PER_MINUTE + 1231);
 
-    assertEquals(10 * DateTime.Field.MILLS_PER_MINUTE, minute.mills());
+    assertEquals(10 * DateTime.MILLS_PER_MINUTE, minute.millis());
 };
 
 DateTime.Field.Minute.Test.testGetMills_Mills_2m = function() {
-    var minute = new DateTime.Field.Minute().mills(DateTime.Field.MILLS_PER_MINUTE * 2 + 1221);
+    var minute = new DateTime.Field.Minute().millis(DateTime.MILLS_PER_MINUTE * 2 + 1221);
 
-    assertEquals(2 * DateTime.Field.MILLS_PER_MINUTE, minute.mills());
+    assertEquals(2 * DateTime.MILLS_PER_MINUTE, minute.millis());
 };
 
 DateTime.Field.Minute.Test.testSetMills_2m_Start = function() {
-    var minute = new DateTime.Field.Minute().mills(DateTime.Field.MILLS_PER_MINUTE * 2);
+    var minute = new DateTime.Field.Minute().millis(DateTime.MILLS_PER_MINUTE * 2);
 
     assertEquals(2, minute.value());
 };
 
 DateTime.Field.Minute.Test.testSetMills_2m_Before = function() {
-    var minute = new DateTime.Field.Minute().mills(DateTime.Field.MILLS_PER_MINUTE * 2 - 1);
+    var minute = new DateTime.Field.Minute().millis(DateTime.MILLS_PER_MINUTE * 2 - 1);
 
     assertEquals(1, minute.value());
 };
 
 DateTime.Field.Minute.Test.testSetMills_negative = function() {
-    var minute = new DateTime.Field.Minute().mills(-62130512880000);
+    var minute = new DateTime.Field.Minute().millis(-62130512880000);
 
     assertEquals(12, minute.value());
 };

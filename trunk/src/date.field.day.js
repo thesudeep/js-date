@@ -5,14 +5,14 @@ DateTime.Field.Day = function(day, firstDay) {
 
     this._val = 0;
 
-    this.mills = function(value) {
+    this.millis = function(value) {
         if (!DateTime.exists(value)) {
-            return DateTime.quotRem(self._val + DateTime.Field.Day.MIN_DAY - firstDay, DateTime.Field.DAYS_PER_WEEK).rem * DateTime.Field.MILLS_PER_DAY;
+            return DateTime.quotRem(self._val + DateTime.Field.Day.MIN_DAY - firstDay, DateTime.DAYS_PER_WEEK).rem * DateTime.MILLS_PER_DAY;
         }
 
         value = DateTime.validateInt(value);
 
-        self._val = DateTime.quotRem(DateTime.Field.Day.THURSDAY - DateTime.Field.Day.MIN_DAY + DateTime.quotRem(value, DateTime.Field.MILLS_PER_DAY).quot, DateTime.Field.DAYS_PER_WEEK).rem;
+        self._val = DateTime.quotRem(DateTime.Field.Day.THURSDAY - DateTime.Field.Day.MIN_DAY + DateTime.quotRem(value, DateTime.MILLS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).rem;
 
         return self;
     };
@@ -30,7 +30,7 @@ DateTime.Field.Day = function(day, firstDay) {
     if (DateTime.exists(day)) {
         this.value(day);
     } else {
-        this.mills(DateTime.currentTimeMillis());
+        this.millis(DateTime.currentTimeMillis());
     }
 };
 

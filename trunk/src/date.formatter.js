@@ -109,7 +109,7 @@ DateTime.Formatter = (function() {
 
     var MillsOfSecond = function(count) {
         this.format = function(calendar) {
-            return trail(calendar.mills(), count);
+            return trail(calendar.millis(), count);
         }
     };
 
@@ -121,7 +121,7 @@ DateTime.Formatter = (function() {
 
     var TimeZoneOffset = function(count) {
         this.format = function(calendar) {
-            var offset = DateTime.quotRem(DateTime.quotRem(calendar.timeZone().offset(calendar.time()), DateTime.Field.MILLS_PER_MINUTE).quot, DateTime.Field.MINUTES_PER_HOUR);
+            var offset = DateTime.quotRem(DateTime.quotRem(calendar.timeZone().offset(calendar.time()), DateTime.MILLS_PER_MINUTE).quot, DateTime.MINUTES_PER_HOUR);
 
             return (offset.quot < 0 ? "-" : "+") + trail(offset.quot, 2) + trail(offset.rem, 2);
         }
