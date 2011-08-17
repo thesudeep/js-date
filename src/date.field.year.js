@@ -1,4 +1,4 @@
-DateTime.Field.Year = function(millis) {
+DateTime.Field.Year = function(calendar) {
     var self = this;
 
     this._ms = 0;
@@ -93,7 +93,7 @@ DateTime.Field.Year = function(millis) {
         return self;
     };
 
-    this.millis(DateTime.exists(millis, 0));
+    this.millis(calendar.time());
 };
 
 DateTime.Field.Year.EPOCH = 1970;
@@ -117,10 +117,4 @@ DateTime.Field.Year.validate = function(year) {
             "Year is expected to be in range [" + DateTime.Field.Year.MIN_YEAR + ".." + DateTime.Field.Year.MAX_YEAR + "] but was: " + year);
 
     return year;
-};
-
-DateTime.Field.Year.isLeap = function(year) {
-    year = DateTime.Field.Year.validate(year);
-
-    return new DateTime.Field.Year().value(year).isLeap();
 };
