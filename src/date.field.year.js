@@ -1,45 +1,65 @@
-DateTime.Field.Year = function(year) {
+DateTime.Field.Year = function(millis) {
     var self = this;
 
-    function calendarYear(year) {
-        return year <= 0 ? year - 1 : year;
+    this._ms = 0;
+    this._val = DateTime.Field.Year.EPOCH;
+    this._leap = false;
+
+    function getLeap(year) {
+        return (year & 3) === 0 && (year % 100 !== 0 || year % 400 === 0);
     }
 
-    function yearMills(year) {
+    function getApproxMillis(year) {
         var leapYears = Math.floor(year / 4) - Math.floor(year / 100) + Math.floor(year / 400);
-
-        if (DateTime.Field.Year.isLeap(calendarYear(year))) {
-            leapYears--;
-        }
 
         return (year * 365 + (leapYears - DateTime.Field.Year.DAYS_0000_TO_1970)) * DateTime.MILLS_PER_DAY;
     }
 
     this.isLeap = function() {
-        return DateTime.Field.Year.isLeap(calendarYear(self._val));
+        return self._leap;
     };
 
     this.millis = function(value) {
         if (arguments.length === 0) {
-            return yearMills(self._val);
+            return self._ms;
         }
 
         value = DateTime.validateInt(value);
 
-        var halfYearMills = DateTime.Field.Year.MILLS_PER_YEAR / 2;
-        var halfValue = value / 2 + DateTime.Field.Year.MILLS_0000_TO_1970 / 2;
+        var halfValue = value / 2;
 
-        var year = Math.floor(halfValue / halfYearMills);
-        var yearStart = yearMills(year);
-        var diff = value - yearStart;
+        if (value === self._ms || Math.abs(halfValue - self._ms / 2) < DateTime.Field.Year.HALF_MILLS_PER_YEAR) {
+            return self;
+        }
+
+        halfValue += DateTime.Field.Year.HALF_MILLS_0000_TO_1970;
+
+        var year = Math.floor(halfValue / DateTime.Field.Year.HALF_MILLS_PER_YEAR);
+        var leap = getLeap(year);
+
+        var ms = getApproxMillis(year);
+        var millisPerYear = DateTime.Field.Year.MILLS_PER_NORMAL_YEAR;
+
+        if (leap) {
+            ms -= DateTime.MILLS_PER_DAY;
+            millisPerYear = DateTime.Field.Year.MILLS_PER_LEAP_YEAR;
+        }
+
+        var diff = value - ms;
 
         if (diff < 0) {
             year--;
-        } else if (diff >= (DateTime.Field.Year.isLeap(calendarYear(year)) ? DateTime.Field.Year.MILLS_PER_LEAP_YEAR : DateTime.Field.Year.MILLS_PER_NORMAL_YEAR)) {
-            year++
+            ms -= millisPerYear;
+            leap = getLeap(year);
+        } else if (diff >= millisPerYear) {
+            year++;
+            ms += millisPerYear;
+            leap = getLeap(year);
         }
 
+        self._ms = ms;
         self._val = year;
+        self._leap = leap;
 
         return self;
     };
@@ -55,27 +75,38 @@ DateTime.Field.Year = function(year) {
             year++;
         }
 
+        if (year === self._val) {
+            return self;
+        }
+
+        var ms = getApproxMillis(year);
+
+        self._leap = getLeap(year);
+
+        if (self._leap) {
+            ms -= DateTime.MILLS_PER_DAY;
+        }
+
+        self._ms = ms;
         self._val = year;
 
         return self;
     };
 
-    if (arguments.length === 0) {
-        this.millis(DateTime.currentTimeMillis());
-    } else {
-        this.value(year);
-    }
+    this.millis(DateTime.exists(millis, 0));
 };
 
 DateTime.Field.Year.EPOCH = 1970;
-DateTime.Field.Year.MIN_YEAR = -292275054;
-DateTime.Field.Year.MAX_YEAR = 292278993;
-DateTime.Field.Year.MILLS_PER_YEAR = 365.2425 * DateTime.MILLS_PER_DAY;;
+DateTime.Field.Year.MIN_YEAR = -271821;
+DateTime.Field.Year.MAX_YEAR = 275759;
+DateTime.Field.Year.MILLS_PER_YEAR = 365.2425 * DateTime.MILLS_PER_DAY;
 DateTime.Field.Year.MILLS_PER_NORMAL_YEAR = 365 * DateTime.MILLS_PER_DAY;
 DateTime.Field.Year.MILLS_PER_LEAP_YEAR = DateTime.Field.Year.MILLS_PER_NORMAL_YEAR + DateTime.MILLS_PER_DAY;
 
 DateTime.Field.Year.DAYS_0000_TO_1970 = 719527;
 DateTime.Field.Year.MILLS_0000_TO_1970 = DateTime.Field.Year.DAYS_0000_TO_1970 * DateTime.MILLS_PER_DAY;
+DateTime.Field.Year.HALF_MILLS_PER_YEAR = Math.floor(DateTime.Field.Year.MILLS_PER_YEAR / 2);
+DateTime.Field.Year.HALF_MILLS_0000_TO_1970 = Math.floor(DateTime.Field.Year.MILLS_0000_TO_1970 / 2);
 
 DateTime.Field.Year.validate = function(year) {
     year = DateTime.validateInt(year);
@@ -91,9 +122,5 @@ DateTime.Field.Year.validate = function(year) {
 DateTime.Field.Year.isLeap = function(year) {
     year = DateTime.Field.Year.validate(year);
 
-    if (year < 0) {
-        year++;
-    }
-
-    return ((year & 3) == 0) && ((year % 100) != 0 || (year % 400) == 0);
+    return new DateTime.Field.Year().value(year).isLeap();
 };

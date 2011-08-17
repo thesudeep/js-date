@@ -1,11 +1,14 @@
+var counterIndex = -1;
+var counter = [];
+
 function fail(message) {
     throw new Error(message);
 }
 
 function time(year, month, date, hour, min, sec, ms) {
-    var d = new Date();
+    var d = new Date(0);
 
-    arguments.length >= 1 && d.setUTCFullYear(year);
+    arguments.length >= 1 && d.setUTCFullYear(year < 0 ? year + 1 : year);
     arguments.length >= 2 && d.setUTCMonth(month - 1);
     arguments.length >= 3 && d.setUTCDate(date);
     arguments.length >= 4 && d.setUTCHours(hour);
@@ -48,4 +51,86 @@ function assertWithTime(millis, fn) {
     } finally {
         DateTime.currentTimeMillis = copyFn;
     }
+}
+
+function $(id) {
+    return document.getElementById(id);
+}
+
+function startTimer() {
+    counter[++counterIndex] = new Date().getTime();
+}
+
+function stopTimer() {
+    if (counterIndex < 0) {
+        throw new Error("Timer has not been started");
+    }
+
+    return new Date().getTime() - counter[counterIndex--];
+}
+
+function runSuite(name, test) {
+    append("root", "<span id='" + name + "_text' class='text'></span> " + name + " (<span id='" + name+ "_success' class='success'></span>:<span id='" + name+ "_failure' class='failure'></span>)<ul id='" + name + "'></ul>");
+
+    var textSpan = $(name + "_text");
+    var successSpan = $(name + "_success");
+    var failureSpan = $(name + "_failure");
+    var suiteContainer = $(name);
+
+    textSpan.innerHTML = "Running...";
+
+    var suiteTime, time, cs, cf, message, className;
+
+    suiteTime = cs = cf = 0;
+
+    for (var i in test) {
+        var f = test[i];
+
+        if (typeof (f) === "function") {
+            startTimer();
+
+            try {
+                f.call(this);
+
+                message = "Success <span class='method'>" + i + "</span>", className = "success";
+
+                successSpan.innerHTML = ++cs;
+            } catch (e) {
+                message = "Failure <span class='method'>" + i + "</span>: " + e.message, className = "failure";
+
+                failureSpan.innerHTML = ++cf;
+            } finally {
+                time = stopTimer();
+
+                message = "<span>" + DateTime.trail(time, 3) + "ms.</span> " + message;
+
+                suiteTime += time;
+            }
+
+            setClass(append(name, message), className);
+        }
+    }
+
+    textSpan.innerHTML = DateTime.trail(suiteTime, 3) + "ms.</span>";
+    successSpan.innerHTML = "" + cs;
+    failureSpan.innerHTML = "" + cf;
+
+    setClass(suiteContainer.parentNode, cf === 0 ? "success" : "failure");
+
+    return cf + cs;
+}
+
+function append(id, html) {
+    var elem = document.createElement("li");
+
+    $(id).appendChild(elem);
+
+    elem.innerHTML = html;
+
+    return elem;
+}
+
+function setClass(elem, className) {
+    elem.setAttribute("class", className);
+    elem.setAttribute("className", className);
 }
