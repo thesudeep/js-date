@@ -1,14 +1,14 @@
 DateTime.Field.Millisecond = function(millisecond) {
     var self = this;
 
-    this.mills = function(value) {
+    this.millis = function(value) {
         if (arguments.length === 0) {
             return self._val;
         }
 
         value = DateTime.validateInt(value);
 
-        self._val = DateTime.quotRem(value, DateTime.Field.MILLS_PER_SECOND).rem;
+        self._val = DateTime.quotRem(value, DateTime.MILLS_PER_SECOND).rem;
 
         return self;
     };
@@ -26,12 +26,12 @@ DateTime.Field.Millisecond = function(millisecond) {
     if (arguments.length === 1) {
         this.value(millisecond);
     } else {
-        this.mills(DateTime.currentTimeMillis());
+        this.millis(DateTime.currentTimeMillis());
     }
 };
 
 DateTime.Field.Millisecond.MIN_MILLS = 0;
-DateTime.Field.Millisecond.MAX_MILLS = DateTime.Field.MILLS_PER_SECOND - 1;
+DateTime.Field.Millisecond.MAX_MILLS = DateTime.MILLS_PER_SECOND - 1;
 
 DateTime.Field.Millisecond.validate = function(millisecond) {
     millisecond = DateTime.validateInt(millisecond);

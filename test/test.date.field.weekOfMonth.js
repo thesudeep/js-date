@@ -21,39 +21,39 @@ DateTime.Field.WeekOfMonth.Test.testSetValue = function() {
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_Epoch = function() {
-    var week = new DateTime.Field.WeekOfMonth().mills(time(2011, 8, 30));
+    var week = new DateTime.Field.WeekOfMonth().millis(time(2011, 8, 30));
 
-    assertEquals(DateTime.Field.MILLS_PER_WEEK * 4, week.mills());
+    assertEquals(DateTime.MILLS_PER_WEEK * 4, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_Mills = function() {
-    var week = new DateTime.Field.WeekOfMonth().mills(time(2011, 9, 5));
+    var week = new DateTime.Field.WeekOfMonth().millis(time(2011, 9, 5));
 
-    assertEquals(DateTime.Field.MILLS_PER_DAY * 4, week.mills());
+    assertEquals(DateTime.MILLS_PER_DAY * 4, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_Value = function() {
     var week = new DateTime.Field.WeekOfMonth(1, 10, 2011).value(6);
 
-    assertEquals(DateTime.Field.MILLS_PER_DAY * 30, week.mills());
+    assertEquals(DateTime.MILLS_PER_DAY * 30, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_Last_6 = function() {
     var week = new DateTime.Field.WeekOfMonth(1, 10, 2011).value(DateTime.Field.WeekOfMonth.LAST_WEEK);
 
-    assertEquals(DateTime.Field.MILLS_PER_DAY * 30, week.mills());
+    assertEquals(DateTime.MILLS_PER_DAY * 30, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_Last_5 = function() {
     var week = new DateTime.Field.WeekOfMonth(1, 8, 2011).value(DateTime.Field.WeekOfMonth.LAST_WEEK);
 
-    assertEquals(DateTime.Field.MILLS_PER_WEEK * 4, week.mills());
+    assertEquals(DateTime.MILLS_PER_WEEK * 4, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_Last_4 = function() {
     var week = new DateTime.Field.WeekOfMonth(1, 2, 2010).value(DateTime.Field.WeekOfMonth.LAST_WEEK);
 
-    assertEquals(DateTime.Field.MILLS_PER_WEEK * 3, week.mills());
+    assertEquals(DateTime.MILLS_PER_WEEK * 3, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testValidate_text = function() {

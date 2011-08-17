@@ -21,25 +21,25 @@ DateTime.Field.Millisecond.Test.testSetValue = function() {
 };
 
 DateTime.Field.Millisecond.Test.testGetMills_Epoch = function() {
-    var millisecond = new DateTime.Field.Millisecond().mills(10120);
+    var millisecond = new DateTime.Field.Millisecond().millis(10120);
 
-    assertEquals(120, millisecond.mills());
+    assertEquals(120, millisecond.millis());
 };
 
 DateTime.Field.Millisecond.Test.testSetMills_0ms_Start = function() {
-    var millisecond = new DateTime.Field.Millisecond().mills(0);
+    var millisecond = new DateTime.Field.Millisecond().millis(0);
 
     assertEquals(0, millisecond.value());
 };
 
 DateTime.Field.Millisecond.Test.testSetMills_0ms_Before = function() {
-    var millisecond = new DateTime.Field.Millisecond().mills(-1);
+    var millisecond = new DateTime.Field.Millisecond().millis(-1);
 
     assertEquals(999, millisecond.value());
 };
 
 DateTime.Field.Millisecond.Test.testSetMills_negative = function() {
-    var millisecond = new DateTime.Field.Millisecond().mills(-62130512882031);
+    var millisecond = new DateTime.Field.Millisecond().millis(-62130512882031);
 
     assertEquals(969, millisecond.value());
 };

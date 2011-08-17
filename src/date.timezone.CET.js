@@ -1,9 +1,9 @@
 DateTime.TimeZone.RuleSet.CET = [
     {
-        offset: DateTime.Field.MILLS_PER_HOUR,
+        offset: DateTime.MILLS_PER_HOUR,
         weekStart: DateTime.Field.Day.MONDAY,
         dst: {
-            offset: DateTime.Field.MILLS_PER_HOUR,
+            offset: DateTime.MILLS_PER_HOUR,
             start: {
                 month: DateTime.Field.Month.MARCH,
                 week: DateTime.Field.WeekOfMonth.LAST_WEEK,

@@ -21,79 +21,79 @@ DateTime.Field.Year.Test.testSetValue = function() {
 };
 
 DateTime.Field.Year.Test.testGetMills_Epoch = function() {
-    var year = new DateTime.Field.Year().mills(10120);
+    var year = new DateTime.Field.Year().millis(10120);
 
-    assertEquals(0, year.mills());
+    assertEquals(0, year.millis());
 };
 
 DateTime.Field.Year.Test.testGetMills_Mills_946684800000 = function() {
-    var year = new DateTime.Field.Year().mills(946684800001);
+    var year = new DateTime.Field.Year().millis(946684800001);
 
-    assertEquals(946684800000, year.mills());
+    assertEquals(946684800000, year.millis());
 };
 
 DateTime.Field.Year.Test.testGetMills_Year_2000 = function() {
     var year = new DateTime.Field.Year().value(2000);
 
-    assertEquals(946684800000, year.mills());
+    assertEquals(946684800000, year.millis());
 };
 
 DateTime.Field.Year.Test.testGetMills_Year_minus2000 = function() {
     var year = new DateTime.Field.Year().value(-2001);
 
-    assertEquals(-125281123200000, year.mills());
+    assertEquals(-125281123200000, year.millis());
 };
 
 DateTime.Field.Year.Test.testSetMills_1_Start = function() {
-    var year = new DateTime.Field.Year().mills(-62135596800000);
+    var year = new DateTime.Field.Year().millis(-62135596800000);
 
     assertEquals(1, year.value());
 };
 
 DateTime.Field.Year.Test.testSetMills_1_Before = function() {
-    var year = new DateTime.Field.Year().mills(-62135596800000 - 1);
+    var year = new DateTime.Field.Year().millis(-62135596800000 - 1);
 
     assertEquals(-1, year.value());
 };
 
 DateTime.Field.Year.Test.testSetMills_minus2000_Start = function() {
-    var year = new DateTime.Field.Year().mills(-125249500800000);
+    var year = new DateTime.Field.Year().millis(-125249500800000);
 
     assertEquals(-2000, year.value());
 };
 
 DateTime.Field.Year.Test.testSetMills_minus2000_Before = function() {
-    var year = new DateTime.Field.Year().mills(-125249500800000 - 1);
+    var year = new DateTime.Field.Year().millis(-125249500800000 - 1);
 
     assertEquals(-2001, year.value());
 };
 
 DateTime.Field.Year.Test.testSetMills_2000_Start = function() {
-    var year = new DateTime.Field.Year().mills(946684800000);
+    var year = new DateTime.Field.Year().millis(946684800000);
 
     assertEquals(2000, year.value());
 };
 
 DateTime.Field.Year.Test.testSetMills_2000_Before = function() {
-    var year = new DateTime.Field.Year().mills(946684800000 - 1);
+    var year = new DateTime.Field.Year().millis(946684800000 - 1);
 
     assertEquals(1999, year.value());
 };
 
 DateTime.Field.Year.Test.testSetMills_2001_Start = function() {
-    var year = new DateTime.Field.Year().mills(978307200000);
+    var year = new DateTime.Field.Year().millis(978307200000);
 
     assertEquals(2001, year.value());
 };
 
 DateTime.Field.Year.Test.testSetMills_2001_Before = function() {
-    var year = new DateTime.Field.Year().mills(978307200000 - 1);
+    var year = new DateTime.Field.Year().millis(978307200000 - 1);
 
     assertEquals(2000, year.value());
 };
 
 DateTime.Field.Year.Test.testSetMills_Epoch = function() {
-    var year = new DateTime.Field.Year().mills(12312);
+    var year = new DateTime.Field.Year().millis(12312);
 
     assertEquals(1970, year.value());
 };

@@ -9,11 +9,11 @@ DateTime.Calendar.Test.testCreation = function() {
     assertEquals(4, calendar.hour());
     assertEquals(5, calendar.minute());
     assertEquals(6, calendar.second());
-    assertEquals(231, calendar.mills());
+    assertEquals(231, calendar.millis());
 };
 
 DateTime.Calendar.Test.testCreation_Empty = function() {
-    assertWithTime(10 * DateTime.Field.MILLS_PER_DAY + 1231, function () {
+    assertWithTime(10 * DateTime.MILLS_PER_DAY + 1231, function () {
         var calendar = new DateTime.Calendar();
 
         assertEquals(1970, calendar.year());
@@ -22,7 +22,7 @@ DateTime.Calendar.Test.testCreation_Empty = function() {
         assertEquals(0, calendar.hour());
         assertEquals(0, calendar.minute());
         assertEquals(1, calendar.second());
-        assertEquals(231, calendar.mills());
+        assertEquals(231, calendar.millis());
     });
 };
 
@@ -161,7 +161,7 @@ DateTime.Calendar.Test.testDay_Negative = function() {
 };
 
 DateTime.Calendar.Test.testHour_Positive = function() {
-    var calendar = new DateTime.Calendar(0).hour(DateTime.Field.HOURS_PER_DAY * (31 + 28 + 1) + 10);
+    var calendar = new DateTime.Calendar(0).hour(DateTime.HOURS_PER_DAY * (31 + 28 + 1) + 10);
 
     assertEquals(1970, calendar.year());
     assertEquals(DateTime.Field.Month.MARCH, calendar.month());

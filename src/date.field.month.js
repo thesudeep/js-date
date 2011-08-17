@@ -10,7 +10,7 @@ DateTime.Field.Month = function(month, year) {
                 MILLS_BY_NORMAL_MONTHS[self._val + 1] - MILLS_BY_NORMAL_MONTHS[self._val];
     };
 
-    this.mills = function(value, year) {
+    this.millis = function(value, year) {
         if (arguments.length === 0) {
             return (self._year.isLeap() ? MILLS_BY_LEAP_MONTHS[self._val] : MILLS_BY_NORMAL_MONTHS[self._val]);
         }
@@ -18,14 +18,14 @@ DateTime.Field.Month = function(month, year) {
         value = DateTime.validateInt(value);
 
         if (arguments.length === 1) {
-            self._year.mills(value);
+            self._year.millis(value);
         } else {
             self._year.value(year);
         }
 
         // Copied from JodaTime.
 
-        var i = (value - self._year.mills()) / 1024;
+        var i = (value - self._year.millis()) / 1024;
 
         // There are 86400000 milliseconds per day, but divided by 1024 is
         // 84375. There are 84375 (128/125)seconds per day.
@@ -69,7 +69,7 @@ DateTime.Field.Month = function(month, year) {
     switch (arguments.length) {
         case 0:
             this._year = new DateTime.Field.Year();
-            this.mills(DateTime.currentTimeMillis(), this._year.value());
+            this.millis(DateTime.currentTimeMillis(), this._year.value());
             break;
         case 1:
             this._year = new DateTime.Field.Year();

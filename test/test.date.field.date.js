@@ -7,7 +7,7 @@ DateTime.Field.Date.Test.testCreation = function() {
 };
 
 DateTime.Field.Date.Test.testCreation_Empty = function() {
-    assertWithTime(10 * DateTime.Field.MILLS_PER_DAY + 1231, function () {
+    assertWithTime(10 * DateTime.MILLS_PER_DAY + 1231, function () {
         var date = new DateTime.Field.Date();
 
         assertEquals(11, date.value());
@@ -21,61 +21,61 @@ DateTime.Field.Date.Test.testSetValue = function() {
 };
 
 DateTime.Field.Date.Test.testGetMills_Epoch = function() {
-    var date = new DateTime.Field.Date().mills(10120);
+    var date = new DateTime.Field.Date().millis(10120);
 
-    assertEquals(0, date.mills());
+    assertEquals(0, date.millis());
 };
 
 DateTime.Field.Date.Test.testGetMills_Mills_First = function() {
-    var date = new DateTime.Field.Date().mills(946684800001);
+    var date = new DateTime.Field.Date().millis(946684800001);
 
-    assertEquals(0, date.mills());
+    assertEquals(0, date.millis());
 };
 
 DateTime.Field.Date.Test.testGetMills_Mills_Second = function() {
-    var date = new DateTime.Field.Date().mills(946771200010);
+    var date = new DateTime.Field.Date().millis(946771200010);
 
-    assertEquals(DateTime.Field.MILLS_PER_DAY, date.mills());
+    assertEquals(DateTime.MILLS_PER_DAY, date.millis());
 };
 
 DateTime.Field.Date.Test.testGetMills_Leap = function() {
     var date = new DateTime.Field.Date().value(29, 2, 2000);
 
-    assertEquals(28 * DateTime.Field.MILLS_PER_DAY, date.mills());
+    assertEquals(28 * DateTime.MILLS_PER_DAY, date.millis());
 };
 
 DateTime.Field.Date.Test.testGetMills_NotLeap = function() {
     var date = new DateTime.Field.Date().value(28, 2, 2001);
 
-    assertEquals(27 * DateTime.Field.MILLS_PER_DAY, date.mills());
+    assertEquals(27 * DateTime.MILLS_PER_DAY, date.millis());
 };
 
 DateTime.Field.Date.Test.testSetMills_plus1_March_Start = function() {
-    var date = new DateTime.Field.Date().mills(-62130499200000);
+    var date = new DateTime.Field.Date().millis(-62130499200000);
 
     assertEquals(1, date.value());
 };
 
 DateTime.Field.Date.Test.testSetMills_plus1_March_Before = function() {
-    var date = new DateTime.Field.Date().mills(-62130499200000 - 1);
+    var date = new DateTime.Field.Date().millis(-62130499200000 - 1);
 
     assertEquals(28, date.value());
 };
 
 DateTime.Field.Date.Test.testSetMills_minus2001_March_Start = function() {
-    var date = new DateTime.Field.Date().mills(-125275939200000);
+    var date = new DateTime.Field.Date().millis(-125275939200000);
 
     assertEquals(1, date.value());
 };
 
 DateTime.Field.Date.Test.testSetMills_minus2001_March_Before = function() {
-    var date = new DateTime.Field.Date().mills(-125275939200000 - 1);
+    var date = new DateTime.Field.Date().millis(-125275939200000 - 1);
 
     assertEquals(29, date.value());
 };
 
 DateTime.Field.Date.Test.testSetMills_Epoch = function() {
-    var date = new DateTime.Field.Date().mills(12312);
+    var date = new DateTime.Field.Date().millis(12312);
 
     assertEquals(1, date.value());
 };

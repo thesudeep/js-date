@@ -14,17 +14,18 @@ DateTime.Calendar = function(time, timeZone) {
     timeZone = DateTime.exists(timeZone, DateTime.TimeZone.DEFAULT);
 
     var self = this;
+    var data = {};
 
     var withOffset, instant = arguments.length === 0 ? DateTime.currentTimeMillis() : DateTime.validateInt(time);
 
     function _get(Field, args, fn) {
-        var field = new Field().mills(instant);
+        var field = new Field().millis(instant);
 
         if (args.length === 0) {
             return field.value();
         }
 
-        fn.call(self, args[0], field);
+        fn.call(self, args[0]);
 
         return self;
     }
@@ -32,34 +33,34 @@ DateTime.Calendar = function(time, timeZone) {
     /* -- Interface -- */
 
     this.year = function (year) {
-        return _get(DateTime.Field.Year, arguments, function(value, year) {
-            instant -= year.mills();
+        return _get(DateTime.Field.Year, arguments, function(value) {
+            instant -= year.millis();
             year.value(value);
-            instant += year.mills();
+            instant += year.millis();
         });
     };
 
     this.month = function (month) {
-        return _get(DateTime.Field.Month, arguments, function(value, month) {
+        return _get(DateTime.Field.Month, arguments, function(value) {
             var years = DateTime.quotRem(value - DateTime.Field.Month.MIN_MONTH, DateTime.Field.Month.MAX_MONTH);
 
             if (years.quot !== 0) {
                 self.year(years.quot += self.year.value());
             }
 
-            instant -= month.mills();
+            instant -= month.millis();
             month.value(years.rem + DateTime.Field.Month.MIN_MONTH, years.quot);
-            instant += month.mills();
+            instant += month.millis();
         });
     };
 
     this.weekOfYear = function (week) {
-        return _get("weekOfYear", arguments, function(value, week) {
+        return _get("weekOfYear", arguments, function(value) {
             value = DateTime.Field.Week.validate(value);
 
-            instant -= data.weekOfYear.mills();
+            instant -= data.weekOfYear.millis();
             data.weekOfYear.value(value);
-            instant += data.weekOfYear.mills();
+            instant += data.weekOfYear.millis();
 
             adjust();
         });
@@ -69,9 +70,9 @@ DateTime.Calendar = function(time, timeZone) {
         return _get("weekOfMonth", arguments, function(value) {
             value = DateTime.Field.WeekOfMonth.validate(value);
 
-            instant -= data.weekOfMonth.mills();
+            instant -= data.weekOfMonth.millis();
             data.weekOfMonth.value(value);
-            instant += data.weekOfMonth.mills();
+            instant += data.weekOfMonth.millis();
 
             adjust();
         });
@@ -85,7 +86,7 @@ DateTime.Calendar = function(time, timeZone) {
 
     this.date = function (date) {
         return _get("date", arguments, function(value) {
-            instant += (value - DateTime.Field.Date.MIN_DATE) * DateTime.Field.MILLS_PER_DAY - data.date.mills();
+            instant += (value - DateTime.Field.Date.MIN_DATE) * DateTime.MILLS_PER_DAY - data.date.millis();
 
             adjust();
         });
@@ -95,9 +96,9 @@ DateTime.Calendar = function(time, timeZone) {
         return _get("day", arguments, function(value) {
             value = DateTime.Field.Day.validate(value);
 
-            instant -= data.day.mills();
+            instant -= data.day.millis();
             data.day.value(value);
-            instant += data.day.mills();
+            instant += data.day.millis();
 
             adjust();
         });
@@ -105,7 +106,7 @@ DateTime.Calendar = function(time, timeZone) {
 
     this.hour = function (hour) {
         return _get("hour", arguments, function(value) {
-            instant += value * DateTime.Field.MILLS_PER_HOUR - data.hour.mills();
+            instant += value * DateTime.MILLS_PER_HOUR - data.hour.millis();
 
             adjust();
         });
@@ -113,7 +114,7 @@ DateTime.Calendar = function(time, timeZone) {
 
     this.minute = function (minute) {
         return _get("minute", arguments, function(value) {
-            instant += value * DateTime.Field.MILLS_PER_MINUTE - data.minute.mills();
+            instant += value * DateTime.MILLS_PER_MINUTE - data.minute.millis();
 
             adjust();
         });
@@ -121,22 +122,22 @@ DateTime.Calendar = function(time, timeZone) {
 
     this.second = function (second) {
         return _get("second", arguments, function(value) {
-            instant += value * DateTime.Field.MILLS_PER_SECOND - data.second.mills();
+            instant += value * DateTime.MILLS_PER_SECOND - data.second.millis();
 
             adjust();
         });
     };
 
-    this.mills = function (mills) {
-        return _get("mills", arguments, function(value) {
-            instant += value - data.mills.mills();
+    this.millis = function (millis) {
+        return _get("millis", arguments, function(value) {
+            instant += value - data.millis.millis();
 
             adjust();
         });
     };
 
     this.clearTime = function() {
-	    var time = DateTime.quotRem(instant, DateTime.Field.MILLS_PER_DAY);
+	    var time = DateTime.quotRem(instant, DateTime.MILLS_PER_DAY);
 
         instant -= time.rem;
 

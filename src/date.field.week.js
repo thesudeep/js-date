@@ -3,17 +3,17 @@ DateTime.Field.Week = function(week) {
 
     this._val = 0;
 
-    this.mills = function(value, start) {
+    this.millis = function(value, start) {
         if (arguments.length === 0) {
-            return self._val * DateTime.Field.MILLS_PER_WEEK;
+            return self._val * DateTime.MILLS_PER_WEEK;
         }
 
         value = DateTime.validateInt(value);
 
         if (arguments.length === 1) {
-            self._val = DateTime.quotRem(value, DateTime.Field.MILLS_PER_WEEK).quot;
+            self._val = DateTime.quotRem(value, DateTime.MILLS_PER_WEEK).quot;
         } else {
-            self._val = DateTime.quotRem(value - start, DateTime.Field.MILLS_PER_WEEK).quot;
+            self._val = DateTime.quotRem(value - start, DateTime.MILLS_PER_WEEK).quot;
         }
 
         return self;
