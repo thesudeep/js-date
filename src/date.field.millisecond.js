@@ -1,5 +1,7 @@
-DateTime.Field.Millisecond = function(millisecond) {
+DateTime.Field.Millisecond = function(calendar) {
     var self = this;
+
+    this._val = 0;
 
     this.millis = function(value) {
         if (arguments.length === 0) {
@@ -8,7 +10,9 @@ DateTime.Field.Millisecond = function(millisecond) {
 
         value = DateTime.validateInt(value);
 
-        self._val = DateTime.quotRem(value, DateTime.MILLS_PER_SECOND).rem;
+        if (self._val !== value) {
+            self._val = DateTime.quotRem(value, DateTime.MILLS_PER_SECOND).rem;
+        }
 
         return self;
     };
@@ -23,11 +27,7 @@ DateTime.Field.Millisecond = function(millisecond) {
         return self;
     };
 
-    if (arguments.length === 1) {
-        this.value(millisecond);
-    } else {
-        this.millis(DateTime.currentTimeMillis());
-    }
+    this.millis(calendar.time());
 };
 
 DateTime.Field.Millisecond.MIN_MILLS = 0;

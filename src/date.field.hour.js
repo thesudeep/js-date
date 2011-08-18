@@ -1,14 +1,18 @@
-DateTime.Field.Hour = function(hour) {
+DateTime.Field.Hour = function(calendar) {
     var self = this;
+
+    this._val = 0;
+    this._ms = 0;
 
     this.millis = function(value) {
         if (arguments.length === 0) {
-            return self._val * DateTime.MILLS_PER_HOUR;
+            return self._ms;
         }
 
         value = DateTime.validateInt(value);
 
         self._val = DateTime.quotRem(DateTime.quotRem(value, DateTime.MILLS_PER_DAY).rem, DateTime.MILLS_PER_HOUR).quot;
+        self._ms = self._val * DateTime.MILLS_PER_HOUR;
 
         return self;
     };
@@ -18,16 +22,15 @@ DateTime.Field.Hour = function(hour) {
             return self._val;
         }
 
-        self._val = DateTime.Field.Hour.validate(hour);
+        if (self._val !== hour) {
+            self._val = DateTime.Field.Hour.validate(hour);
+            self._ms = self._val * DateTime.MILLS_PER_HOUR;
+        }
 
         return self;
     };
 
-    if (arguments.length === 1) {
-        this.value(hour);
-    } else {
-        this.millis(DateTime.currentTimeMillis());
-    }
+    this.millis(calendar.time());
 };
 
 DateTime.Field.Hour.MIN_HOUR = 0;
