@@ -15,8 +15,9 @@ DateTime.Calendar = function(time, timeZone) {
 
     var self = this;
     var data = {};
-
     var withOffset, instant = arguments.length === 0 ? DateTime.currentTimeMillis() : DateTime.validateInt(time);
+
+    var firstDay = timeZone.firstDay(instant);
 
     function _get(Field, args, fn) {
         var field = new Field().millis(instant);
@@ -31,6 +32,16 @@ DateTime.Calendar = function(time, timeZone) {
     }
 
     /* -- Interface -- */
+
+    this.firstDay = function(value) {
+        if (arguments.length === 0) {
+            return firstDay;
+        }
+
+        firstDay = DateTime.Field.Day.validate(value);
+
+        return self;
+    };
 
     this.year = function (year) {
         return _get(DateTime.Field.Year, arguments, function(value) {
@@ -56,7 +67,7 @@ DateTime.Calendar = function(time, timeZone) {
 
     this.weekOfYear = function (week) {
         return _get("weekOfYear", arguments, function(value) {
-            value = DateTime.Field.Week.validate(value);
+            value = DateTime.Field.WeekOfYear.validate(value);
 
             instant -= data.weekOfYear.millis();
             data.weekOfYear.value(value);

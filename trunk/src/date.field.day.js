@@ -1,37 +1,29 @@
-DateTime.Field.Day = function(day, firstDay) {
+DateTime.Field.Day = function(calendar) {
     var self = this;
 
-    firstDay = DateTime.Field.Day.validate(DateTime.exists(firstDay, DateTime.Field.Day.MIN_DAY));
-
-    this._val = 0;
+    this._val = DateTime.Field.Day.EPOCH;
 
     this.millis = function(value) {
         if (!DateTime.exists(value)) {
-            return DateTime.quotRem(self._val + DateTime.Field.Day.MIN_DAY - firstDay, DateTime.DAYS_PER_WEEK).rem * DateTime.MILLS_PER_DAY;
+            return DateTime.quotRem(self._val - calendar.firstDay(), DateTime.DAYS_PER_WEEK).rem * DateTime.MILLS_PER_DAY;
         }
 
-        value = DateTime.validateInt(value);
-
-        self._val = DateTime.quotRem(DateTime.Field.Day.THURSDAY - DateTime.Field.Day.MIN_DAY + DateTime.quotRem(value, DateTime.MILLS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).rem;
+        self._val = DateTime.Field.Day.millisToDay(value);
 
         return self;
     };
 
     this.value = function(day) {
         if (!DateTime.exists(day)) {
-            return self._val + DateTime.Field.Day.MIN_DAY;
+            return self._val;
         }
 
-        self._val = DateTime.Field.Day.validate(day) - DateTime.Field.Day.MIN_DAY;
+        self._val = DateTime.Field.Day.validate(day);
 
         return self;
     };
 
-    if (DateTime.exists(day)) {
-        this.value(day);
-    } else {
-        this.millis(DateTime.currentTimeMillis());
-    }
+    this.millis(calendar.time());
 };
 
 /** Constant (1) representing Monday, the first day of the week (ISO) */
@@ -49,8 +41,16 @@ DateTime.Field.Day.SATURDAY = 6;
 /** Constant (7) representing Sunday, the seventh day of the week (ISO) */
 DateTime.Field.Day.SUNDAY = 7;
 
+DateTime.Field.Day.EPOCH = DateTime.Field.Day.THURSDAY;
+
 DateTime.Field.Day.MIN_DAY = DateTime.Field.Day.MONDAY;
 DateTime.Field.Day.MAX_DAY = DateTime.Field.Day.SUNDAY;
+
+DateTime.Field.Day.millisToDay = function(millis) {
+    millis = DateTime.validateInt(millis);
+
+    return DateTime.quotRem(DateTime.Field.Day.EPOCH - DateTime.Field.Day.MIN_DAY + DateTime.quotRem(millis, DateTime.MILLS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).rem + DateTime.Field.Day.MIN_DAY;
+};
 
 DateTime.Field.Day.validate = function(day) {
     day = DateTime.validateInt(day);
