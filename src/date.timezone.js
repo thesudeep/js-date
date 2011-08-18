@@ -92,6 +92,18 @@ DateTime.TimeZone = function (id, name, rules) {
         }
     }
 
+    this.firstDay = function(time) {
+        year.millis(time);
+
+        var rule = findRule();
+
+        if (rule && DateTime.exists(rule.weekStart)) {
+            return rule.weekStart;
+        }
+
+        return Date.Field.Day.MONDAY;
+    };
+
     this.offset = function(time) {
         year.millis(time);
 
