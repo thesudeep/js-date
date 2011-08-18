@@ -1,78 +1,40 @@
-DateTime.Field.Date = function(date, month, year) {
+DateTime.Field.Date = function(calendar) {
     var self = this;
 
-    this.millis = function(value, month, year) {
+    this.millis = function(value) {
         if (arguments.length === 0) {
             return self._val * DateTime.MILLS_PER_DAY;
         }
 
         value = DateTime.validateInt(value);
 
-        if (arguments === 3) {
-            self._month.value(month, year);
-        } else {
-            self._month.millis(value);
-        }
+        var shift = calendar.year().millis(value).millis() + calendar.month().millis(value).millis();
 
-        self._val = Math.floor((value - self._month.millis() - self._month._year.millis()) / DateTime.MILLS_PER_DAY);
+        self._val = Math.floor((value - shift) / DateTime.MILLS_PER_DAY);
 
         return self;
     };
 
-    this.value = function(date, month, year) {
-        switch (arguments.length) {
-            case 0 :
-                return self._val + 1;
-            case 3 :
-                self._month.value(month, year);
-                break;
-            case 2 :
-                self._month.value(month);
-                break;
-
+    this.value = function(date) {
+        if (arguments.length === 0) {
+            return self._val + 1;
         }
 
-        self._val = DateTime.Field.Date.validate(date, self._month.value(), self._month._year.value()) - 1;
+        self._val = DateTime.Field.Date.validate(date, calendar.month().duration()) - 1;
 
         return self;
     };
 
-    switch (arguments.length) {
-        case 3 :
-            this._month = new DateTime.Field.Month(month, year);
-            this.value(date, this._month.value());
-            break;
-        case 2 :
-            this._month = new DateTime.Field.Month(month);
-            this.value(date, this._month.value());
-            break;
-        case 1 :
-            this._month = new DateTime.Field.Month();
-            this.value(date);
-            break;
-        case 0 :
-            this._month = new DateTime.Field.Month();
-            this.millis(DateTime.currentTimeMillis());
-            break;
-    }
+    this.millis(calendar.time());
 };
 
 DateTime.Field.Date.MIN_DATE = 1;
 DateTime.Field.Date.MAX_DATE = 31;
 
-DateTime.Field.Date.validate = function(date, month, year) {
-    var max = DateTime.Field.Date.MAX_DATE;
-
-    switch (arguments.length) {
-        case 3 :
-            max = Math.floor(new DateTime.Field.Month(month, year).duration() / DateTime.MILLS_PER_DAY);
-            break;
-        case 2 :
-            max = Math.floor(new DateTime.Field.Month(month).duration() / DateTime.MILLS_PER_DAY);
-            break;
-    }
-
+DateTime.Field.Date.validate = function(date, duration) {
     date = DateTime.validateInt(date);
+
+    var max = DateTime.exists(duration) ? Math.floor(duration / DateTime.MILLS_PER_DAY) : DateTime.Field.Date.MAX_DATE;
 
     DateTime.assertTrue(date >= DateTime.Field.Date.MIN_DATE && date <= max,
             "Date is expected to be in range [" + DateTime.Field.Date.MIN_DATE + ".." + max + "] but was: " + date);
