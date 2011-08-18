@@ -13,138 +13,120 @@ DateTime.Field.Date.Test.testCreation_Empty = function() {
 };
 
 DateTime.Field.Date.Test.testSetValue = function() {
-    var date = DateTime.Field.Date.Test.createDate().value(1);
+    var date = DateTime.Field.Date.Test.createDate(1970).value(1);
 
     assertEquals(1, date.value());
 };
 
 DateTime.Field.Date.Test.testGetMills_Epoch = function() {
-    var date = DateTime.Field.Date.Test.createDate().millis(10120);
+    var date = DateTime.Field.Date.Test.createDate(1970).millis(10120);
 
     assertEquals(0, date.millis());
 };
 
 DateTime.Field.Date.Test.testGetMills_Mills_First = function() {
-    var date = DateTime.Field.Date.Test.createDate().millis(946684800001);
+    var date = DateTime.Field.Date.Test.createDate(2000, 11).millis(time(2000, 11, 1));
 
     assertEquals(0, date.millis());
 };
 
 DateTime.Field.Date.Test.testGetMills_Mills_Second = function() {
-    var date = DateTime.Field.Date.Test.createDate().millis(946771200010);
+    var date = DateTime.Field.Date.Test.createDate(2000, 2).millis(time(2000, 2, 2));
 
     assertEquals(DateTime.MILLS_PER_DAY, date.millis());
 };
 
 DateTime.Field.Date.Test.testGetMills_Leap = function() {
-    var date = DateTime.Field.Date.Test.createDate().value(29, 2, 2000);
+    var date = DateTime.Field.Date.Test.createDate(2000, 2).value(29);
 
     assertEquals(28 * DateTime.MILLS_PER_DAY, date.millis());
 };
 
 DateTime.Field.Date.Test.testGetMills_NotLeap = function() {
-    var date = DateTime.Field.Date.Test.createDate().value(28, 2, 2001);
+    var date = DateTime.Field.Date.Test.createDate(2001, 2).value(28);
 
     assertEquals(27 * DateTime.MILLS_PER_DAY, date.millis());
 };
 
 DateTime.Field.Date.Test.testSetMills_plus1_March_Start = function() {
-    var date = DateTime.Field.Date.Test.createDate().millis(-62130499200000);
+    var date = DateTime.Field.Date.Test.createDate(1, 3).millis(time(1, 3, 1));
 
     assertEquals(1, date.value());
 };
 
 DateTime.Field.Date.Test.testSetMills_plus1_March_Before = function() {
-    var date = DateTime.Field.Date.Test.createDate().millis(-62130499200000 - 1);
+    var date = DateTime.Field.Date.Test.createDate(1, 2).millis(time(1, 3, 1) - 1);
 
     assertEquals(28, date.value());
 };
 
 DateTime.Field.Date.Test.testSetMills_minus2001_March_Start = function() {
-    var date = DateTime.Field.Date.Test.createDate().millis(-125275939200000);
+    var date = DateTime.Field.Date.Test.createDate(-2001, 3).millis(time(-2001, 3, 1));
 
     assertEquals(1, date.value());
 };
 
 DateTime.Field.Date.Test.testSetMills_minus2001_March_Before = function() {
-    var date = DateTime.Field.Date.Test.createDate().millis(-125275939200000 - 1);
+    var date = DateTime.Field.Date.Test.createDate(-2001, 2).millis(time(-2001, 3, 1) - 1);
 
     assertEquals(29, date.value());
 };
 
 DateTime.Field.Date.Test.testSetMills_Epoch = function() {
-    var date = DateTime.Field.Date.Test.createDate().millis(12312);
+    var date = DateTime.Field.Date.Test.createDate(1970, 1).millis(12312);
 
     assertEquals(1, date.value());
 };
 
-DateTime.Field.Date.Test.testMaxDate_Constructor_OK = function() {
-    var date = DateTime.Field.Date.Test.createDate(DateTime.Field.Date.MAX_DATE);
-
-    assertEquals(DateTime.Field.Date.MAX_DATE, date.value());
-};
-
-DateTime.Field.Date.Test.testMaxDate_Constructor_Month_OK = function() {
-    var date = DateTime.Field.Date.Test.createDate(28, 2);
-
-    assertEquals(28, date.value());
-};
-
-DateTime.Field.Date.Test.testMaxDate_Constructor_Month_Year_OK = function() {
-    var date = DateTime.Field.Date.Test.createDate(29, 2, 2000);
+DateTime.Field.Date.Test.testMaxDate_Value_Leap_OK = function() {
+    var date = DateTime.Field.Date.Test.createDate(2000, 2).value(29);
 
     assertEquals(29, date.value());
 };
 
-DateTime.Field.Date.Test.testMinDate_Constructor_OK = function() {
-    var date = DateTime.Field.Date.Test.createDate(2000, 1, DateTime.Field.Date.MIN_DATE);
-
-    assertEquals(DateTime.Field.Date.MIN_DATE, date.value());
+DateTime.Field.Date.Test.testMaxDate_Value_Leap_Fail = function() {
+    assertFail(function() {
+        DateTime.Field.Date.Test.createDate(2000, 2).value(30);
+    });
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_OK = function() {
-    var date = DateTime.Field.Date.Test.createDate().value(DateTime.Field.Date.MAX_DATE);
-
-    assertEquals(DateTime.Field.Date.MAX_DATE, date.value());
-};
-
-DateTime.Field.Date.Test.testMaxDate_Value_Month_OK = function() {
-    var date = DateTime.Field.Date.Test.createDate().value(28, 2);
+DateTime.Field.Date.Test.testMaxDate_Value_Normal_OK = function() {
+    var date = DateTime.Field.Date.Test.createDate(2001, 2).value(28);
 
     assertEquals(28, date.value());
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_Month_Year_OK = function() {
-    var date = DateTime.Field.Date.Test.createDate().value(29, 2, 2000);
-
-    assertEquals(29, date.value());
-};
-
-DateTime.Field.Date.Test.testMaxDate_Value_Fail = function() {
+DateTime.Field.Date.Test.testMaxDate_Value_Normal_Fail = function() {
     assertFail(function() {
-        DateTime.Field.Date.Test.createDate().value(DateTime.Field.Date.MAX_DATE + 1);
+        DateTime.Field.Date.Test.createDate(2001, 2).value(29);
     });
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_Month_Fail = function() {
+DateTime.Field.Date.Test.testMaxDate_Value_31_OK = function() {
+    var date = DateTime.Field.Date.Test.createDate(2001, 12).value(DateTime.Field.Date.MAX_DATE);
+
+    assertEquals(DateTime.Field.Date.MAX_DATE, date.value());
+};
+
+DateTime.Field.Date.Test.testMaxDate_Value_31_Fail = function() {
     assertFail(function() {
-        DateTime.Field.Date.Test.createDate().value(31, 4);
+        DateTime.Field.Date.Test.createDate(2001, 12).value(DateTime.Field.Date.MAX_DATE + 1);
     });
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_Month_Year_Fail = function() {
+DateTime.Field.Date.Test.testMaxDate_Value_30_Fail = function() {
     assertFail(function() {
-        DateTime.Field.Date.Test.createDate().value(29, 2, 2001);
+        DateTime.Field.Date.Test.createDate(2001, 11).value(DateTime.Field.Date.MAX_DATE);
     });
 };
 
 DateTime.Field.Date.Test.testMinDate_Value_OK = function() {
-    DateTime.Field.Date.Test.createDate().value(DateTime.Field.Date.MIN_DATE);
+    DateTime.Field.Date.Test.createDate(2000, 1).value(DateTime.Field.Date.MIN_DATE);
 };
 
 DateTime.Field.Date.Test.testMinDate_Value_Fail = function() {
     assertFail(function() {
-        DateTime.Field.Date.Test.createDate().value(DateTime.Field.Date.MIN_DATE - 1);
+        DateTime.Field.Date.Test.createDate(2000, 1).value(DateTime.Field.Date.MIN_DATE - 1);
     });
 };
 
