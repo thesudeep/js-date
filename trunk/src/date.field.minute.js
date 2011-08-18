@@ -1,14 +1,18 @@
-DateTime.Field.Minute = function(minute) {
+DateTime.Field.Minute = function(calendar) {
     var self = this;
+
+    this._val = 0;
+    this._ms = 0;
 
     this.millis = function(value) {
         if (arguments.length === 0) {
-            return self._val * DateTime.MILLS_PER_MINUTE;
+            return self._ms;
         }
 
         value = DateTime.validateInt(value);
 
         self._val = DateTime.quotRem(DateTime.quotRem(value, DateTime.MILLS_PER_HOUR).rem, DateTime.MILLS_PER_MINUTE).quot;
+        self._ms = self._val * DateTime.MILLS_PER_MINUTE;
 
         return self;
     };
@@ -18,16 +22,15 @@ DateTime.Field.Minute = function(minute) {
             return self._val;
         }
 
-        self._val = DateTime.Field.Minute.validate(minute);
+        if (self._val !== minute) {
+            self._val = DateTime.Field.Minute.validate(minute);
+            self._ms = self._val * DateTime.MILLS_PER_MINUTE;
+        }
 
         return self;
     };
 
-    if (arguments.length === 1) {
-        this.value(minute);
-    } else {
-        this.millis(DateTime.currentTimeMillis());
-    }
+    this.millis(calendar.time());
 };
 
 DateTime.Field.Minute.MIN_MINUTE = 0;

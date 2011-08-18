@@ -1,104 +1,80 @@
 DateTime.Field.Minute.Test = {};
 
 DateTime.Field.Minute.Test.testCreation = function() {
-    var minute = new DateTime.Field.Minute(1);
+    var minute = new DateTime.Field.Minute(mock({time: time(2000, 1, 1, 0, 3)}));
 
-    assertEquals(1, minute.value());
+    assertEquals(3, minute.value());
 };
 
 DateTime.Field.Minute.Test.testCreation_Empty = function() {
-    assertWithTime(10 * DateTime.MILLS_PER_MINUTE + 1231, function () {
-        var minute = new DateTime.Field.Minute();
-
-        assertEquals(10, minute.value());
+    assertFail(function () {
+        new DateTime.Field.Minute();
     });
 };
 
 DateTime.Field.Minute.Test.testSetValue = function() {
-    var minute = new DateTime.Field.Minute().value(1);
+    var minute = DateTime.Field.Minute.Test.createMinute().value(1);
 
     assertEquals(1, minute.value());
 };
 
 DateTime.Field.Minute.Test.testGetMills_Epoch = function() {
-    var minute = new DateTime.Field.Minute().millis(10120);
+    var minute = DateTime.Field.Minute.Test.createMinute().millis(10120);
 
     assertEquals(0, minute.millis());
 };
 
 DateTime.Field.Minute.Test.testGetMills_Mills_10m = function() {
-    var minute = new DateTime.Field.Minute().millis(10 * DateTime.MILLS_PER_MINUTE + 1231);
+    var minute = DateTime.Field.Minute.Test.createMinute().millis(time(2000, 1, 1, 0, 10));
 
     assertEquals(10 * DateTime.MILLS_PER_MINUTE, minute.millis());
 };
 
 DateTime.Field.Minute.Test.testGetMills_Mills_2m = function() {
-    var minute = new DateTime.Field.Minute().millis(DateTime.MILLS_PER_MINUTE * 2 + 1221);
+    var minute = DateTime.Field.Minute.Test.createMinute().millis(time(2000, 1, 1, 0, 2));
 
     assertEquals(2 * DateTime.MILLS_PER_MINUTE, minute.millis());
 };
 
 DateTime.Field.Minute.Test.testSetMills_2m_Start = function() {
-    var minute = new DateTime.Field.Minute().millis(DateTime.MILLS_PER_MINUTE * 2);
+    var minute = DateTime.Field.Minute.Test.createMinute().millis(time(2000, 1, 1, 0, 2));
 
     assertEquals(2, minute.value());
 };
 
 DateTime.Field.Minute.Test.testSetMills_2m_Before = function() {
-    var minute = new DateTime.Field.Minute().millis(DateTime.MILLS_PER_MINUTE * 2 - 1);
+    var minute = DateTime.Field.Minute.Test.createMinute().millis(time(2000, 1, 1, 0, 2) - 1);
 
     assertEquals(1, minute.value());
 };
 
 DateTime.Field.Minute.Test.testSetMills_negative = function() {
-    var minute = new DateTime.Field.Minute().millis(-62130512880000);
+    var minute = DateTime.Field.Minute.Test.createMinute().millis(time(-2000, 1, 1, 0, 12));
 
     assertEquals(12, minute.value());
 };
 
-DateTime.Field.Minute.Test.testMaxHour_Constructor_OK = function() {
-    var minute = new DateTime.Field.Minute(DateTime.Field.Minute.MAX_MINUTE);
+DateTime.Field.Minute.Test.testMaxMinute_Constructor_OK = function() {
+    var minute = DateTime.Field.Minute.Test.createMinute(DateTime.Field.Minute.MAX_MINUTE);
 
     assertEquals(DateTime.Field.Minute.MAX_MINUTE, minute.value());
 };
 
-DateTime.Field.Minute.Test.testMaxHour_Constructor_Fail = function() {
-    assertFail(function() {
-        new DateTime.Field.Minute(DateTime.Field.Minute.MAX_MINUTE + 1);
-    });
-};
-
-DateTime.Field.Minute.Test.testMinHour_Constructor_OK = function() {
-    var minute = new DateTime.Field.Minute(DateTime.Field.Minute.MIN_MINUTE);
+DateTime.Field.Minute.Test.testMinMinute_Constructor_OK = function() {
+    var minute = DateTime.Field.Minute.Test.createMinute(DateTime.Field.Minute.MIN_MINUTE);
 
     assertEquals(DateTime.Field.Minute.MIN_MINUTE, minute.value());
 };
 
-DateTime.Field.Minute.Test.testMinHour_Constructor_Fail = function() {
-    assertFail(function() {
-        new DateTime.Field.Minute(DateTime.Field.Minute.MIN_MINUTE - 1);
-    });
-};
-
-DateTime.Field.Minute.Test.testMaxHour_Value_OK = function() {
-    var minute = new DateTime.Field.Minute().value(DateTime.Field.Minute.MAX_MINUTE);
+DateTime.Field.Minute.Test.testMaxMinute_Value_OK = function() {
+    var minute = DateTime.Field.Minute.Test.createMinute().value(DateTime.Field.Minute.MAX_MINUTE);
 
     assertEquals(DateTime.Field.Minute.MAX_MINUTE, minute.value());
 };
 
-DateTime.Field.Minute.Test.testMaxHour_Value_Fail = function() {
+DateTime.Field.Minute.Test.testMaxMinute_Value_Fail = function() {
     assertFail(function() {
-        new DateTime.Field.Minute().value(DateTime.Field.Minute.MAX_MINUTE + 1);
-    });
-};
-
-DateTime.Field.Minute.Test.testMinHour_Value_OK = function() {
-    new DateTime.Field.Minute(DateTime.Field.Minute.MIN_MINUTE);
-};
-
-DateTime.Field.Minute.Test.testMinHour_Value_Fail = function() {
-    assertFail(function() {
-        new DateTime.Field.Minute().value(DateTime.Field.Minute.MIN_MINUTE - 1);
+        DateTime.Field.Minute.Test.createMinute().value(DateTime.Field.Minute.MAX_MINUTE + 1);
     });
 };
 
@@ -128,4 +104,10 @@ DateTime.Field.Minute.Test.testValidate_negative = function() {
     assertFail(function() {
         DateTime.Field.Minute.validate("-1");
     });
+};
+
+DateTime.Field.Minute.Test.createMinute = function(minute) {
+    minute = DateTime.exists(minute, 0);
+
+    return new DateTime.Field.Minute(mock({time: time(2000, 1, 1, 0, minute)}));
 };
