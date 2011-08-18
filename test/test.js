@@ -23,11 +23,23 @@ function mock(obj) {
     var mock = {};
 
     for (var i in obj) {
-        mock[i] = (function(val) {
+        mock[i] = (function(val, self) {
             return function() {
-                return val;
+                if (arguments.length === 0) {
+                    if (typeof (val) !== "function") {
+                        return val;
+                    } else {
+                        return val.call(self);
+                    }
+                }
+
+                if (typeof (val) === "function") {
+                    val.apply(self, arguments);
+                }
+
+                return self;
             }
-        })(obj[i]);
+        })(obj[i], mock);
     }
 
     return mock;
