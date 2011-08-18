@@ -1,85 +1,46 @@
-DateTime.Field.Month = function(month, year) {
-    var MILLS_BY_NORMAL_MONTHS = [0, 2678400000, 5097600000, 7776000000, 10368000000, 13046400000, 15638400000, 18316800000, 20995200000, 23587200000, 26265600000, 28857600000, 31536000000];
-    var MILLS_BY_LEAP_MONTHS =   [0, 2678400000, 5184000000, 7862400000, 10454400000, 13132800000, 15724800000, 18403200000, 21081600000, 23673600000, 26352000000, 28944000000, 31622400000];
-
+DateTime.Field.Month = function(calendar) {
     var self = this;
 
     this.duration = function() {
-        return self._year.isLeap() ?
-                MILLS_BY_LEAP_MONTHS[self._val + 1] - MILLS_BY_LEAP_MONTHS[self._val] :
-                MILLS_BY_NORMAL_MONTHS[self._val + 1] - MILLS_BY_NORMAL_MONTHS[self._val];
+        return calendar.year().isLeap() ?
+                DateTime.Field.Month.MILLS_BY_LEAP_MONTHS[self._val + 1] - DateTime.Field.Month.MILLS_BY_LEAP_MONTHS[self._val] :
+                DateTime.Field.Month.MILLS_BY_NORMAL_MONTHS[self._val + 1] - DateTime.Field.Month.MILLS_BY_NORMAL_MONTHS[self._val];
     };
 
-    this.millis = function(value, year) {
+    this.millis = function(value) {
+        var a = calendar.year().isLeap() ? DateTime.Field.Month.MILLS_BY_LEAP_MONTHS : DateTime.Field.Month.MILLS_BY_NORMAL_MONTHS;
+
         if (arguments.length === 0) {
-            return (self._year.isLeap() ? MILLS_BY_LEAP_MONTHS[self._val] : MILLS_BY_NORMAL_MONTHS[self._val]);
+            return a[self._val];
         }
 
         value = DateTime.validateInt(value);
 
-        if (arguments.length === 1) {
-            self._year.millis(value);
-        } else {
-            self._year.value(year);
-        }
+        var yearStart = calendar.year().millis(value).millis();
 
-        // Copied from JodaTime.
+        // Inspired by JodaTime.
 
-        var i = (value - self._year.millis()) / 1024;
+        var i = value - yearStart;
 
-        // There are 86400000 milliseconds per day, but divided by 1024 is
-        // 84375. There are 84375 (128/125)seconds per day.
-
-        var month =
-            (self._year.isLeap())
-            ? ((i < 182 * 84375)
-               ? ((i < 91 * 84375)
-                  ? ((i < 31 * 84375) ? 1 : (i < 60 * 84375) ? 2 : 3)
-                  : ((i < 121 * 84375) ? 4 : (i < 152 * 84375) ? 5 : 6))
-               : ((i < 274 * 84375)
-                  ? ((i < 213 * 84375) ? 7 : (i < 244 * 84375) ? 8 : 9)
-                  : ((i < 305 * 84375) ? 10 : (i < 335 * 84375) ? 11 : 12)))
-            : ((i < 181 * 84375)
-               ? ((i < 90 * 84375)
-                  ? ((i < 31 * 84375) ? 1 : (i < 59 * 84375) ? 2 : 3)
-                  : ((i < 120 * 84375) ? 4 : (i < 151 * 84375) ? 5 : 6))
-               : ((i < 273 * 84375)
-                  ? ((i < 212 * 84375) ? 7 : (i < 243 * 84375) ? 8 : 9)
-                  : ((i < 304 * 84375) ? 10 : (i < 334 * 84375) ? 11 : 12)));
-
-        self._val = month - 1;
+        self._val =
+                i < a[6]
+                        ? (i < a[3] ? (i < a[2] ? (i < a[1] ? 0 : 1) : 2 ) : (i < a[5] ? (i < a[4] ? 3 : 4) : 5))
+                        : (i < a[9] ? (i < a[8] ? (i < a[7] ? 6 : 7) : 8 ) : (i < a[11] ? (i < a[10] ? 9 : 10) : 11));
 
         return self;
     };
 
-    this.value = function(month, year) {
+    this.value = function(month) {
         if (arguments.length === 0) {
-            return self._val + 1;
+            return self._val + DateTime.Field.Month.MIN_MONTH;
         }
 
-        if (arguments.length === 2) {
-            self._year.value(year);
-        }
-
-        self._val = DateTime.Field.Month.validate(month) - 1;
+        self._val = DateTime.Field.Month.validate(month) - DateTime.Field.Month.MIN_MONTH;
 
         return self;
     };
 
-    switch (arguments.length) {
-        case 0:
-            this._year = new DateTime.Field.Year();
-            this.millis(DateTime.currentTimeMillis(), this._year.value());
-            break;
-        case 1:
-            this._year = new DateTime.Field.Year();
-            this.value(month, this._year.value());
-            break;
-        case 2:
-            this._year = new DateTime.Field.Year(year);
-            this.value(month, this._year.value());
-            break;
-    }
+    this.millis(calendar.time());
 };
 
 /** Constant (1) representing January, the first month (ISO) */
@@ -109,6 +70,10 @@ DateTime.Field.Month.DECEMBER = 12;
 
 DateTime.Field.Month.MIN_MONTH = DateTime.Field.Month.JANUARY;
 DateTime.Field.Month.MAX_MONTH = DateTime.Field.Month.DECEMBER;
+
+DateTime.Field.Month.MILLS_BY_NORMAL_MONTHS = [0, 2678400000, 5097600000, 7776000000, 10368000000, 13046400000, 15638400000, 18316800000, 20995200000, 23587200000, 26265600000, 28857600000, 31536000000];
+DateTime.Field.Month.MILLS_BY_LEAP_MONTHS =   [0, 2678400000, 5184000000, 7862400000, 10454400000, 13132800000, 15724800000, 18403200000, 21081600000, 23673600000, 26352000000, 28944000000, 31622400000];
+
 
 DateTime.Field.Month.validate = function(month) {
     month = DateTime.validateInt(month);
