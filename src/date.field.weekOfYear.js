@@ -22,14 +22,14 @@ DateTime.Field.WeekOfYear = function(calendar) {
 
     this.millis = function(value) {
         if (arguments.length === 0) {
-            return self._val * DateTime.MILLS_PER_WEEK - adjustDelta();
+            return (self._val - DateTime.Field.WeekOfYear.MIN_WEEK) * DateTime.MILLS_PER_WEEK - adjustDelta();
         }
 
         value = DateTime.validateInt(value);
 
         calendar.year().millis(value);
 
-        self._val = DateTime.Field.WeekOfMonth.MIN_WEEK + DateTime.quotRem(DateTime.quotRem(adjustDelta() + value - start, DateTime.MILLS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).quot;
+        self._val = DateTime.Field.WeekOfYear.MIN_WEEK + DateTime.quotRem(DateTime.quotRem(adjustDelta() + value - start, DateTime.MILLS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).quot;
 
         return self;
     };

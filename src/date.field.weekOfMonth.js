@@ -22,7 +22,7 @@ DateTime.Field.WeekOfMonth = function(calendar) {
 
     this.millis = function(value) {
         if (arguments.length === 0) {
-            return self._val * DateTime.MILLS_PER_WEEK - adjustDelta();
+            return (self._val - DateTime.Field.WeekOfMonth.MIN_WEEK) * DateTime.MILLS_PER_WEEK - adjustDelta();
         }
 
         value = DateTime.validateInt(value);
