@@ -5,7 +5,7 @@ DateTime.Field.Day = function(calendar) {
 
     this.millis = function(value) {
         if (!DateTime.exists(value)) {
-            return DateTime.quotRem(self._val - calendar.firstDay(), DateTime.DAYS_PER_WEEK).rem * DateTime.MILLS_PER_DAY;
+            return DateTime.Field.Day.dayToMills(self._val - calendar.firstDay());
         }
 
         self._val = DateTime.Field.Day.millisToDay(value);
@@ -45,6 +45,10 @@ DateTime.Field.Day.EPOCH = DateTime.Field.Day.THURSDAY;
 
 DateTime.Field.Day.MIN_DAY = DateTime.Field.Day.MONDAY;
 DateTime.Field.Day.MAX_DAY = DateTime.Field.Day.SUNDAY;
+
+DateTime.Field.Day.dayToMills = function(day) {
+    return DateTime.quotRem(day, DateTime.DAYS_PER_WEEK).rem * DateTime.MILLS_PER_DAY;
+};
 
 DateTime.Field.Day.millisToDay = function(millis) {
     millis = DateTime.validateInt(millis);
