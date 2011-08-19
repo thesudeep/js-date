@@ -27,8 +27,9 @@ DateTime.Field.Year = function(calendar) {
         value = DateTime.validateInt(value);
 
         var halfValue = value / 2;
+        var halfDiff = halfValue - self._ms / 2;
 
-        if (value === self._ms || Math.abs(halfValue - self._ms / 2) < DateTime.Field.Year.HALF_MILLS_PER_YEAR) {
+        if (value === self._ms || halfDiff >= 0 && halfDiff < DateTime.Field.Year.HALF_MILLS_PER_YEAR) {
             return self;
         }
 

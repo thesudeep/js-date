@@ -136,13 +136,12 @@ DateTime.Formatter = (function() {
             Z: TimeZoneOffset // Time zone RFC 822 time zone -0800
         };
 
-        var
+        var ch,
                 a = [],
-                ch = 0,
                 count = 0;
 
         for (var i = 0; i <= pattern.length; i++) {
-            if (ch === pattern[i] && i != pattern.length) {
+            if (ch === pattern.charAt(i) && i !== pattern.length) {
                 count++;
             } else {
                 if (count > 0) {
@@ -156,7 +155,7 @@ DateTime.Formatter = (function() {
                 }
 
                 count = 1;
-                ch = pattern[i];
+                ch = pattern.charAt(i);
             }
         }
 

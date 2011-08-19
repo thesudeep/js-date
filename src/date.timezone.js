@@ -18,10 +18,6 @@ DateTime.TimeZone = function (id, name, rules) {
                 instant = 0,
                 me = this;
 
-        function safeGet(variable, FieldClass, value) {
-            return variable === undefined ? new FieldClass(me).value(value) : variable.value(value);
-        }
-
         function calculate(obj) {
             month.value(obj.month);
             hour.value(obj.hour);

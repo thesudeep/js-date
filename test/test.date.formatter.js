@@ -32,13 +32,13 @@ DateTime.Formatter.Test.test_MM = function() {
 DateTime.Formatter.Test.test_w = function() {
     var formatter = new DateTime.Formatter("w");
 
-    assertEquals("4", formatter.format(time(1970, 2, 3, 4, 5, 6, 231)));
+    assertEquals("6", formatter.format(time(1970, 2, 3, 4, 5, 6, 231)));
 };
 
 DateTime.Formatter.Test.test_ww = function() {
     var formatter = new DateTime.Formatter("ww");
 
-    assertEquals("04", formatter.format(time(1970, 2, 3, 4, 5, 6, 231)));
+    assertEquals("06", formatter.format(time(1970, 2, 3, 4, 5, 6, 231)));
 };
 
 DateTime.Formatter.Test.test_W = function() {

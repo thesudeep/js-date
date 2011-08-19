@@ -90,10 +90,16 @@ DateTime.Field.Year.Test.testSetMills_2001_Before = function() {
     assertEquals(2000, year.value());
 };
 
-DateTime.Field.Year.Test.testSetMills_Epoch = function() {
+DateTime.Field.Year.Test.testSetMills_Epoch_Positive = function() {
     var year = DateTime.Field.Year.Test.createYear().millis(12312);
 
     assertEquals(1970, year.value());
+};
+
+DateTime.Field.Year.Test.testSetMills_Epoch_Negative = function() {
+    var year = DateTime.Field.Year.Test.createYear().millis(-12312);
+
+    assertEquals(1969, year.value());
 };
 
 DateTime.Field.Year.Test.testMaxYear_Constructor_OK = function() {
