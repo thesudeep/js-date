@@ -21,31 +21,31 @@ DateTime.Field.WeekOfMonth.Test.testSetValue = function() {
 DateTime.Field.WeekOfMonth.Test.testGetMills_Mon_Second = function() {
     var week = DateTime.Field.WeekOfMonth.Test.createWoM().millis(time(2000, 1, 3));
 
-    assertEquals(2 * DateTime.MILLS_PER_DAY + DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(2 * DateTime.MILLS_PER_DAY, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_Sun_Second = function() {
     var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.SUNDAY).millis(time(2000, 1, 2));
 
-    assertEquals(DateTime.MILLS_PER_DAY + DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(DateTime.MILLS_PER_DAY, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_Thu_Second = function() {
     var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.THURSDAY).millis(time(2000, 1, 6));
 
-    assertEquals(5 * DateTime.MILLS_PER_DAY + DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(5 * DateTime.MILLS_PER_DAY, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_Mon_Six = function() {
     var week = DateTime.Field.WeekOfMonth.Test.createWoM().millis(time(2000, 1, 31));
 
-    assertEquals(2 * DateTime.MILLS_PER_DAY + 5 * DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(2 * DateTime.MILLS_PER_DAY + 4 * DateTime.MILLS_PER_WEEK, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_value_Mon_6_Weeks = function() {
     var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.MONDAY, 2012, 4, 1).value(6);
 
-    assertEquals(2 * DateTime.MILLS_PER_DAY + 5 * DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(2 * DateTime.MILLS_PER_DAY + 4 * DateTime.MILLS_PER_WEEK, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_value_Mon_6_Weeks = function() {
@@ -57,7 +57,7 @@ DateTime.Field.WeekOfMonth.Test.testGetMills_value_Mon_6_Weeks = function() {
 DateTime.Field.WeekOfMonth.Test.testGetMills_value_Sun_6_Weeks = function() {
     var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.SUNDAY, 2000, 4, 1).value(6);
 
-    assertEquals(2 * DateTime.MILLS_PER_DAY + 5 * DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(2 * DateTime.MILLS_PER_DAY + 4 * DateTime.MILLS_PER_WEEK, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMills_value_Sun_6_Weeks = function() {
@@ -69,7 +69,7 @@ DateTime.Field.WeekOfMonth.Test.testGetMills_value_Sun_6_Weeks = function() {
 DateTime.Field.WeekOfMonth.Test.testGetMills_value_Mon_Last_Weeks = function() {
     var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.MONDAY, 2000, 1, 1).value(DateTime.Field.WeekOfMonth.LAST_WEEK);
 
-    assertEquals(2 * DateTime.MILLS_PER_DAY + 5 * DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(2 * DateTime.MILLS_PER_DAY + 4 * DateTime.MILLS_PER_WEEK, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetValue_value_Last_Weeks = function() {

@@ -1,16 +1,11 @@
 DateTime.TimeZone = function (id, name, rules) {
     var self = this;
 
-    this.id = id;
-    this.name = name;
-
-    var year = new DateTime.Field.Year();
-
-    function findRule() {
+    function findRule(year) {
         for (var i in rules) {
             var rule = rules[i];
 
-            if (rule && (rule.applyYear === undefined || rule.applyYear <= year.value()) && (rule.cancelYear === undefined || rule.cancelYear > year.value())) {
+            if (rule && (rule.applyYear === undefined || rule.applyYear <= year) && (rule.cancelYear === undefined || rule.cancelYear > year)) {
                 return rule;
             }
         }
@@ -18,107 +13,128 @@ DateTime.TimeZone = function (id, name, rules) {
         return null;
     }
 
-    function _get(DateField, ruleValue) {
-        if (ruleValue) {
-            switch (arguments.length) {
-                case 2:
-                    return new DateField(ruleValue);
-                case 3:
-                    return new DateField(ruleValue, arguments[2].value());
-                case 4:
-                    return new DateField(ruleValue, arguments[2].value(), arguments[3].value());
+    function TimeZoneCalendar() {
+        var year, month, hour, date, day, weekOfMonth,
+                instant = 0,
+                me = this;
+
+        function safeGet(variable, FieldClass, value) {
+            return variable === undefined ? new FieldClass(me).value(value) : variable.value(value);
+        }
+
+        function calculate(obj) {
+            month.value(obj.month);
+            hour.value(obj.hour);
+
+            var delta;
+
+            if (obj.date !== undefined) {
+                delta = date.value(obj.date).millis();
+            } else {
+                delta = weekOfMonth.value(obj.week).millis() + day.value(obj.day).millis();
+
+                if (delta > month.duration()) {
+                    delta -= DateTime.MILLS_PER_WEEK;
+                }
             }
+
+            return delta + year.millis() + month.millis() + hour.millis();
         }
 
-        return null;
-    }
-
-    function toTime(obj) {
-        return obj ? obj.millis() : 0;
-    }
-
-    function calcDelta(obj, month, weekStart) {
-        var delta;
-
-        if (obj.date) {
-            delta = toTime(_get(DateTime.Field.Date, obj.date, month, weekStart));
-        } else {
-            delta = toTime(_get(DateTime.Field.WeekOfMonth, obj.week, month, year)) +
-                    toTime(_get(DateTime.Field.Day, obj.day, weekStart));
-
-            if (delta > month.duration()) {
-                delta -= DateTime.MILLS_PER_WEEK;
+        this.time = function(value) {
+            if (arguments.length === 0) {
+                return instant;
             }
-        }
 
-        return delta;
-    }
+            if (instant !== value) {
+                instant = value;
 
-    function calculateDST(rule) {
-        if (!rule.dst || !rule.dst.start || !rule.dst.stop) {
-            return null;
-        }
+                year.millis(instant);
+                month.millis(instant);
+                hour.millis(instant);
 
-        var weekStart = new (function () {
-            this.value = function() {
-                return DateTime.exists(rule.weekStart, DateTime.Field.Day.MIN_DAY);
+                me.rule = findRule(year.value());
             }
-        });
 
-        DateTime.assertTrue(rule.dst.start.month, "Month is missing in DST start settings");
-        DateTime.assertTrue(rule.dst.stop.month, "Month is missing in DST stop settings");
+            return me;
+        };
 
-        DateTime.assertTrue(rule.dst.start.hour, "Hour is missing in DST start settings");
-        DateTime.assertTrue(rule.dst.stop.hour, "Hour is missing in DST stop settings");
+        this.year = function() {
+            return year;
+        };
 
-        DateTime.assertTrue(rule.dst.start.date || rule.dst.start.week && rule.dst.start.day, "Missing required DST start settings");
-        DateTime.assertTrue(rule.dst.stop.date || rule.dst.stop.week && rule.dst.stop.day, "Missing required DST stop settings");
+        this.month = function() {
+            return month;
+        };
 
-        DateTime.assertTrue(!rule.dst.start.date || !rule.dst.start.week && !rule.dst.start.day, "Ambiguous DST start settings");
-        DateTime.assertTrue(!rule.dst.stop.date || !rule.dst.stop.week && !rule.dst.stop.day, "Ambiguous DST stop settings");
+        this.firstDay = function() {
+            if (!me.rule || me.rule.weekStart === undefined) {
+                return DateTime.Field.Day.MIN_DAY;
+            }
 
-        var startMonth = _get(DateTime.Field.Month, rule.dst.start.month, year);
-        var stopMonth = _get(DateTime.Field.Month, rule.dst.stop.month, year);
+            return me.rule.weekStart;
+        };
 
-        var startHour = _get(DateTime.Field.Hour, rule.dst.start.hour);
-        var stopHour = _get(DateTime.Field.Hour, rule.dst.stop.hour);
+        this.startDst = function() {
+            DateTime.assertTrue(me.rule.dst.start.month, "Month is missing in DST start settings");
+            DateTime.assertTrue(me.rule.dst.start.hour, "Hour is missing in DST start settings");
+            DateTime.assertTrue(me.rule.dst.start.date || me.rule.dst.start.week && me.rule.dst.start.day, "Missing required DST start settings");
+            DateTime.assertTrue(!me.rule.dst.start.date || !me.rule.dst.start.week && !me.rule.dst.start.day, "Ambiguous DST start settings");
 
-        var startTime = toTime(year) + toTime(startMonth) + calcDelta(rule.dst.start, startMonth, weekStart);
-        var stopTime = toTime(year) + toTime(stopMonth) + calcDelta(rule.dst.stop, stopMonth, weekStart);
+            return calculate(me.rule.dst.start) - me.rule.offset;
+        };
 
-        return {
-            start: startTime + toTime(startHour) - rule.offset,
-            end: stopTime + toTime(stopHour) - rule.offset - rule.dst.offset
-        }
+        this.stopDst = function() {
+            DateTime.assertTrue(me.rule.dst.stop.month, "Month is missing in DST stop settings");
+            DateTime.assertTrue(me.rule.dst.stop.hour, "Hour is missing in DST stop settings");
+            DateTime.assertTrue(me.rule.dst.stop.date || me.rule.dst.stop.week && me.rule.dst.stop.day, "Missing required DST stop settings");
+            DateTime.assertTrue(!me.rule.dst.stop.date || !me.rule.dst.stop.week && !me.rule.dst.stop.day, "Ambiguous DST stop settings");
+
+            return calculate(me.rule.dst.stop) - me.rule.offset - me.rule.dst.offset;
+        };
+
+
+        this.rule = findRule(DateTime.Field.Year.EPOCH);
+
+        year = new DateTime.Field.Year(this);
+        month = new DateTime.Field.Month(this);
+        hour = new DateTime.Field.Hour(this);
+
+        date = new DateTime.Field.Date(this);
+        day = new DateTime.Field.Day(this);
+        weekOfMonth = new DateTime.Field.WeekOfMonth(this);
     }
 
     this.firstDay = function(time) {
-        year.millis(time);
-
-        var rule = findRule();
-
-        if (rule && DateTime.exists(rule.weekStart)) {
-            return rule.weekStart;
-        }
-
-        return Date.Field.Day.MONDAY;
+        return self._calendar.time(time).firstDay();
     };
 
     this.offset = function(time) {
-        year.millis(time);
+        self._calendar.time(time);
 
-        var rule = findRule();
+        if (self._calendar.rule) {
+            var rule = self._calendar.rule;
 
-        if (rule) {
-            var dst = calculateDST(rule);
+            if (!rule.dst || !rule.dst.start || !rule.dst.stop) {
+                return null;
+            }
 
-            var dstOffset = dst && dst.start <= time && dst.end > time ? rule.dst.offset : 0;
+            var dst = {
+                start: self._calendar.startDst(),
+                end: self._calendar.stopDst()
+            };
+
+            var dstOffset = dst.start <= time && dst.end > time ? rule.dst.offset : 0;
 
             return rule.offset + dstOffset;
         }
 
         throw new Error("Cannot find appropriate rule for the time zone " + self.id);
     };
+
+    this.id = id;
+    this.name = name;
+    this._calendar = new TimeZoneCalendar();
 };
 
 DateTime.TimeZone.RuleSet = {
