@@ -14,19 +14,68 @@ DateTime.Calendar = function(time, timeZone) {
     timeZone = DateTime.exists(timeZone, DateTime.TimeZone.DEFAULT);
 
     var self = this;
-    var data = {};
-    var withOffset, instant = arguments.length === 0 ? DateTime.currentTimeMillis() : DateTime.validateInt(time);
+    var calendar;
+    var instant = arguments.length === 0 ? DateTime.currentTimeMillis() : DateTime.validateInt(time);
 
     var firstDay = timeZone.firstDay(instant);
 
-    function _get(Field, args, fn) {
-        var field = new Field().millis(instant);
+    var fields = {
+        year: DateTime.Field.Year,
+        month: DateTime.Field.Month,
+        date: DateTime.Field.Date,
 
-        if (args.length === 0) {
-            return field.value();
+        hour: DateTime.Field.Hour,
+        minute: DateTime.Field.Minute,
+        second: DateTime.Field.Second,
+        ms: DateTime.Field.Millisecond,
+
+        day: DateTime.Field.Day,
+        weekOfMonth: DateTime.Field.WeekOfMonth,
+        weekOfYear: DateTime.Field.WeekOfYear
+    };
+
+    function BaseCalendar() {
+        this.time = function() {
+            return instant + timeZone.offset(instant);
+        };
+
+        this.firstDay = function() {
+            return firstDay;
+        };
+
+        for (var name in fields) {
+            this[name] = (function(name, Clazz) {
+                return function() {
+                    var obj = this["_" + name];
+
+                    if (obj === undefined) {
+                        obj = (this["_" + name] = new Clazz(this));
+                    }
+
+                    return obj;
+                };
+            })(name, fields[name]);
+        }
+    }
+
+    function _get(fieldName, args, fn) {
+        if (calendar === undefined) {
+            calendar = new BaseCalendar();
         }
 
-        fn.call(self, args[0]);
+        var field = calendar[fieldName].call(calendar);
+
+        if (args.length === 0) {
+            return field.millis(calendar.time()).value();
+        }
+
+        instant -= field.millis();
+
+        var result = arguments.length >= 3 ? fn.call(self, args[0]) : field.value(args[0]);
+
+        if (result) {
+            instant += result.millis();
+        }
 
         return self;
     }
@@ -44,49 +93,27 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.year = function (year) {
-        return _get(DateTime.Field.Year, arguments, function(value) {
-            instant -= year.millis();
-            year.value(value);
-            instant += year.millis();
-        });
+        return _get("year", arguments);
     };
 
     this.month = function (month) {
-        return _get(DateTime.Field.Month, arguments, function(value) {
+        return _get("month", arguments, function(value) {
             var years = DateTime.quotRem(value - DateTime.Field.Month.MIN_MONTH, DateTime.Field.Month.MAX_MONTH);
 
             if (years.quot !== 0) {
-                self.year(years.quot += self.year.value());
+                self.year(years.quot += calendar._year.value());
             }
 
-            instant -= month.millis();
-            month.value(years.rem + DateTime.Field.Month.MIN_MONTH, years.quot);
-            instant += month.millis();
+            return calendar._month.value(years.rem + DateTime.Field.Month.MIN_MONTH);
         });
     };
 
     this.weekOfYear = function (week) {
-        return _get("weekOfYear", arguments, function(value) {
-            value = DateTime.Field.WeekOfYear.validate(value);
-
-            instant -= data.weekOfYear.millis();
-            data.weekOfYear.value(value);
-            instant += data.weekOfYear.millis();
-
-            adjust();
-        });
+        return _get("weekOfYear", arguments);
     };
 
     this.weekOfMonth = function (week) {
-        return _get("weekOfMonth", arguments, function(value) {
-            value = DateTime.Field.WeekOfMonth.validate(value);
-
-            instant -= data.weekOfMonth.millis();
-            data.weekOfMonth.value(value);
-            instant += data.weekOfMonth.millis();
-
-            adjust();
-        });
+        return _get("weekOfMonth", arguments);
     };
 
     this.plusDate = function(date) {
@@ -97,53 +124,35 @@ DateTime.Calendar = function(time, timeZone) {
 
     this.date = function (date) {
         return _get("date", arguments, function(value) {
-            instant += (value - DateTime.Field.Date.MIN_DATE) * DateTime.MILLS_PER_DAY - data.date.millis();
-
-            adjust();
+            instant += (value - DateTime.Field.Date.MIN_DATE) * DateTime.MILLS_PER_DAY;
         });
     };
 
     this.day = function (day) {
-        return _get("day", arguments, function(value) {
-            value = DateTime.Field.Day.validate(value);
-
-            instant -= data.day.millis();
-            data.day.value(value);
-            instant += data.day.millis();
-
-            adjust();
-        });
+        return _get("day", arguments);
     };
 
     this.hour = function (hour) {
         return _get("hour", arguments, function(value) {
-            instant += value * DateTime.MILLS_PER_HOUR - data.hour.millis();
-
-            adjust();
+            instant += value * DateTime.MILLS_PER_HOUR;
         });
     };
 
     this.minute = function (minute) {
         return _get("minute", arguments, function(value) {
-            instant += value * DateTime.MILLS_PER_MINUTE - data.minute.millis();
-
-            adjust();
+            instant += value * DateTime.MILLS_PER_MINUTE;
         });
     };
 
     this.second = function (second) {
         return _get("second", arguments, function(value) {
-            instant += value * DateTime.MILLS_PER_SECOND - data.second.millis();
-
-            adjust();
+            instant += value * DateTime.MILLS_PER_SECOND;
         });
     };
 
     this.millis = function (millis) {
-        return _get("millis", arguments, function(value) {
-            instant += value - data.millis.millis();
-
-            adjust();
+        return _get("ms", arguments, function(value) {
+            instant += value;
         });
     };
 
@@ -156,15 +165,13 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.timeZone = function (tz) {
-        if (!DateTime.exists(tz)) {
+        if (arguments.length === 0) {
             return timeZone;
         }
 
-        DateTime.assertTrue(timeZone instanceof DateTime.TimeZone, "TimeZone should be an instance of DateTime.TimeZone class");
+        DateTime.assertTrue(tz instanceof DateTime.TimeZone, "TimeZone should be an instance of DateTime.TimeZone class");
 
         timeZone = tz;
-
-        adjust();
 
         return self;
     };
@@ -175,6 +182,8 @@ DateTime.Calendar = function(time, timeZone) {
         } else {
             instant = DateTime.validateInt(value);
         }
+
+        return self;
     };
 
     this.toDate = function() {

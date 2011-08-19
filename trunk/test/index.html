@@ -36,16 +36,16 @@
 
     <link href="index.css" media="screen" rel="stylesheet" type="text/css">
 </head>
-<body onload="run();">
+<body onload="runNumber();">
 <ul id="root"></ul>
 <script type="text/javascript">
     function runNumber() {
         startTimer();
 
-	    var count = 100000;
+	    var count = 1000;
 		
 		while (--count !== 0) {
-		    new DateTime.Field.Year().millis(1313452800000).value(-2001).millis();
+		    new Date().calendar().year(100).month(10).second(10).hour(100).day(1).time();
 		}
 
         append("root", "Finished in " + stopTimer() + "ms");
