@@ -6,34 +6,34 @@ DateTime.Field.Day.Test.testSetValue = function() {
     assertEquals(DateTime.Field.Day.MONDAY, day.value());
 };
 
-DateTime.Field.Day.Test.testGetMills_Epoch_Mon = function() {
+DateTime.Field.Day.Test.testGetMillis_Epoch_Mon = function() {
     var day = DateTime.Field.Day.Test.createDay(DateTime.Field.Day.MONDAY).millis(10120);
 
-    assertEquals(3 * DateTime.MILLS_PER_DAY, day.millis());
+    assertEquals(3 * DateTime.MILLIS_PER_DAY, day.millis());
 };
 
-DateTime.Field.Day.Test.testGetMills_Epoch_Sun = function() {
+DateTime.Field.Day.Test.testGetMillis_Epoch_Sun = function() {
     var day = DateTime.Field.Day.Test.createDay(DateTime.Field.Day.SUNDAY).millis(10120);
 
-    assertEquals(4 * DateTime.MILLS_PER_DAY, day.millis());
+    assertEquals(4 * DateTime.MILLIS_PER_DAY, day.millis());
 };
 
-DateTime.Field.Day.Test.testGetMills_Epoch_Thu = function() {
+DateTime.Field.Day.Test.testGetMillis_Epoch_Thu = function() {
     var day = DateTime.Field.Day.Test.createDay(DateTime.Field.Day.THURSDAY).millis(10120);
 
     assertEquals(0, day.millis());
 };
 
-DateTime.Field.Day.Test.testGetMills_Mills = function() {
+DateTime.Field.Day.Test.testGetMillis_Millis = function() {
     var day = DateTime.Field.Day.Test.createDay().millis(time(2011, 8, 12));
 
-    assertEquals((DateTime.Field.Day.FRIDAY - 1) * DateTime.MILLS_PER_DAY, day.millis());
+    assertEquals((DateTime.Field.Day.FRIDAY - 1) * DateTime.MILLIS_PER_DAY, day.millis());
 };
 
-DateTime.Field.Day.Test.testGetMills_Value = function() {
+DateTime.Field.Day.Test.testGetMillis_Value = function() {
     var day = DateTime.Field.Day.Test.createDay().value(DateTime.Field.Day.SUNDAY);
 
-    assertEquals((DateTime.Field.Day.SUNDAY - 1) * DateTime.MILLS_PER_DAY, day.millis());
+    assertEquals((DateTime.Field.Day.SUNDAY - 1) * DateTime.MILLIS_PER_DAY, day.millis());
 };
 
 DateTime.Field.Day.Test.testValidate_text = function() {

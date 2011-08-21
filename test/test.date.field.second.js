@@ -6,25 +6,25 @@ DateTime.Field.Second.Test.testSetValue = function() {
     assertEquals(1, second.value());
 };
 
-DateTime.Field.Second.Test.testGetMills_Epoch = function() {
+DateTime.Field.Second.Test.testGetMillis_Epoch = function() {
     var second = DateTime.Field.Second.Test.createSecond().millis(10120);
 
     assertEquals(10000, second.millis());
 };
 
-DateTime.Field.Second.Test.testSetMills_2s_Start = function() {
+DateTime.Field.Second.Test.testSetMillis_2s_Start = function() {
     var second = DateTime.Field.Second.Test.createSecond().millis(2000);
 
     assertEquals(2, second.value());
 };
 
-DateTime.Field.Second.Test.testSetMills_2s_Before = function() {
+DateTime.Field.Second.Test.testSetMillis_2s_Before = function() {
     var second = DateTime.Field.Second.Test.createSecond().millis(2000 - 1);
 
     assertEquals(1, second.value());
 };
 
-DateTime.Field.Second.Test.testSetMills_negative = function() {
+DateTime.Field.Second.Test.testSetMillis_negative = function() {
     var second = DateTime.Field.Second.Test.createSecond().millis(time(2000, 1, 1, 0, 0, 58));
 
     assertEquals(58, second.value());

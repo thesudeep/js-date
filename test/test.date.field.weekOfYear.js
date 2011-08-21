@@ -6,61 +6,61 @@ DateTime.Field.WeekOfYear.Test.testSetValue = function() {
     assertEquals(2, week.value());
 };
 
-DateTime.Field.WeekOfYear.Test.testGetMills_Mon_Second = function() {
+DateTime.Field.WeekOfYear.Test.testGetMillis_Mon_Second = function() {
     var week = DateTime.Field.WeekOfYear.Test.createWoY().millis(time(2000, 1, 3));
 
-    assertEquals(2 * DateTime.MILLS_PER_DAY, week.millis());
+    assertEquals(2 * DateTime.MILLIS_PER_DAY, week.millis());
 };
 
-DateTime.Field.WeekOfYear.Test.testGetMills_Sun_Second = function() {
+DateTime.Field.WeekOfYear.Test.testGetMillis_Sun_Second = function() {
     var week = DateTime.Field.WeekOfYear.Test.createWoY(DateTime.Field.Day.SUNDAY).millis(time(2000, 1, 2));
 
-    assertEquals(DateTime.MILLS_PER_DAY, week.millis());
+    assertEquals(DateTime.MILLIS_PER_DAY, week.millis());
 };
 
-DateTime.Field.WeekOfYear.Test.testGetMills_Thu_Second = function() {
+DateTime.Field.WeekOfYear.Test.testGetMillis_Thu_Second = function() {
     var week = DateTime.Field.WeekOfYear.Test.createWoY(DateTime.Field.Day.THURSDAY).millis(time(2000, 1, 6));
 
-    assertEquals(5 * DateTime.MILLS_PER_DAY, week.millis());
+    assertEquals(5 * DateTime.MILLIS_PER_DAY, week.millis());
 };
 
-DateTime.Field.WeekOfYear.Test.testGetMills_Mon_Six = function() {
+DateTime.Field.WeekOfYear.Test.testGetMillis_Mon_Six = function() {
     var week = DateTime.Field.WeekOfYear.Test.createWoY().millis(time(2000, 1, 31));
 
-    assertEquals(2 * DateTime.MILLS_PER_DAY + 4 * DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(2 * DateTime.MILLIS_PER_DAY + 4 * DateTime.MILLIS_PER_WEEK, week.millis());
 };
 
-DateTime.Field.WeekOfYear.Test.testGetMills_Value_Mon_54_Weeks = function() {
+DateTime.Field.WeekOfYear.Test.testGetMillis_Value_Mon_54_Weeks = function() {
     var week = DateTime.Field.WeekOfYear.Test.createWoY(DateTime.Field.Day.MONDAY, 2012, 1, 1).value(54);
 
-    assertEquals(DateTime.MILLS_PER_DAY + 52 * DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(DateTime.MILLIS_PER_DAY + 52 * DateTime.MILLIS_PER_WEEK, week.millis());
 };
 
-DateTime.Field.WeekOfYear.Test.testGetMills_Value_Mon_Last_Weeks = function() {
+DateTime.Field.WeekOfYear.Test.testGetMillis_Value_Mon_Last_Weeks = function() {
     var week = DateTime.Field.WeekOfYear.Test.createWoY(DateTime.Field.Day.MONDAY, 2012, 1, 1).value(DateTime.Field.WeekOfYear.LAST_WEEK);
 
-    assertEquals(DateTime.MILLS_PER_DAY + 52 * DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(DateTime.MILLIS_PER_DAY + 52 * DateTime.MILLIS_PER_WEEK, week.millis());
 };
 
-DateTime.Field.WeekOfYear.Test.testGetMills_Value_Mon_54_Weeks_Fail = function() {
+DateTime.Field.WeekOfYear.Test.testGetMillis_Value_Mon_54_Weeks_Fail = function() {
     assertFail(function() {
         DateTime.Field.WeekOfYear.Test.createWoY(DateTime.Field.Day.MONDAY, 2000, 1, 1).value(54);
     });
 };
 
-DateTime.Field.WeekOfYear.Test.testGetMills_Value_Sun_54_Weeks = function() {
+DateTime.Field.WeekOfYear.Test.testGetMillis_Value_Sun_54_Weeks = function() {
     var week = DateTime.Field.WeekOfYear.Test.createWoY(DateTime.Field.Day.SUNDAY, 2000, 1, 1).value(54);
 
-    assertEquals(DateTime.MILLS_PER_DAY + 52 * DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(DateTime.MILLIS_PER_DAY + 52 * DateTime.MILLIS_PER_WEEK, week.millis());
 };
 
-DateTime.Field.WeekOfYear.Test.testGetMills_Value_Sun_Last_Weeks = function() {
+DateTime.Field.WeekOfYear.Test.testGetMillis_Value_Sun_Last_Weeks = function() {
     var week = DateTime.Field.WeekOfYear.Test.createWoY(DateTime.Field.Day.SUNDAY, 2000, 1, 1).value(DateTime.Field.WeekOfYear.LAST_WEEK);
 
-    assertEquals(DateTime.MILLS_PER_DAY + 52 * DateTime.MILLS_PER_WEEK, week.millis());
+    assertEquals(DateTime.MILLIS_PER_DAY + 52 * DateTime.MILLIS_PER_WEEK, week.millis());
 };
 
-DateTime.Field.WeekOfYear.Test.testGetMills_Value_Sun_54_Weeks_Fail = function() {
+DateTime.Field.WeekOfYear.Test.testGetMillis_Value_Sun_54_Weeks_Fail = function() {
     assertFail(function() {
         DateTime.Field.WeekOfYear.Test.createWoY(DateTime.Field.Day.SUNDAY, 2012, 1, 1).value(54);
     });

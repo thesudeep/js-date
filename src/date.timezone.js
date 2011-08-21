@@ -33,7 +33,7 @@ DateTime.TimeZone = function (id, name, rules) {
                 delta = weekOfMonth.value(obj.week).millis() + day.value(obj.day).millis();
 
                 if (delta > month.duration()) {
-                    delta -= DateTime.MILLS_PER_WEEK;
+                    delta -= DateTime.MILLIS_PER_WEEK;
                 }
             }
 
@@ -63,6 +63,10 @@ DateTime.TimeZone = function (id, name, rules) {
 
         this.month = function() {
             return month;
+        };
+
+        this.date = function() {
+            return date;
         };
 
         this.firstDay = function() {
@@ -107,18 +111,28 @@ DateTime.TimeZone = function (id, name, rules) {
         return self._calendar.time(time).firstDay();
     };
 
+    this.dstShift = function(time) {
+        var cal = self._calendar.time(time);
+
+        if (cal.rule && cal.rule.dst && cal.rule.dst.start && cal.rule.dst.stop && cal.rule.dst.offset) {
+            return cal.rule.dst.offset;
+        }
+
+        return 0;
+    };
+
     this.offset = function(time) {
-        self._calendar.time(time);
+        var cal = self._calendar.time(time);
 
-        if (self._calendar.rule) {
-            var rule = self._calendar.rule;
+        if (cal.rule) {
+            var rule = cal.rule;
 
-            if (!rule.dst || !rule.dst.start || !rule.dst.stop) {
+            if (self.dstShift(time) === 0) {
                 return rule.offset;
             }
 
-            if (yearValue !== self._calendar.year().value() || dst === null) {
-                yearValue = self._calendar.year().value();
+            if (yearValue !== cal.year().value() || dst === null) {
+                yearValue = cal.year().value();
 
                 dst = {
                     start: self._calendar.startDst(),

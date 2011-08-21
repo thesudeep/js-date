@@ -47,7 +47,13 @@ function mock(obj) {
 
 function assertEquals(expected, actual) {
     if (expected != actual) {
-        fail("Expected (" + expected + ") but was (" + actual + ")");
+        var message = "Expected (" + expected + ") but was (" + actual + ")";
+
+        if (expected > 365 * DateTime.MILLIS_PER_DAY) {
+            message += ". -- " + new Date(expected).toUTCString() + " -> " + new Date(actual).toUTCString();
+        }
+
+        fail(message);
     }
 }
 

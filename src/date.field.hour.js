@@ -4,6 +4,10 @@ DateTime.Field.Hour = function(calendar) {
     this._val = 0;
     this._ms = 0;
 
+    this.duration = function() {
+        return DateTime.MILLIS_PER_HOUR;
+    };
+
     this.millis = function(value) {
         if (arguments.length === 0) {
             return self._ms;
@@ -11,8 +15,8 @@ DateTime.Field.Hour = function(calendar) {
 
         value = DateTime.validateInt(value);
 
-        self._val = DateTime.quotRem(DateTime.quotRem(value, DateTime.MILLS_PER_DAY).rem, DateTime.MILLS_PER_HOUR).quot;
-        self._ms = self._val * DateTime.MILLS_PER_HOUR;
+        self._val = DateTime.quotRem(DateTime.quotRem(value, DateTime.MILLIS_PER_DAY).rem, DateTime.MILLIS_PER_HOUR).quot;
+        self._ms = self._val * DateTime.MILLIS_PER_HOUR;
 
         return self;
     };
@@ -24,7 +28,7 @@ DateTime.Field.Hour = function(calendar) {
 
         if (self._val !== hour) {
             self._val = DateTime.Field.Hour.validate(hour);
-            self._ms = self._val * DateTime.MILLS_PER_HOUR;
+            self._ms = self._val * DateTime.MILLIS_PER_HOUR;
         }
 
         return self;

@@ -7,6 +7,10 @@ DateTime.Field.WeekOfYear = function(calendar) {
     this._val = 0;
     this._delta = 0;
 
+    this.duration = function() {
+        return DateTime.MILLIS_PER_WEEK;
+    };
+
     function adjustDelta() {
         var _start = calendar.year().millis();
 
@@ -14,7 +18,7 @@ DateTime.Field.WeekOfYear = function(calendar) {
             firstDay = calendar.firstDay();
             start = _start;
 
-            self._delta = DateTime.Field.Day.dayToMills(DateTime.Field.Day.millisToDay(start) - firstDay);
+            self._delta = DateTime.Field.Day.dayToMillis(DateTime.Field.Day.millisToDay(start) - firstDay);
         }
 
         return self._delta;
@@ -22,14 +26,14 @@ DateTime.Field.WeekOfYear = function(calendar) {
 
     this.millis = function(value) {
         if (arguments.length === 0) {
-            return (self._val - DateTime.Field.WeekOfYear.MIN_WEEK) * DateTime.MILLS_PER_WEEK - adjustDelta();
+            return (self._val - DateTime.Field.WeekOfYear.MIN_WEEK) * DateTime.MILLIS_PER_WEEK - adjustDelta();
         }
 
         value = DateTime.validateInt(value);
 
         calendar.year().millis(value);
 
-        self._val = DateTime.Field.WeekOfYear.MIN_WEEK + DateTime.quotRem(DateTime.quotRem(adjustDelta() + value - start, DateTime.MILLS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).quot;
+        self._val = DateTime.Field.WeekOfYear.MIN_WEEK + DateTime.quotRem(DateTime.quotRem(adjustDelta() + value - start, DateTime.MILLIS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).quot;
 
         return self;
     };
@@ -45,7 +49,7 @@ DateTime.Field.WeekOfYear = function(calendar) {
 
         adjustDelta();
 
-        var max = calendar.year().isLeap() && self._delta === (DateTime.MILLS_PER_WEEK - DateTime.MILLS_PER_DAY)
+        var max = calendar.year().isLeap() && self._delta === (DateTime.MILLIS_PER_WEEK - DateTime.MILLIS_PER_DAY)
                 ? DateTime.Field.WeekOfYear.MAX_WEEK
                 : DateTime.Field.WeekOfYear.MAX_WEEK - 1;
 
