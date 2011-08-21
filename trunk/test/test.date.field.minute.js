@@ -6,37 +6,37 @@ DateTime.Field.Minute.Test.testSetValue = function() {
     assertEquals(1, minute.value());
 };
 
-DateTime.Field.Minute.Test.testGetMills_Epoch = function() {
+DateTime.Field.Minute.Test.testGetMillis_Epoch = function() {
     var minute = DateTime.Field.Minute.Test.createMinute().millis(10120);
 
     assertEquals(0, minute.millis());
 };
 
-DateTime.Field.Minute.Test.testGetMills_Mills_10m = function() {
+DateTime.Field.Minute.Test.testGetMillis_Millis_10m = function() {
     var minute = DateTime.Field.Minute.Test.createMinute().millis(time(2000, 1, 1, 0, 10));
 
-    assertEquals(10 * DateTime.MILLS_PER_MINUTE, minute.millis());
+    assertEquals(10 * DateTime.MILLIS_PER_MINUTE, minute.millis());
 };
 
-DateTime.Field.Minute.Test.testGetMills_Mills_2m = function() {
+DateTime.Field.Minute.Test.testGetMillis_Millis_2m = function() {
     var minute = DateTime.Field.Minute.Test.createMinute().millis(time(2000, 1, 1, 0, 2));
 
-    assertEquals(2 * DateTime.MILLS_PER_MINUTE, minute.millis());
+    assertEquals(2 * DateTime.MILLIS_PER_MINUTE, minute.millis());
 };
 
-DateTime.Field.Minute.Test.testSetMills_2m_Start = function() {
+DateTime.Field.Minute.Test.testSetMillis_2m_Start = function() {
     var minute = DateTime.Field.Minute.Test.createMinute().millis(time(2000, 1, 1, 0, 2));
 
     assertEquals(2, minute.value());
 };
 
-DateTime.Field.Minute.Test.testSetMills_2m_Before = function() {
+DateTime.Field.Minute.Test.testSetMillis_2m_Before = function() {
     var minute = DateTime.Field.Minute.Test.createMinute().millis(time(2000, 1, 1, 0, 2) - 1);
 
     assertEquals(1, minute.value());
 };
 
-DateTime.Field.Minute.Test.testSetMills_negative = function() {
+DateTime.Field.Minute.Test.testSetMillis_negative = function() {
     var minute = DateTime.Field.Minute.Test.createMinute().millis(time(-2000, 1, 1, 0, 12));
 
     assertEquals(12, minute.value());

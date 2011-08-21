@@ -13,7 +13,7 @@ DateTime.Calendar.Test.testCreation = function() {
 };
 
 DateTime.Calendar.Test.testCreation_Empty = function() {
-    assertWithTime(10 * DateTime.MILLS_PER_DAY + 1231, function () {
+    assertWithTime(10 * DateTime.MILLIS_PER_DAY + 1231, function () {
         var calendar = new DateTime.Calendar();
 
         assertEquals(1970, calendar.year());

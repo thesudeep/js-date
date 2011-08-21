@@ -7,6 +7,10 @@ DateTime.Field.WeekOfMonth = function(calendar) {
     this._delta = 0;
     this._val = 0;
 
+    this.duration = function() {
+        return DateTime.MILLIS_PER_WEEK;
+    };
+
     function adjustDelta() {
         var _start = calendar.year().millis() + calendar.month().millis();
 
@@ -14,7 +18,7 @@ DateTime.Field.WeekOfMonth = function(calendar) {
             firstDay = calendar.firstDay();
             start = _start;
 
-            self._delta = DateTime.Field.Day.dayToMills(DateTime.Field.Day.millisToDay(start) - firstDay);
+            self._delta = DateTime.Field.Day.dayToMillis(DateTime.Field.Day.millisToDay(start) - firstDay);
         }
 
         return self._delta;
@@ -22,7 +26,7 @@ DateTime.Field.WeekOfMonth = function(calendar) {
 
     this.millis = function(value) {
         if (arguments.length === 0) {
-            return (self._val - DateTime.Field.WeekOfMonth.MIN_WEEK) * DateTime.MILLS_PER_WEEK - adjustDelta();
+            return (self._val - DateTime.Field.WeekOfMonth.MIN_WEEK) * DateTime.MILLIS_PER_WEEK - adjustDelta();
         }
 
         value = DateTime.validateInt(value);
@@ -30,7 +34,7 @@ DateTime.Field.WeekOfMonth = function(calendar) {
         calendar.year().millis(value);
         calendar.month().millis(value);
 
-        self._val = DateTime.Field.WeekOfMonth.MIN_WEEK + DateTime.quotRem(DateTime.quotRem(adjustDelta() + value - start, DateTime.MILLS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).quot;
+        self._val = DateTime.Field.WeekOfMonth.MIN_WEEK + DateTime.quotRem(DateTime.quotRem(adjustDelta() + value - start, DateTime.MILLIS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).quot;
 
         return self;
     };
@@ -44,7 +48,7 @@ DateTime.Field.WeekOfMonth = function(calendar) {
             week = DateTime.validateInt(week);
         }
 
-        var max = DateTime.quotRem(calendar.month().duration() + adjustDelta(), DateTime.MILLS_PER_WEEK);
+        var max = DateTime.quotRem(calendar.month().duration() + adjustDelta(), DateTime.MILLIS_PER_WEEK);
 
         if (max.rem !== 0) {
             max.quot++;

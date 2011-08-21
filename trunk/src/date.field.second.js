@@ -4,6 +4,10 @@ DateTime.Field.Second = function(calendar) {
     self._val = 0;
     self._ms = 0;
 
+    this.duration = function() {
+        return DateTime.MILLIS_PER_SECOND;
+    };
+
     this.millis = function(value) {
         if (arguments.length === 0) {
             return self._ms;
@@ -11,8 +15,8 @@ DateTime.Field.Second = function(calendar) {
 
         value = DateTime.validateInt(value);
 
-        self._val = DateTime.quotRem(DateTime.quotRem(value, DateTime.MILLS_PER_MINUTE).rem, DateTime.MILLS_PER_SECOND).quot;
-        self._ms = self._val * DateTime.MILLS_PER_SECOND;
+        self._val = DateTime.quotRem(DateTime.quotRem(value, DateTime.MILLIS_PER_MINUTE).rem, DateTime.MILLIS_PER_SECOND).quot;
+        self._ms = self._val * DateTime.MILLIS_PER_SECOND;
 
         return self;
     };
@@ -24,7 +28,7 @@ DateTime.Field.Second = function(calendar) {
 
         if (self._val !== second) {
             self._val = DateTime.Field.Second.validate(second);
-            self._ms = self._val * DateTime.MILLS_PER_SECOND;
+            self._ms = self._val * DateTime.MILLIS_PER_SECOND;
         }
 
         return self;

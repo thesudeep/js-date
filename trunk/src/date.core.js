@@ -25,7 +25,11 @@ DateTime = {
         return b;
     },
     quotRem: function(divisor, divider) {
-        var rem = (divider + (divisor % divider)) % divider;
+        var rem = divisor % divider;
+
+        if (rem < 0) {
+            rem += divider;
+        }
 
         return {
             quot: Math.floor((divisor - rem) / divider),
@@ -47,17 +51,17 @@ DateTime = {
 };
 
 /** Milliseconds in one second (1000) (ISO) */
-DateTime.MILLS_PER_SECOND = 1000;
+DateTime.MILLIS_PER_SECOND = 1000;
 /** Seconds in one minute (60) (ISO) */
 DateTime.SECONDS_PER_MINUTE = 60;
 /** Milliseconds in one minute (ISO) */
-DateTime.MILLS_PER_MINUTE = DateTime.MILLS_PER_SECOND * DateTime.SECONDS_PER_MINUTE;
+DateTime.MILLIS_PER_MINUTE = DateTime.MILLIS_PER_SECOND * DateTime.SECONDS_PER_MINUTE;
 /** Minutes in one hour (ISO) */
 DateTime.MINUTES_PER_HOUR = 60;
 /** Seconds in one hour (ISO) */
 DateTime.SECONDS_PER_HOUR = DateTime.SECONDS_PER_MINUTE * DateTime.MINUTES_PER_HOUR;
 /** Milliseconds in one hour (ISO) */
-DateTime.MILLS_PER_HOUR = DateTime.MILLS_PER_MINUTE * DateTime.MINUTES_PER_HOUR;
+DateTime.MILLIS_PER_HOUR = DateTime.MILLIS_PER_MINUTE * DateTime.MINUTES_PER_HOUR;
 /** Hours in a typical day (24) (ISO). Due to time zone offset changes, the number of hours per day can vary. */
 DateTime.HOURS_PER_DAY = 24;
 /** Minutes in a typical day (ISO). Due to time zone offset changes, the number of minutes per day can vary. */
@@ -65,7 +69,7 @@ DateTime.MINUTES_PER_DAY = DateTime.MINUTES_PER_HOUR * DateTime.HOURS_PER_DAY;
 /** Seconds in a typical day (ISO). Due to time zone offset changes, the number of seconds per day can vary. */
 DateTime.SECONDS_PER_DAY = DateTime.SECONDS_PER_HOUR * DateTime.HOURS_PER_DAY;
 /** Milliseconds in a typical day (ISO). Due to time zone offset changes, the number of milliseconds per day can vary. */
-DateTime.MILLS_PER_DAY = DateTime.MILLS_PER_HOUR * DateTime.HOURS_PER_DAY;
+DateTime.MILLIS_PER_DAY = DateTime.MILLIS_PER_HOUR * DateTime.HOURS_PER_DAY;
 /** Days in one week (7) (ISO) */
 DateTime.DAYS_PER_WEEK = 7;
 /** Hours in a typical week. Due to time zone offset changes, the number of hours per week can vary. */
@@ -75,7 +79,7 @@ DateTime.MINUTES_PER_WEEK = DateTime.MINUTES_PER_DAY * DateTime.DAYS_PER_WEEK;
 /** Seconds in a typical week (ISO). Due to time zone offset changes, the number of seconds per week can vary. */
 DateTime.SECONDS_PER_WEEK = DateTime.SECONDS_PER_DAY * DateTime.DAYS_PER_WEEK;
 /** Milliseconds in a typical week (ISO). Due to time zone offset changes, the number of milliseconds per week can vary. */
-DateTime.MILLS_PER_WEEK = DateTime.MILLS_PER_DAY * DateTime.DAYS_PER_WEEK;
+DateTime.MILLIS_PER_WEEK = DateTime.MILLIS_PER_DAY * DateTime.DAYS_PER_WEEK;
 
 Date.prototype.calendar = function(timeZone) {
     timeZone = DateTime.exists(timeZone, DateTime.TimeZone.DEFAULT);

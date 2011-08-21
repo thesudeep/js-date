@@ -93,7 +93,7 @@ DateTime.Formatter = (function() {
         }
     };
 
-    var MillsOfSecond = function(count) {
+    var MillisOfSecond = function(count) {
         this.format = function(calendar) {
             return DateTime.trail(calendar.millis(), count);
         }
@@ -107,7 +107,7 @@ DateTime.Formatter = (function() {
 
     var TimeZoneOffset = function(count) {
         this.format = function(calendar) {
-            var offset = DateTime.quotRem(DateTime.quotRem(calendar.timeZone().offset(calendar.time()), DateTime.MILLS_PER_MINUTE).quot, DateTime.MINUTES_PER_HOUR);
+            var offset = DateTime.quotRem(DateTime.quotRem(calendar.timeZone().offset(calendar.time()), DateTime.MILLIS_PER_MINUTE).quot, DateTime.MINUTES_PER_HOUR);
 
             return (offset.quot < 0 ? "-" : "+") + DateTime.trail(offset.quot, 2) + DateTime.trail(offset.rem, 2);
         }
@@ -131,7 +131,7 @@ DateTime.Formatter = (function() {
             h: function() {throw new Error("not implemented yet")},// Hour in am/pm (1-12) Number 12
             m: MinuteOfHour, // Minute in hour Number 30
             s: SecondOfMinute, // Second in minute Number 55
-            S: MillsOfSecond, // Millisecond Number 978
+            S: MillisOfSecond, // Millisecond Number 978
             z: TimeZoneText, // Time zone General time zone Pacific Standard Time; PST; GMT-08:00
             Z: TimeZoneOffset // Time zone RFC 822 time zone -0800
         };

@@ -3,9 +3,13 @@ DateTime.Field.Day = function(calendar) {
 
     this._val = DateTime.Field.Day.EPOCH;
 
+    this.duration = function() {
+        return DateTime.MILLIS_PER_DAY;
+    };
+
     this.millis = function(value) {
         if (!DateTime.exists(value)) {
-            return DateTime.Field.Day.dayToMills(self._val - calendar.firstDay());
+            return DateTime.Field.Day.dayToMillis(self._val - calendar.firstDay());
         }
 
         self._val = DateTime.Field.Day.millisToDay(value);
@@ -44,14 +48,14 @@ DateTime.Field.Day.EPOCH = DateTime.Field.Day.THURSDAY;
 DateTime.Field.Day.MIN_DAY = DateTime.Field.Day.MONDAY;
 DateTime.Field.Day.MAX_DAY = DateTime.Field.Day.SUNDAY;
 
-DateTime.Field.Day.dayToMills = function(day) {
-    return DateTime.quotRem(day, DateTime.DAYS_PER_WEEK).rem * DateTime.MILLS_PER_DAY;
+DateTime.Field.Day.dayToMillis = function(day) {
+    return DateTime.quotRem(day, DateTime.DAYS_PER_WEEK).rem * DateTime.MILLIS_PER_DAY;
 };
 
 DateTime.Field.Day.millisToDay = function(millis) {
     millis = DateTime.validateInt(millis);
 
-    return DateTime.quotRem(DateTime.Field.Day.EPOCH - DateTime.Field.Day.MIN_DAY + DateTime.quotRem(millis, DateTime.MILLS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).rem + DateTime.Field.Day.MIN_DAY;
+    return DateTime.quotRem(DateTime.Field.Day.EPOCH - DateTime.Field.Day.MIN_DAY + DateTime.quotRem(millis, DateTime.MILLIS_PER_DAY).quot, DateTime.DAYS_PER_WEEK).rem + DateTime.Field.Day.MIN_DAY;
 };
 
 DateTime.Field.Day.validate = function(day) {
