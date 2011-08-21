@@ -29,8 +29,6 @@ DateTime.Field.Second = function(calendar) {
 
         return self;
     };
-
-    this.millis(calendar.time());
 };
 
 DateTime.Field.Second.MIN_SECOND = 0;

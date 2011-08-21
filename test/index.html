@@ -28,15 +28,16 @@
     <script type="text/javascript" src="./test.date.field.millisecond.js"></script>
 
     <script type="text/javascript" src="./test.date.field.day.js"></script>
-    <script type="text/javascript" src="test.date.field.weekOfYear.js"></script>
+    <script type="text/javascript" src="./test.date.field.weekOfYear.js"></script>
     <script type="text/javascript" src="./test.date.field.weekOfMonth.js"></script>
     <script type="text/javascript" src="./test.date.timezone.js"></script>
     <script type="text/javascript" src="./test.date.calendar.js"></script>
+    <script type="text/javascript" src="./test.date.calendar.CET.js"></script>
     <script type="text/javascript" src="./test.date.formatter.js"></script>
 
     <link href="index.css" media="screen" rel="stylesheet" type="text/css">
 </head>
-<body onload="runNumber();">
+<body onload="run();">
 <ul id="root"></ul>
 <script type="text/javascript">
     function runNumber() {
@@ -67,6 +68,7 @@
         runSuite("DateTime.Field.WeekOfMonth.Test", DateTime.Field.WeekOfMonth.Test);
         runSuite("DateTime.TimeZone.Test", DateTime.TimeZone.Test);
         runSuite("DateTime.Calendar.Test", DateTime.Calendar.Test);
+        runSuite("DateTime.Calendar.Test.CET", DateTime.Calendar.Test.CET);
         runSuite("DateTime.Formatter.Test", DateTime.Formatter.Test);
 
         append("root", "Finished in " + stopTimer() + "ms");

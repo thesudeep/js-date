@@ -61,8 +61,6 @@ DateTime.Field.WeekOfMonth = function(calendar) {
 
         return self;
     };
-
-    this.millis(calendar.time());
 };
 
 DateTime.Field.WeekOfMonth.MIN_WEEK = 1;

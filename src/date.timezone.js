@@ -1,6 +1,9 @@
 DateTime.TimeZone = function (id, name, rules) {
     var self = this;
 
+    var dst = null;
+    var yearValue = null;
+
     function findRule(year) {
         for (var i in rules) {
             var rule = rules[i];
@@ -45,7 +48,6 @@ DateTime.TimeZone = function (id, name, rules) {
             if (instant !== value) {
                 instant = value;
 
-                year.millis(instant);
                 month.millis(instant);
                 hour.millis(instant);
 
@@ -112,13 +114,17 @@ DateTime.TimeZone = function (id, name, rules) {
             var rule = self._calendar.rule;
 
             if (!rule.dst || !rule.dst.start || !rule.dst.stop) {
-                return null;
+                return rule.offset;
             }
 
-            var dst = {
-                start: self._calendar.startDst(),
-                end: self._calendar.stopDst()
-            };
+            if (yearValue !== self._calendar.year().value() || dst === null) {
+                yearValue = self._calendar.year().value();
+
+                dst = {
+                    start: self._calendar.startDst(),
+                    end: self._calendar.stopDst()
+                };
+            }
 
             var dstOffset = dst.start <= time && dst.end > time ? rule.dst.offset : 0;
 

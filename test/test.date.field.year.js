@@ -1,17 +1,5 @@
 DateTime.Field.Year.Test = {};
 
-DateTime.Field.Year.Test.testCreation = function() {
-    var year = new DateTime.Field.Year(mock({time: time(2011, 1, 2)}));
-
-    assertEquals(2011, year.value());
-};
-
-DateTime.Field.Year.Test.testCreation_Empty = function() {
-    assertFail(function() {
-        new DateTime.Field.Year();
-    });
-};
-
 DateTime.Field.Year.Test.testSetValue = function() {
     var year = DateTime.Field.Year.Test.createYear().value(10120);
 
@@ -100,36 +88,6 @@ DateTime.Field.Year.Test.testSetMills_Epoch_Negative = function() {
     var year = DateTime.Field.Year.Test.createYear().millis(-12312);
 
     assertEquals(1969, year.value());
-};
-
-DateTime.Field.Year.Test.testMaxYear_Constructor_OK = function() {
-    var year = DateTime.Field.Year.Test.createYear(time(DateTime.Field.Year.MAX_YEAR, 12, 31));
-
-    assertEquals(DateTime.Field.Year.MAX_YEAR, year.value());
-};
-
-DateTime.Field.Year.Test.testMaxYear_Constructor_Fail = function() {
-    assertFail(function() {
-        DateTime.Field.Year.Test.createYear(time(DateTime.Field.Year.MAX_YEAR + 1, 12, 31));
-    });
-};
-
-DateTime.Field.Year.Test.testMinYear_Constructor_OK = function() {
-    var year = DateTime.Field.Year.Test.createYear(time(DateTime.Field.Year.MIN_YEAR, 1, 1));
-
-    assertEquals(DateTime.Field.Year.MIN_YEAR, year.value());
-};
-
-DateTime.Field.Year.Test.testMinYear_Constructor_Fail = function() {
-    assertFail(function() {
-        DateTime.Field.Year.Test.createYear(time(DateTime.Field.Year.MIN_YEAR - 1, 1, 1));
-    });
-};
-
-DateTime.Field.Year.Test.testZeroYear_Constructor = function() {
-    var year = DateTime.Field.Year.Test.createYear(time(0, 1, 1));
-
-    assertEquals(-1, year.value());
 };
 
 DateTime.Field.Year.Test.testZeroYear_Value = function() {

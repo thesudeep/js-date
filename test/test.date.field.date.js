@@ -1,17 +1,5 @@
 DateTime.Field.Date.Test = {};
 
-DateTime.Field.Date.Test.testCreation = function() {
-    var date = new DateTime.Field.Date(DateTime.Field.Date.Test.mockCalendar(2001, 3, 1));
-
-    assertEquals(1, date.value());
-};
-
-DateTime.Field.Date.Test.testCreation_Empty = function() {
-    assertFail(function () {
-        new DateTime.Field.Date();
-    });
-};
-
 DateTime.Field.Date.Test.testSetValue = function() {
     var date = DateTime.Field.Date.Test.createDate(1970).value(1);
 

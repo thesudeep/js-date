@@ -1,14 +1,20 @@
 DateTime.Field.Month = function(calendar) {
     var self = this;
 
+    this._val = 0;
+
+    function getArray() {
+        return calendar.year().isLeap() ? DateTime.Field.Month.MILLS_BY_LEAP_MONTHS : DateTime.Field.Month.MILLS_BY_NORMAL_MONTHS;
+    }
+
     this.duration = function() {
-        return calendar.year().isLeap() ?
-                DateTime.Field.Month.MILLS_BY_LEAP_MONTHS[self._val + 1] - DateTime.Field.Month.MILLS_BY_LEAP_MONTHS[self._val] :
-                DateTime.Field.Month.MILLS_BY_NORMAL_MONTHS[self._val + 1] - DateTime.Field.Month.MILLS_BY_NORMAL_MONTHS[self._val];
+        var a = getArray();
+
+        return a[self._val + 1] - a[self._val];
     };
 
     this.millis = function(value) {
-        var a = calendar.year().isLeap() ? DateTime.Field.Month.MILLS_BY_LEAP_MONTHS : DateTime.Field.Month.MILLS_BY_NORMAL_MONTHS;
+        var a = getArray();
 
         if (arguments.length === 0) {
             return a[self._val];
@@ -39,8 +45,6 @@ DateTime.Field.Month = function(calendar) {
 
         return self;
     };
-
-    this.millis(calendar.time());
 };
 
 /** Constant (1) representing January, the first month (ISO) */

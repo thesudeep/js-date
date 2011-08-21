@@ -1,17 +1,5 @@
 DateTime.Field.Day.Test = {};
 
-DateTime.Field.Day.Test.testCreation = function() {
-    var day = new DateTime.Field.Day(mock({time: time(2011, 1, 1)}));
-
-    assertEquals(DateTime.Field.Day.SATURDAY, day.value());
-};
-
-DateTime.Field.Day.Test.testCreation_Empty = function() {
-    assertFail(function () {
-        new DateTime.Field.Day();
-    });
-};
-
 DateTime.Field.Day.Test.testSetValue = function() {
     var day = DateTime.Field.Day.Test.createDay().value(DateTime.Field.Day.MONDAY);
 

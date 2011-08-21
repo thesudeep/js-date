@@ -26,8 +26,6 @@ DateTime.Field.Millisecond = function(calendar) {
 
         return self;
     };
-
-    this.millis(calendar.time());
 };
 
 DateTime.Field.Millisecond.MIN_MILLS = 0;

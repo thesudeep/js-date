@@ -1,29 +1,5 @@
 DateTime.Field.Month.Test = {};
 
-DateTime.Field.Month.Test.testCreation = function() {
-    var month = new DateTime.Field.Month(DateTime.Field.Month.Test.mockCalendar(2001, DateTime.Field.Month.MARCH));
-
-    assertEquals(DateTime.Field.Month.MARCH, month.value());
-};
-
-DateTime.Field.Month.Test.testCreation_Empty = function() {
-    assertFail(function () {
-        new DateTime.Field.Month();
-    });
-};
-
-DateTime.Field.Month.Test.testDuration_Leap_Feb_by_constuctor = function() {
-    var month = DateTime.Field.Month.Test.createMonth(2000, DateTime.Field.Month.FEBRUARY);
-
-    assertEquals(29 * DateTime.MILLS_PER_DAY, month.duration());
-};
-
-DateTime.Field.Month.Test.testDuration_Norm_Feb_by_constuctor = function() {
-    var month = DateTime.Field.Month.Test.createMonth(2001, DateTime.Field.Month.FEBRUARY);
-
-    assertEquals(28 * DateTime.MILLS_PER_DAY, month.duration());
-};
-
 DateTime.Field.Month.Test.testSetValue_Leap_Feb_by_value = function() {
     var month = DateTime.Field.Month.Test.createMonth(2000).value(DateTime.Field.Month.FEBRUARY);
 
@@ -113,18 +89,6 @@ DateTime.Field.Month.Test.testSetMills_Epoch = function() {
     var month = DateTime.Field.Month.Test.createMonth(1970).millis(12312);
 
     assertEquals(DateTime.Field.Month.JANUARY, month.value());
-};
-
-DateTime.Field.Month.Test.testMaxMonth_Constructor_OK = function() {
-    var month = DateTime.Field.Month.Test.createMonth(0, DateTime.Field.Month.MAX_MONTH);
-
-    assertEquals(DateTime.Field.Month.MAX_MONTH, month.value());
-};
-
-DateTime.Field.Month.Test.testMinMonth_Constructor_OK = function() {
-    var month = DateTime.Field.Month.Test.createMonth(0, DateTime.Field.Month.MIN_MONTH);
-
-    assertEquals(DateTime.Field.Month.MIN_MONTH, month.value());
 };
 
 DateTime.Field.Month.Test.testMaxMonth_Value_OK = function() {

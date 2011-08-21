@@ -1,17 +1,5 @@
 DateTime.Field.Minute.Test = {};
 
-DateTime.Field.Minute.Test.testCreation = function() {
-    var minute = new DateTime.Field.Minute(mock({time: time(2000, 1, 1, 0, 3)}));
-
-    assertEquals(3, minute.value());
-};
-
-DateTime.Field.Minute.Test.testCreation_Empty = function() {
-    assertFail(function () {
-        new DateTime.Field.Minute();
-    });
-};
-
 DateTime.Field.Minute.Test.testSetValue = function() {
     var minute = DateTime.Field.Minute.Test.createMinute().value(1);
 
@@ -52,18 +40,6 @@ DateTime.Field.Minute.Test.testSetMills_negative = function() {
     var minute = DateTime.Field.Minute.Test.createMinute().millis(time(-2000, 1, 1, 0, 12));
 
     assertEquals(12, minute.value());
-};
-
-DateTime.Field.Minute.Test.testMaxMinute_Constructor_OK = function() {
-    var minute = DateTime.Field.Minute.Test.createMinute(DateTime.Field.Minute.MAX_MINUTE);
-
-    assertEquals(DateTime.Field.Minute.MAX_MINUTE, minute.value());
-};
-
-DateTime.Field.Minute.Test.testMinMinute_Constructor_OK = function() {
-    var minute = DateTime.Field.Minute.Test.createMinute(DateTime.Field.Minute.MIN_MINUTE);
-
-    assertEquals(DateTime.Field.Minute.MIN_MINUTE, minute.value());
 };
 
 DateTime.Field.Minute.Test.testMaxMinute_Value_OK = function() {

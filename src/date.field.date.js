@@ -1,6 +1,8 @@
 DateTime.Field.Date = function(calendar) {
     var self = this;
 
+    this._val = 0;
+
     this.millis = function(value) {
         if (arguments.length === 0) {
             return self._val * DateTime.MILLS_PER_DAY;
@@ -24,8 +26,6 @@ DateTime.Field.Date = function(calendar) {
 
         return self;
     };
-
-    this.millis(calendar.time());
 };
 
 DateTime.Field.Date.MIN_DATE = 1;

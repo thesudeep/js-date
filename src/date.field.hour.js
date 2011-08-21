@@ -29,8 +29,6 @@ DateTime.Field.Hour = function(calendar) {
 
         return self;
     };
-
-    this.millis(calendar.time());
 };
 
 DateTime.Field.Hour.MIN_HOUR = 0;
