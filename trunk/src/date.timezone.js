@@ -57,19 +57,19 @@ DateTime.TimeZone = function (id, name, rules) {
             return me;
         };
 
-        this.withYear = function() {
+        this.getYear = function() {
             return year;
         };
 
-        this.withMonth = function() {
+        this.getMonth = function() {
             return month;
         };
 
-        this.withDayOfMonth = function() {
+        this.getDayOfMonth = function() {
             return daysOfMonth;
         };
 
-        this.withFirstWeekDay = function() {
+        this.getFirstWeekDay = function() {
             if (!me.rule || me.rule.weekStart === undefined) {
                 return DateTime.Field.DaysOfWeek.MIN_DAY;
             }
@@ -108,7 +108,7 @@ DateTime.TimeZone = function (id, name, rules) {
     }
 
     this.firstDay = function(time) {
-        return self._calendar.time(time).withFirstWeekDay();
+        return self._calendar.time(time).getFirstWeekDay();
     };
 
     this.dstShift = function(time) {
@@ -131,8 +131,8 @@ DateTime.TimeZone = function (id, name, rules) {
                 return rule.offset;
             }
 
-            if (yearValue !== cal.withYear().value() || dst === null) {
-                yearValue = cal.withYear().value();
+            if (yearValue !== cal.getYear().value() || dst === null) {
+                yearValue = cal.getYear().value();
 
                 dst = {
                     start: self._calendar.startDst(),

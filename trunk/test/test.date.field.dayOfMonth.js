@@ -156,10 +156,10 @@ DateTime.Field.DaysOfMonth.Test.mockCalendar = function(year, month, daysOfMonth
     daysOfMonth = DateTime.exists(daysOfMonth, 1);
 
     return mock({
-        withYear: mock({
+        getYear: mock({
             millis: time(year, 1, 1)
         }),
-        withMonth: mock({
+        getMonth: mock({
             millis: time(year, month, 1) - time(year, 1, 1),
             duration: time(year, month + 1, 1) - time(year, month, 1)
         }),

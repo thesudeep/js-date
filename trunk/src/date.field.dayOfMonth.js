@@ -14,7 +14,7 @@ DateTime.Field.DaysOfMonth = function(calendar) {
 
         value = DateTime.validateInt(value);
 
-        var shift = calendar.withYear().millis(value).millis() + calendar.withMonth().millis(value).millis();
+        var shift = calendar.getYear().millis(value).millis() + calendar.getMonth().millis(value).millis();
 
         self._val = Math.floor((value - shift) / DateTime.MILLIS_PER_DAY);
 
@@ -26,7 +26,7 @@ DateTime.Field.DaysOfMonth = function(calendar) {
             return self._val + 1;
         }
 
-        self._val = DateTime.Field.DaysOfMonth.validate(daysOfMonth, calendar.withMonth().duration()) - 1;
+        self._val = DateTime.Field.DaysOfMonth.validate(daysOfMonth, calendar.getMonth().duration()) - 1;
 
         return self;
     };

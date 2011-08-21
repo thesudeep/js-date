@@ -19,6 +19,14 @@ function time(year, month, daysOfMonth, hour, min, sec, ms) {
     return d.getTime();
 }
 
+function trail(n) {
+    if (n >= 1000) {
+        return n;
+    } else {
+        return DateTime.trail(n, 3, "0");
+    }
+}
+
 function mock(obj) {
     var mock = {};
 
@@ -134,7 +142,7 @@ function runSuite(name, test) {
             } finally {
                 time = stopTimer();
 
-                message = "<span>" + DateTime.trail(time, 3) + "ms.</span> " + message;
+                message = "<span>" + trail(time) + "ms.</span> " + message;
 
                 suiteTime += time;
             }
@@ -143,7 +151,7 @@ function runSuite(name, test) {
         }
     }
 
-    textSpan.innerHTML = DateTime.trail(suiteTime, 3) + "ms.</span>";
+    textSpan.innerHTML = trail(suiteTime) + "ms.</span>";
     successSpan.innerHTML = "" + cs;
     failureSpan.innerHTML = "" + cf;
 

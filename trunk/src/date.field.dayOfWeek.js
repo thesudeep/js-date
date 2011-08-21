@@ -9,7 +9,7 @@ DateTime.Field.DaysOfWeek = function(calendar) {
 
     this.millis = function(value) {
         if (!DateTime.exists(value)) {
-            return DateTime.Field.DaysOfWeek.dayToMillis(self._val - calendar.withFirstWeekDay());
+            return DateTime.Field.DaysOfWeek.dayToMillis(self._val - calendar.getFirstWeekDay());
         }
 
         self._val = DateTime.Field.DaysOfWeek.millisToDay(value);

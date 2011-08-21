@@ -70,6 +70,6 @@ DateTime.Field.DaysOfWeek.Test.createDay = function(firstDay, _time) {
 
     return new DateTime.Field.DaysOfWeek(mock({
         time: _time,
-        withFirstWeekDay: firstDay
+        getFirstWeekDay: firstDay
     }));
 };

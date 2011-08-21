@@ -38,15 +38,33 @@ DateTime.Calendar.Test.testWithYear_Negative = function() {
     assertEquals(-2000, calendar.withYear());
 };
 
+DateTime.Calendar.Test.testWithYear_InvalidDay = function() {
+    var calendar = new DateTime.Calendar(time(2000, 2, 29)).withYear(2001);
+
+    assertEquals(2001, calendar.withYear());
+    assertEquals(DateTime.Field.Month.FEBRUARY, calendar.withMonth());
+    assertEquals(28, calendar.withDayOfMonth());
+};
+
+DateTime.Calendar.Test.testPlusYears_InvalidDay = function() {
+    var calendar = new DateTime.Calendar(time(2000, 2, 29)).plusYears(1);
+
+    assertEquals(2001, calendar.withYear());
+    assertEquals(DateTime.Field.Month.FEBRUARY, calendar.withMonth());
+    assertEquals(28, calendar.withDayOfMonth());
+};
+
+DateTime.Calendar.Test.testMinusYears_InvalidDay = function() {
+    var calendar = new DateTime.Calendar(time(2000, 2, 29)).minusYears(1);
+
+    assertEquals(1999, calendar.withYear());
+    assertEquals(DateTime.Field.Month.FEBRUARY, calendar.withMonth());
+    assertEquals(28, calendar.withDayOfMonth());
+};
+
 DateTime.Calendar.Test.testWithYear_Zero = function() {
     assertFail(function() {
         new DateTime.Calendar(0).withYear(0);
-    });
-};
-
-DateTime.Calendar.Test.testWithMonth_BiggerThanMax = function() {
-    assertFail(function() {
-        new DateTime.Calendar(0).withMonth(14);
     });
 };
 
@@ -55,6 +73,20 @@ DateTime.Calendar.Test.testWithMonth = function() {
 
     assertEquals(1970, calendar.withYear());
     assertEquals(DateTime.Field.Month.AUGUST, calendar.withMonth());
+};
+
+DateTime.Calendar.Test.testWithMonth_InvalidDay = function() {
+    var calendar = new DateTime.Calendar(time(2001, 1, 31)).withMonth(DateTime.Field.Month.FEBRUARY);
+
+    assertEquals(2001, calendar.withYear());
+    assertEquals(DateTime.Field.Month.FEBRUARY, calendar.withMonth());
+    assertEquals(28, calendar.withDayOfMonth());
+};
+
+DateTime.Calendar.Test.testWithMonth_BiggerThanMax = function() {
+    assertFail(function() {
+        new DateTime.Calendar(0).withMonth(14);
+    });
 };
 
 DateTime.Calendar.Test.testWithMonth_LesserThanMin = function() {
@@ -67,7 +99,22 @@ DateTime.Calendar.Test.testPlusMonths_14 = function() {
     var calendar = new DateTime.Calendar(0).plusMonths(14);
 
     assertEquals(1971, calendar.withYear());
+    assertEquals(DateTime.Field.Month.MARCH, calendar.withMonth());
+};
+
+DateTime.Calendar.Test.testPlusMonths_1 = function() {
+    var calendar = new DateTime.Calendar(0).plusMonths(1);
+
+    assertEquals(1970, calendar.withYear());
     assertEquals(DateTime.Field.Month.FEBRUARY, calendar.withMonth());
+};
+
+DateTime.Calendar.Test.testPlusMonths_InvalidDay = function() {
+    var calendar = new DateTime.Calendar(time(2001, 1, 31)).plusMonths(1);
+
+    assertEquals(2001, calendar.withYear());
+    assertEquals(DateTime.Field.Month.FEBRUARY, calendar.withMonth());
+    assertEquals(28, calendar.withDayOfMonth());
 };
 
 DateTime.Calendar.Test.testPlusMonths_Zero = function() {
@@ -81,7 +128,15 @@ DateTime.Calendar.Test.testMinusMonths_1 = function() {
     var calendar = new DateTime.Calendar(0).minusMonths(1);
 
     assertEquals(1969, calendar.withYear());
+    assertEquals(DateTime.Field.Month.DECEMBER, calendar.withMonth());
+};
+
+DateTime.Calendar.Test.testMinusMonths_InvalidDay = function() {
+    var calendar = new DateTime.Calendar(time(2001, 1, 31)).minusMonths(2);
+
+    assertEquals(2000, calendar.withYear());
     assertEquals(DateTime.Field.Month.NOVEMBER, calendar.withMonth());
+    assertEquals(30, calendar.withDayOfMonth());
 };
 
 DateTime.Calendar.Test.testMinusMonths_Zero = function() {

@@ -172,11 +172,11 @@ DateTime.Field.Month.Test.mockCalendar = function(year, month, daysOfMonth) {
 
     var calendar = mock({
         time: time(year, month, 1),
-        withYear: mock({
+        getYear: mock({
             millis: time(year, 1, 1),
             isLeap: ((y & 3) === 0 && (y % 100 !== 0 || y % 400 === 0))
         }),
-        withDayOfMonth: mock({
+        getDayOfMonth: mock({
             value: daysOfMonth
         })
     });
@@ -184,7 +184,7 @@ DateTime.Field.Month.Test.mockCalendar = function(year, month, daysOfMonth) {
     if (daysOfMonth !== undefined) {
         calendar._date = daysOfMonth;
 
-        calendar.withDayOfMonth().value = (function(cal) {
+        calendar.getDayOfMonth().value = (function(cal) {
             return function(val) {
                 if (val === undefined) {
                     return cal._date;
