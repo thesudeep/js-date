@@ -7,13 +7,13 @@ DateTime.Formatter = (function() {
 
     var Era = function(count) {
         this.format = function(calendar) {
-            return calendar.year() < 0 ? "BC" : "AD";
+            return calendar.withYear() < 0 ? "BC" : "AD";
         }
     };
 
     var Year = function(count) {
         this.format = function(calendar) {
-            return DateTime.trail(Math.abs(calendar.year()), count < 4 ? 2 : count);
+            return DateTime.trail(Math.abs(calendar.withYear()), count < 4 ? 2 : count);
         }
     };
 
@@ -35,61 +35,61 @@ DateTime.Formatter = (function() {
         }
 
         this.format = function(calendar) {
-            return fn.call(this, calendar.month());
+            return fn.call(this, calendar.withMonth());
         }
     };
 
     var WeekOfYear = function(count) {
         this.format = function(calendar) {
-            return DateTime.trail(calendar.weekOfYear(), count);
+            return DateTime.trail(calendar.withWeekOfYear(), count);
         }
     };
 
     var WeekOfMonth = function(count) {
         this.format = function(calendar) {
-            return DateTime.trail(calendar.weekOfMonth(), count);
+            return DateTime.trail(calendar.withWeekOfMonth(), count);
         }
     };
 
     var DateOfMonth = function(count) {
         this.format = function(calendar) {
-            return DateTime.trail(calendar.date(), count);
+            return DateTime.trail(calendar.withDayOfMonth(), count);
         }
     };
 
     var DayNumeric = function(count) {
         this.format = function(calendar) {
-            return DateTime.trail(calendar.day(), count);
+            return DateTime.trail(calendar.withDayOfWeek(), count);
         }
     };
 
     var DayText = function(count) {
         this.format = function(calendar) {
-            return (count < 4 ? "Short-" : "Long-") + calendar.day();
+            return (count < 4 ? "Short-" : "Long-") + calendar.withDayOfWeek();
         }
     };
 
     var HourOfDay = function(count) {
         this.format = function(calendar) {
-            return DateTime.trail(calendar.hour(), count);
+            return DateTime.trail(calendar.withHourOfDay(), count);
         }
     };
 
     var HourOfDayPlus = function(count) {
         this.format = function(calendar) {
-            return DateTime.trail(calendar.hour() + 1, count);
+            return DateTime.trail(calendar.withHourOfDay() + 1, count);
         }
     };
 
     var MinuteOfHour = function(count) {
         this.format = function(calendar) {
-            return DateTime.trail(calendar.minute(), count);
+            return DateTime.trail(calendar.withMinuteOfHour(), count);
         }
     };
 
     var SecondOfMinute = function(count) {
         this.format = function(calendar) {
-            return DateTime.trail(calendar.second(), count);
+            return DateTime.trail(calendar.withSecondOfMinute(), count);
         }
     };
 
@@ -101,13 +101,13 @@ DateTime.Formatter = (function() {
 
     var TimeZoneText = function(count) {
         this.format = function(calendar) {
-            return count < 4 ? calendar.timeZone().id : calendar.timeZone().name;
+            return count < 4 ? calendar.withZone().id : calendar.withZone().name;
         }
     };
 
     var TimeZoneOffset = function(count) {
         this.format = function(calendar) {
-            var offset = DateTime.quotRem(DateTime.quotRem(calendar.timeZone().offset(calendar.time()), DateTime.MILLIS_PER_MINUTE).quot, DateTime.MINUTES_PER_HOUR);
+            var offset = DateTime.quotRem(DateTime.quotRem(calendar.withZone().offset(calendar.time()), DateTime.MILLIS_PER_MINUTE).quot, DateTime.MINUTES_PER_HOUR);
 
             return (offset.quot < 0 ? "-" : "+") + DateTime.trail(offset.quot, 2) + DateTime.trail(offset.rem, 2);
         }

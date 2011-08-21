@@ -4,14 +4,14 @@ DateTime.Field.Month = function(calendar) {
     this._val = 0;
 
     function choose(normal, leap) {
-        return calendar.year().isLeap() ? leap : normal;
+        return calendar.withYear().isLeap() ? leap : normal;
     }
 
     function adjustDate() {
         var days = choose(DateTime.Field.Month.DAYS_BY_NORMAL_MONTHS, DateTime.Field.Month.DAYS_BY_LEAP_MONTHS);
 
-        if (calendar.date().value() > days[self._val]) {
-            calendar.date().value(days[self._val]);
+        if (calendar.withDayOfMonth().value() > days[self._val]) {
+            calendar.withDayOfMonth().value(days[self._val]);
         }
     }
 
@@ -32,7 +32,7 @@ DateTime.Field.Month = function(calendar) {
 
         value = DateTime.validateInt(value);
 
-        var yearStart = calendar.year().millis(value).millis();
+        var yearStart = calendar.withYear().millis(value).millis();
 
         a = choose(DateTime.Field.Month.MILLIS_BY_NORMAL_MONTHS, DateTime.Field.Month.MILLIS_BY_LEAP_MONTHS);
 

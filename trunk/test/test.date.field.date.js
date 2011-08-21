@@ -1,168 +1,168 @@
-DateTime.Field.Date.Test = {};
+DateTime.Field.DaysOfMonth.Test = {};
 
-DateTime.Field.Date.Test.testSetValue = function() {
-    var date = DateTime.Field.Date.Test.createDate(1970).value(1);
+DateTime.Field.DaysOfMonth.Test.testSetValue = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(1970).value(1);
 
-    assertEquals(1, date.value());
+    assertEquals(1, daysOfMonth.value());
 };
 
-DateTime.Field.Date.Test.testGetMillis_Epoch = function() {
-    var date = DateTime.Field.Date.Test.createDate(1970).millis(10120);
+DateTime.Field.DaysOfMonth.Test.testGetMillis_Epoch = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(1970).millis(10120);
 
-    assertEquals(0, date.millis());
+    assertEquals(0, daysOfMonth.millis());
 };
 
-DateTime.Field.Date.Test.testGetMillis_Millis_First = function() {
-    var date = DateTime.Field.Date.Test.createDate(2000, 11).millis(time(2000, 11, 1));
+DateTime.Field.DaysOfMonth.Test.testGetMillis_Millis_First = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(2000, 11).millis(time(2000, 11, 1));
 
-    assertEquals(0, date.millis());
+    assertEquals(0, daysOfMonth.millis());
 };
 
-DateTime.Field.Date.Test.testGetMillis_Millis_Second = function() {
-    var date = DateTime.Field.Date.Test.createDate(2000, 2).millis(time(2000, 2, 2));
+DateTime.Field.DaysOfMonth.Test.testGetMillis_Millis_Second = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(2000, 2).millis(time(2000, 2, 2));
 
-    assertEquals(DateTime.MILLIS_PER_DAY, date.millis());
+    assertEquals(DateTime.MILLIS_PER_DAY, daysOfMonth.millis());
 };
 
-DateTime.Field.Date.Test.testGetMillis_Leap = function() {
-    var date = DateTime.Field.Date.Test.createDate(2000, 2).value(29);
+DateTime.Field.DaysOfMonth.Test.testGetMillis_Leap = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(2000, 2).value(29);
 
-    assertEquals(28 * DateTime.MILLIS_PER_DAY, date.millis());
+    assertEquals(28 * DateTime.MILLIS_PER_DAY, daysOfMonth.millis());
 };
 
-DateTime.Field.Date.Test.testGetMillis_NotLeap = function() {
-    var date = DateTime.Field.Date.Test.createDate(2001, 2).value(28);
+DateTime.Field.DaysOfMonth.Test.testGetMillis_NotLeap = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(2001, 2).value(28);
 
-    assertEquals(27 * DateTime.MILLIS_PER_DAY, date.millis());
+    assertEquals(27 * DateTime.MILLIS_PER_DAY, daysOfMonth.millis());
 };
 
-DateTime.Field.Date.Test.testSetMillis_plus1_March_Start = function() {
-    var date = DateTime.Field.Date.Test.createDate(1, 3).millis(time(1, 3, 1));
+DateTime.Field.DaysOfMonth.Test.testSetMillis_plus1_March_Start = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(1, 3).millis(time(1, 3, 1));
 
-    assertEquals(1, date.value());
+    assertEquals(1, daysOfMonth.value());
 };
 
-DateTime.Field.Date.Test.testSetMillis_plus1_March_Before = function() {
-    var date = DateTime.Field.Date.Test.createDate(1, 2).millis(time(1, 3, 1) - 1);
+DateTime.Field.DaysOfMonth.Test.testSetMillis_plus1_March_Before = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(1, 2).millis(time(1, 3, 1) - 1);
 
-    assertEquals(28, date.value());
+    assertEquals(28, daysOfMonth.value());
 };
 
-DateTime.Field.Date.Test.testSetMillis_minus2001_March_Start = function() {
-    var date = DateTime.Field.Date.Test.createDate(-2001, 3).millis(time(-2001, 3, 1));
+DateTime.Field.DaysOfMonth.Test.testSetMillis_minus2001_March_Start = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(-2001, 3).millis(time(-2001, 3, 1));
 
-    assertEquals(1, date.value());
+    assertEquals(1, daysOfMonth.value());
 };
 
-DateTime.Field.Date.Test.testSetMillis_minus2001_March_Before = function() {
-    var date = DateTime.Field.Date.Test.createDate(-2001, 2).millis(time(-2001, 3, 1) - 1);
+DateTime.Field.DaysOfMonth.Test.testSetMillis_minus2001_March_Before = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(-2001, 2).millis(time(-2001, 3, 1) - 1);
 
-    assertEquals(29, date.value());
+    assertEquals(29, daysOfMonth.value());
 };
 
-DateTime.Field.Date.Test.testSetMillis_Epoch = function() {
-    var date = DateTime.Field.Date.Test.createDate(1970, 1).millis(12312);
+DateTime.Field.DaysOfMonth.Test.testSetMillis_Epoch = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(1970, 1).millis(12312);
 
-    assertEquals(1, date.value());
+    assertEquals(1, daysOfMonth.value());
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_Leap_OK = function() {
-    var date = DateTime.Field.Date.Test.createDate(2000, 2).value(29);
+DateTime.Field.DaysOfMonth.Test.testMaxDate_Value_Leap_OK = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(2000, 2).value(29);
 
-    assertEquals(29, date.value());
+    assertEquals(29, daysOfMonth.value());
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_Leap_Fail = function() {
+DateTime.Field.DaysOfMonth.Test.testMaxDate_Value_Leap_Fail = function() {
     assertFail(function() {
-        DateTime.Field.Date.Test.createDate(2000, 2).value(30);
+        DateTime.Field.DaysOfMonth.Test.createDate(2000, 2).value(30);
     });
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_Normal_OK = function() {
-    var date = DateTime.Field.Date.Test.createDate(2001, 2).value(28);
+DateTime.Field.DaysOfMonth.Test.testMaxDate_Value_Normal_OK = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(2001, 2).value(28);
 
-    assertEquals(28, date.value());
+    assertEquals(28, daysOfMonth.value());
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_Normal_Fail = function() {
+DateTime.Field.DaysOfMonth.Test.testMaxDate_Value_Normal_Fail = function() {
     assertFail(function() {
-        DateTime.Field.Date.Test.createDate(2001, 2).value(29);
+        DateTime.Field.DaysOfMonth.Test.createDate(2001, 2).value(29);
     });
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_31_OK = function() {
-    var date = DateTime.Field.Date.Test.createDate(2001, 12).value(DateTime.Field.Date.MAX_DATE);
+DateTime.Field.DaysOfMonth.Test.testMaxDate_Value_31_OK = function() {
+    var daysOfMonth = DateTime.Field.DaysOfMonth.Test.createDate(2001, 12).value(DateTime.Field.DaysOfMonth.MAX_DATE);
 
-    assertEquals(DateTime.Field.Date.MAX_DATE, date.value());
+    assertEquals(DateTime.Field.DaysOfMonth.MAX_DATE, daysOfMonth.value());
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_31_Fail = function() {
+DateTime.Field.DaysOfMonth.Test.testMaxDate_Value_31_Fail = function() {
     assertFail(function() {
-        DateTime.Field.Date.Test.createDate(2001, 12).value(DateTime.Field.Date.MAX_DATE + 1);
+        DateTime.Field.DaysOfMonth.Test.createDate(2001, 12).value(DateTime.Field.DaysOfMonth.MAX_DATE + 1);
     });
 };
 
-DateTime.Field.Date.Test.testMaxDate_Value_30_Fail = function() {
+DateTime.Field.DaysOfMonth.Test.testMaxDate_Value_30_Fail = function() {
     assertFail(function() {
-        DateTime.Field.Date.Test.createDate(2001, 11).value(DateTime.Field.Date.MAX_DATE);
+        DateTime.Field.DaysOfMonth.Test.createDate(2001, 11).value(DateTime.Field.DaysOfMonth.MAX_DATE);
     });
 };
 
-DateTime.Field.Date.Test.testMinDate_Value_OK = function() {
-    DateTime.Field.Date.Test.createDate(2000, 1).value(DateTime.Field.Date.MIN_DATE);
+DateTime.Field.DaysOfMonth.Test.testMinDate_Value_OK = function() {
+    DateTime.Field.DaysOfMonth.Test.createDate(2000, 1).value(DateTime.Field.DaysOfMonth.MIN_DATE);
 };
 
-DateTime.Field.Date.Test.testMinDate_Value_Fail = function() {
+DateTime.Field.DaysOfMonth.Test.testMinDate_Value_Fail = function() {
     assertFail(function() {
-        DateTime.Field.Date.Test.createDate(2000, 1).value(DateTime.Field.Date.MIN_DATE - 1);
+        DateTime.Field.DaysOfMonth.Test.createDate(2000, 1).value(DateTime.Field.DaysOfMonth.MIN_DATE - 1);
     });
 };
 
-DateTime.Field.Date.Test.testValidate_text = function() {
+DateTime.Field.DaysOfMonth.Test.testValidate_text = function() {
     assertFail(function() {
-        DateTime.Field.Date.validate("a");
+        DateTime.Field.DaysOfMonth.validate("a");
     });
 };
 
-DateTime.Field.Date.Test.testValidate_long = function() {
+DateTime.Field.DaysOfMonth.Test.testValidate_long = function() {
     assertFail(function() {
-        DateTime.Field.Date.validate("11231237012730198239812398");
+        DateTime.Field.DaysOfMonth.validate("11231237012730198239812398");
     });
 };
 
-DateTime.Field.Date.Test.testValidate_hex = function() {
+DateTime.Field.DaysOfMonth.Test.testValidate_hex = function() {
     assertFail(function() {
-        DateTime.Field.Date.validate("0x1");
+        DateTime.Field.DaysOfMonth.validate("0x1");
     });
 };
 
-DateTime.Field.Date.Test.testValidate_zeroTrail = function() {
-    assertEquals(12, DateTime.Field.Date.validate("012"));
+DateTime.Field.DaysOfMonth.Test.testValidate_zeroTrail = function() {
+    assertEquals(12, DateTime.Field.DaysOfMonth.validate("012"));
 };
 
-DateTime.Field.Date.Test.testValidate_negative = function() {
+DateTime.Field.DaysOfMonth.Test.testValidate_negative = function() {
     assertFail(function() {
-        DateTime.Field.Date.validate("-1");
+        DateTime.Field.DaysOfMonth.validate("-1");
     });
 };
 
-DateTime.Field.Date.Test.createDate = function(year, month, date) {
-    return new DateTime.Field.Date(DateTime.Field.Date.Test.mockCalendar(year, month, date));
+DateTime.Field.DaysOfMonth.Test.createDate = function(year, month, daysOfMonth) {
+    return new DateTime.Field.DaysOfMonth(DateTime.Field.DaysOfMonth.Test.mockCalendar(year, month, daysOfMonth));
 };
 
-DateTime.Field.Date.Test.mockCalendar = function(year, month, date) {
+DateTime.Field.DaysOfMonth.Test.mockCalendar = function(year, month, daysOfMonth) {
     year = DateTime.exists(year, 0);
     month = DateTime.exists(month, 1);
-    date = DateTime.exists(date, 1);
+    daysOfMonth = DateTime.exists(daysOfMonth, 1);
 
     return mock({
-        year: mock({
+        withYear: mock({
             millis: time(year, 1, 1)
         }),
-        month: mock({
+        withMonth: mock({
             millis: time(year, month, 1) - time(year, 1, 1),
             duration: time(year, month + 1, 1) - time(year, month, 1)
         }),
-        time: time(year, month, date)
+        time: time(year, month, daysOfMonth)
     });
 };

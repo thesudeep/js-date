@@ -26,32 +26,32 @@ DateTime.Calendar = function(time, timeZone) {
             return instant + timeZone.offset(instant);
         };
 
-        this.year = function() {
+        this.withYear = function() {
             return me._year;
         };
 
-        this.month = function() {
+        this.withMonth = function() {
             return me._month;
         };
 
-        this.date = function() {
-            return me._date;
+        this.withDayOfMonth = function() {
+            return me._dayOfMonth;
         };
 
-        this.firstDay = function() {
+        this.withFirstWeekDay = function() {
             return firstDay;
         };
 
         this._year = new DateTime.Field.Year(this);
         this._month = new DateTime.Field.Month(this);
-        this._date = new DateTime.Field.Date(this);
+        this._dayOfMonth = new DateTime.Field.DaysOfMonth(this);
 
-        this._hour = new DateTime.Field.Hour(this);
-        this._minute = new DateTime.Field.Minute(this);
-        this._second = new DateTime.Field.Second(this);
-        this._ms = new DateTime.Field.Millisecond(this);
+        this._hourOfDay = new DateTime.Field.Hour(this);
+        this._minuteOfHour = new DateTime.Field.Minute(this);
+        this._secondOfMinute = new DateTime.Field.Second(this);
+        this._millisOfSecond = new DateTime.Field.Millisecond(this);
 
-        this._day = new DateTime.Field.Day(this);
+        this._dayOfWeek = new DateTime.Field.DaysOfWeek(this);
         this._weekOfMonth = new DateTime.Field.WeekOfMonth(this);
         this._weekOfYear = new DateTime.Field.WeekOfYear(this);
     }
@@ -86,21 +86,21 @@ DateTime.Calendar = function(time, timeZone) {
 
     /* -- Interface -- */
 
-    this.firstDay = function(value) {
+    this.withFirstWeekDay = function(value) {
         if (arguments.length === 0) {
             return firstDay;
         }
 
-        firstDay = DateTime.Field.Day.validate(value);
+        firstDay = DateTime.Field.DaysOfWeek.validate(value);
 
         return self;
     };
 
-    this.year = function (year) {
+    this.withYear = function (year) {
         return withField("year", arguments);
     };
 
-    this.month = function (month) {
+    this.withMonth = function (month) {
         return withField("month", arguments, function(value) {
             var yearMillis = 0;
             var years = DateTime.quotRem(value - DateTime.Field.Month.MIN_MONTH, DateTime.Field.Month.MAX_MONTH);
@@ -117,55 +117,55 @@ DateTime.Calendar = function(time, timeZone) {
         });
     };
 
-    this.weekOfYear = function (week) {
+    this.withWeekOfYear = function (week) {
         return withField("weekOfYear", arguments);
     };
 
-    this.weekOfMonth = function (week) {
+    this.withWeekOfMonth = function (week) {
         return withField("weekOfMonth", arguments);
     };
 
-    this.plusDay = function(days) {
-        self.date(self.date() + DateTime.validateInt(days));
+    this.plusDays = function(days) {
+        self.withDayOfMonth(self.withDayOfMonth() + DateTime.validateInt(days));
 
         return self;
     };
 
-    this.date = function (date) {
-        return withField("date", arguments, function(value) {
-            return (value - DateTime.Field.Date.MIN_DATE) * DateTime.MILLIS_PER_DAY;
+    this.withDayOfMonth = function(daysOfMonth) {
+        return withField("dayOfMonth", arguments, function(value) {
+            return (value - DateTime.Field.DaysOfMonth.MIN_DATE) * DateTime.MILLIS_PER_DAY;
         });
     };
 
-    this.day = function (day) {
-        return withField("day", arguments);
+    this.withDayOfWeek = function (daysOfWeek) {
+        return withField("dayOfWeek", arguments);
     };
 
-    this.hour = function (hour) {
-        return withField("hour", arguments, function(value) {
+    this.withHourOfDay = function (hour) {
+        return withField("hourOfDay", arguments, function(value) {
             return value * DateTime.MILLIS_PER_HOUR;
         });
     };
 
-    this.minute = function (minute) {
-        return withField("minute", arguments, function(value) {
+    this.withMinuteOfHour = function (minute) {
+        return withField("minuteOfHour", arguments, function(value) {
             return value * DateTime.MILLIS_PER_MINUTE;
         });
     };
 
-    this.second = function (second) {
-        return withField("second", arguments, function(value) {
+    this.withSecondOfMinute = function (second) {
+        return withField("secondOfMinute", arguments, function(value) {
             return value * DateTime.MILLIS_PER_SECOND;
         });
     };
 
-    this.millis = function (millis) {
-        return withField("ms", arguments, function(value) {
+    this.withMillisOfSecond = function (millis) {
+        return withField("millisOfSecond", arguments, function(value) {
             return value;
         });
     };
 
-    this.clearTime = function() {
+    this.withoutTime = function() {
 	    var time = DateTime.quotRem(instant, DateTime.MILLIS_PER_DAY);
 
         instant -= time.rem;
@@ -173,7 +173,7 @@ DateTime.Calendar = function(time, timeZone) {
         return self;
     };
 
-    this.timeZone = function (tz) {
+    this.withZone = function (tz) {
         if (arguments.length === 0) {
             return timeZone;
         }
