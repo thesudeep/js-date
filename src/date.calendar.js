@@ -25,19 +25,19 @@ DateTime.Calendar = function(time, timeZone) {
             return instant + timeZone.offset(instant);
         };
 
-        this.withYear = function() {
+        this.getYear = function() {
             return me._year;
         };
 
-        this.withMonth = function() {
+        this.getMonth = function() {
             return me._month;
         };
 
-        this.withDayOfMonth = function() {
+        this.getDayOfMonth = function() {
             return me._dayOfMonth;
         };
 
-        this.withFirstWeekDay = function() {
+        this.getFirstWeekDay = function() {
             return firstDay;
         };
 
@@ -53,6 +53,12 @@ DateTime.Calendar = function(time, timeZone) {
         this._dayOfWeek = new DateTime.Field.DaysOfWeek(this);
         this._weekOfMonth = new DateTime.Field.WeekOfMonth(this);
         this._weekOfYear = new DateTime.Field.WeekOfYear(this);
+
+        var _time = this.time();
+
+        this._year.millis(_time);
+        this._month.millis(_time);
+        this._dayOfMonth.millis(_time);
     }
 
     function plusField(duration, value, fn) {
@@ -71,7 +77,7 @@ DateTime.Calendar = function(time, timeZone) {
         return self;
     }
 
-    function withField(field, args) {
+    function withField(field, args, fn) {
         field.millis(calendar.time());
 
         if (args.length === 0) {
@@ -81,9 +87,28 @@ DateTime.Calendar = function(time, timeZone) {
         instant += timeZone.offset(instant);
         instant -= field.millis();
         instant += field.value(args[0]).millis();
+
+        if (fn) {
+            instant += fn.call(self, instant);
+        }
+
         instant -= timeZone.offset(instant);
 
         return self;
+    }
+
+    function adjustMonth(inst) {
+        var month = calendar.getMonth().value();
+
+        return month !== calendar.getMonth().millis(inst).value() ? -DateTime.MILLIS_PER_DAY : 0;
+    }
+
+    function adjustDayOfMonth(inst) {
+        var dayOfMonth = calendar.getDayOfMonth();
+        var value = dayOfMonth.millis();
+        var newValue = dayOfMonth.millis(inst).millis();
+
+        return value !== newValue ? -(newValue + DateTime.MILLIS_PER_DAY) : 0;
     }
 
     /* -- Interface -- */
@@ -99,15 +124,16 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.withYear = function(year) {
-        return withField(calendar._year, arguments);
+        return withField(calendar._year, arguments, adjustMonth);
     };
 
     this.plusYears = function(years) {
         return plusField(0, years, function() {
-            var before = calendar._year.millis();
-            var after = calendar._year.value(calendar._year.value() + years).millis();
+            var before = calendar.getYear().millis();
+            var after = calendar.getYear().value(calendar.getYear().value() + years).millis();
+            var delta = after - before;
 
-            return after - before;
+            return delta + adjustMonth(instant + delta);
         });
     };
 
@@ -116,23 +142,25 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.withMonth = function(month) {
-        return withField(calendar._month, arguments);
+        return withField(calendar._month, arguments, adjustDayOfMonth);
     };
 
     this.plusMonths = function(months) {
         return plusField(calendar._month, months, function(value) {
-            var yearMillis = 0;
-            var years = DateTime.quotRem(value - DateTime.Field.Month.MIN_MONTH, DateTime.Field.Month.MAX_MONTH);
+            var millis = 0;
+            var years = DateTime.quotRem(value, DateTime.Field.Month.MAX_MONTH);
 
             if (years.quot !== 0) {
-                yearMillis -= calendar._year.millis();
-                calendar._year.value(years.quot + calendar._year.value());
-                yearMillis += calendar._year.millis();
+                millis -= calendar.getYear().millis();
+                calendar.getYear().value(years.quot + calendar.getYear().value());
+                millis += calendar.getYear().millis();
             }
 
             calendar._month.value(years.rem + DateTime.Field.Month.MIN_MONTH);
 
-            return yearMillis + calendar._month.millis();
+            millis += calendar._month.millis();
+
+            return millis + adjustDayOfMonth(instant + millis);
         })
     };
 

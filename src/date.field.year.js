@@ -15,6 +15,16 @@ DateTime.Field.Year = function(calendar) {
         return (year * 365 + (leapYears - DateTime.Field.Year.DAYS_0000_TO_1970)) * DateTime.MILLIS_PER_DAY;
     }
 
+    function adjustLeap(year) {
+        var leap = getLeap(year);
+
+        if (self._leap !== leap) {
+            self._leap = leap;
+
+            leap === false && calendar.getMonth().value(calendar.getMonth().value());
+        }
+    }
+
     this.duration = function() {
         return self._leap ? DateTime.Field.Year.MILLIS_PER_LEAP_YEAR : DateTime.Field.Year.MILLIS_PER_NORMAL_YEAR;
     };
@@ -55,16 +65,15 @@ DateTime.Field.Year = function(calendar) {
         if (diff < 0) {
             year--;
             ms -= millisPerYear;
-            leap = getLeap(year);
         } else if (diff >= millisPerYear) {
             year++;
             ms += millisPerYear;
-            leap = getLeap(year);
         }
 
         self._ms = ms;
         self._val = year;
-        self._leap = leap;
+
+        adjustLeap(year);
 
         return self;
     };
@@ -86,7 +95,7 @@ DateTime.Field.Year = function(calendar) {
 
         var ms = getApproxMillis(year);
 
-        self._leap = getLeap(year);
+        adjustLeap(year);
 
         if (self._leap) {
             ms -= DateTime.MILLIS_PER_DAY;

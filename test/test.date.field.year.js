@@ -6,6 +6,15 @@ DateTime.Field.Year.Test.testSetValue = function() {
     assertEquals(10120, year.value());
 };
 
+DateTime.Field.Year.Test.testSetValue_InvalidDate = function() {
+    var calendar = DateTime.Field.Year.Test.mockCalendar();
+
+    var year = new DateTime.Field.Year(calendar).value(2000).value(2001);
+
+    assertEquals(2001, year.value());
+    assertEquals(1, calendar._withMonthInvoced);
+};
+
 DateTime.Field.Year.Test.testGetMillis_Epoch = function() {
     var year = DateTime.Field.Year.Test.createYear().millis(10120);
 
@@ -181,6 +190,31 @@ DateTime.Field.Year.Test.testValidate_negative = function() {
     assertEquals(-1001, DateTime.Field.Year.validate("-1001"));
 };
 
-DateTime.Field.Year.Test.createYear = function(time) {
-    return new DateTime.Field.Year(mock({time: DateTime.exists(time, 0)}));
+DateTime.Field.Year.Test.createYear = function(month) {
+
+    return new DateTime.Field.Year(DateTime.Field.Year.Test.mockCalendar());
+};
+
+DateTime.Field.Year.Test.mockCalendar = function() {
+    var calendar = mock({
+        getMonth: mock({
+            value: null
+        })
+    });
+
+    calendar._withMonthInvoced = 0;
+
+    calendar.getMonth().value = (function(cal) {
+        return function(val) {
+            if (val === undefined) {
+                return cal._withMonthInvoced;
+            }
+
+            cal._withMonthInvoced++;
+
+            return this;
+        };
+    })(calendar);
+
+    return calendar;
 };

@@ -106,10 +106,10 @@ DateTime.Field.WeekOfYear.Test.mockCalendar = function(firstDay, year, month, da
 
     return mock({
         time: time(year, month, daysOfMonth),
-        withYear: mock({
+        getYear: mock({
             isLeap: ((year & 3) === 0 && (year % 100 !== 0 || year % 400 === 0)),
             millis: time(year, 1, 1)
         }),
-        withFirstWeekDay: firstDay
+        getFirstWeekDay: firstDay
     });
 };
