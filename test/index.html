@@ -4,13 +4,13 @@
     <script type="text/javascript" src="../src/date.field.js"></script>
     <script type="text/javascript" src="../src/date.field.year.js"></script>
     <script type="text/javascript" src="../src/date.field.month.js"></script>
-    <script type="text/javascript" src="../src/date.field.date.js"></script>
+    <script type="text/javascript" src="../src/date.field.daysOfMonth.js"></script>
     <script type="text/javascript" src="../src/date.field.hour.js"></script>
     <script type="text/javascript" src="../src/date.field.minute.js"></script>
     <script type="text/javascript" src="../src/date.field.second.js"></script>
     <script type="text/javascript" src="../src/date.field.millisecond.js"></script>
 
-    <script type="text/javascript" src="../src/date.field.day.js"></script>
+    <script type="text/javascript" src="../src/date.field.daysOfWeek.js"></script>
     <script type="text/javascript" src="../src/date.field.weekOfYear.js"></script>
     <script type="text/javascript" src="../src/date.field.weekOfMonth.js"></script>
     <script type="text/javascript" src="../src/date.timezone.js"></script>
@@ -46,7 +46,7 @@
 	    var count = 1000;
 		
 		while (--count !== 0) {
-		    new Date().calendar().year(100).month(10).second(10).hour(100).day(1).time();
+		    new Date().calendar().withYear(100).withMonth(10).withSecondOfMinute(10).withHourOfDay(100).withDayOfWeek(1).time();
 		}
 
         append("root", "Finished in " + stopTimer() + "ms");
@@ -57,13 +57,13 @@
 		
         runSuite("DateTime.Field.Year.Test", DateTime.Field.Year.Test);
         runSuite("DateTime.Field.Month.Test", DateTime.Field.Month.Test);
-        runSuite("DateTime.Field.Date.Test", DateTime.Field.Date.Test);
+        runSuite("DateTime.Field.Date.Test", DateTime.Field.DaysOfMonth.Test);
         runSuite("DateTime.Field.Hour.Test", DateTime.Field.Hour.Test);
         runSuite("DateTime.Field.Minute.Test", DateTime.Field.Minute.Test);
         runSuite("DateTime.Field.Second.Test", DateTime.Field.Second.Test);
         runSuite("DateTime.Field.Millisecond.Test", DateTime.Field.Millisecond.Test);
 
-        runSuite("DateTime.Field.Day.Test", DateTime.Field.Day.Test);
+        runSuite("DateTime.Field.Day.Test", DateTime.Field.DaysOfWeek.Test);
         runSuite("DateTime.Field.WeekOfYear.Test", DateTime.Field.WeekOfYear.Test);
         runSuite("DateTime.Field.WeekOfMonth.Test", DateTime.Field.WeekOfMonth.Test);
         runSuite("DateTime.TimeZone.Test", DateTime.TimeZone.Test);

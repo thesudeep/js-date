@@ -1,19 +1,19 @@
 DateTime.TimeZone.RuleSet.CET = [
     {
         offset: DateTime.MILLIS_PER_HOUR,
-        weekStart: DateTime.Field.Day.MONDAY,
+        weekStart: DateTime.Field.DaysOfWeek.MONDAY,
         dst: {
             offset: DateTime.MILLIS_PER_HOUR,
             start: {
                 month: DateTime.Field.Month.MARCH,
                 week: DateTime.Field.WeekOfMonth.LAST_WEEK,
-                day: DateTime.Field.Day.SUNDAY,
+                daysOfWeek: DateTime.Field.DaysOfWeek.SUNDAY,
                 hour: 2
             },
             stop: {
                 month: DateTime.Field.Month.OCTOBER,
                 week: DateTime.Field.WeekOfMonth.LAST_WEEK,
-                day: DateTime.Field.Day.SUNDAY,
+                daysOfWeek: DateTime.Field.DaysOfWeek.SUNDAY,
                 hour: 3
             }
         }

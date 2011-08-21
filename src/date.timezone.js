@@ -17,7 +17,7 @@ DateTime.TimeZone = function (id, name, rules) {
     }
 
     function TimeZoneCalendar() {
-        var year, month, hour, date, day, weekOfMonth,
+        var year, month, hour, daysOfMonth, day, weekOfMonth,
                 instant = 0,
                 me = this;
 
@@ -27,10 +27,10 @@ DateTime.TimeZone = function (id, name, rules) {
 
             var delta;
 
-            if (obj.date !== undefined) {
-                delta = date.value(obj.date).millis();
+            if (obj.daysOfMonth !== undefined) {
+                delta = daysOfMonth.value(obj.daysOfMonth).millis();
             } else {
-                delta = weekOfMonth.value(obj.week).millis() + day.value(obj.day).millis();
+                delta = weekOfMonth.value(obj.week).millis() + day.value(obj.daysOfWeek).millis();
 
                 if (delta > month.duration()) {
                     delta -= DateTime.MILLIS_PER_WEEK;
@@ -57,21 +57,21 @@ DateTime.TimeZone = function (id, name, rules) {
             return me;
         };
 
-        this.year = function() {
+        this.withYear = function() {
             return year;
         };
 
-        this.month = function() {
+        this.withMonth = function() {
             return month;
         };
 
-        this.date = function() {
-            return date;
+        this.withDayOfMonth = function() {
+            return daysOfMonth;
         };
 
-        this.firstDay = function() {
+        this.withFirstWeekDay = function() {
             if (!me.rule || me.rule.weekStart === undefined) {
-                return DateTime.Field.Day.MIN_DAY;
+                return DateTime.Field.DaysOfWeek.MIN_DAY;
             }
 
             return me.rule.weekStart;
@@ -80,8 +80,8 @@ DateTime.TimeZone = function (id, name, rules) {
         this.startDst = function() {
             DateTime.assertTrue(me.rule.dst.start.month, "Month is missing in DST start settings");
             DateTime.assertTrue(me.rule.dst.start.hour, "Hour is missing in DST start settings");
-            DateTime.assertTrue(me.rule.dst.start.date || me.rule.dst.start.week && me.rule.dst.start.day, "Missing required DST start settings");
-            DateTime.assertTrue(!me.rule.dst.start.date || !me.rule.dst.start.week && !me.rule.dst.start.day, "Ambiguous DST start settings");
+            DateTime.assertTrue(me.rule.dst.start.daysOfMonth || me.rule.dst.start.week && me.rule.dst.start.daysOfWeek, "Missing required DST start settings");
+            DateTime.assertTrue(!me.rule.dst.start.daysOfMonth || !me.rule.dst.start.week && !me.rule.dst.start.daysOfWeek, "Ambiguous DST start settings");
 
             return calculate(me.rule.dst.start) - me.rule.offset;
         };
@@ -89,8 +89,8 @@ DateTime.TimeZone = function (id, name, rules) {
         this.stopDst = function() {
             DateTime.assertTrue(me.rule.dst.stop.month, "Month is missing in DST stop settings");
             DateTime.assertTrue(me.rule.dst.stop.hour, "Hour is missing in DST stop settings");
-            DateTime.assertTrue(me.rule.dst.stop.date || me.rule.dst.stop.week && me.rule.dst.stop.day, "Missing required DST stop settings");
-            DateTime.assertTrue(!me.rule.dst.stop.date || !me.rule.dst.stop.week && !me.rule.dst.stop.day, "Ambiguous DST stop settings");
+            DateTime.assertTrue(me.rule.dst.stop.daysOfMonth || me.rule.dst.stop.week && me.rule.dst.stop.daysOfWeek, "Missing required DST stop settings");
+            DateTime.assertTrue(!me.rule.dst.stop.daysOfMonth || !me.rule.dst.stop.week && !me.rule.dst.stop.daysOfWeek, "Ambiguous DST stop settings");
 
             return calculate(me.rule.dst.stop) - me.rule.offset - me.rule.dst.offset;
         };
@@ -102,13 +102,13 @@ DateTime.TimeZone = function (id, name, rules) {
         month = new DateTime.Field.Month(this);
         hour = new DateTime.Field.Hour(this);
 
-        date = new DateTime.Field.Date(this);
-        day = new DateTime.Field.Day(this);
+        daysOfMonth = new DateTime.Field.DaysOfMonth(this);
+        day = new DateTime.Field.DaysOfWeek(this);
         weekOfMonth = new DateTime.Field.WeekOfMonth(this);
     }
 
     this.firstDay = function(time) {
-        return self._calendar.time(time).firstDay();
+        return self._calendar.time(time).withFirstWeekDay();
     };
 
     this.dstShift = function(time) {
@@ -131,8 +131,8 @@ DateTime.TimeZone = function (id, name, rules) {
                 return rule.offset;
             }
 
-            if (yearValue !== cal.year().value() || dst === null) {
-                yearValue = cal.year().value();
+            if (yearValue !== cal.withYear().value() || dst === null) {
+                yearValue = cal.withYear().value();
 
                 dst = {
                     start: self._calendar.startDst(),
@@ -156,7 +156,7 @@ DateTime.TimeZone = function (id, name, rules) {
 DateTime.TimeZone.RuleSet = {
     UTC: [{
         offset: 0,
-        weekStart: DateTime.Field.Day.MONDAY
+        weekStart: DateTime.Field.DaysOfWeek.MONDAY
     }]
 };
 

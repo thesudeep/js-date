@@ -9,12 +9,12 @@ DateTime.TimeZone.Test.RuleSet = [
             offset: DateTime.MILLIS_PER_HOUR,
             start: {
                 month: DateTime.Field.Month.MARCH,
-                date: 22,
+                daysOfMonth: 22,
                 hour: 2
             },
             stop: {
                 month: DateTime.Field.Month.OCTOBER,
-                date: 17,
+                daysOfMonth: 17,
                 hour: 3
             }
         }
@@ -26,13 +26,13 @@ DateTime.TimeZone.Test.RuleSet = [
             start: {
                 month: DateTime.Field.Month.MARCH,
                 week: DateTime.Field.WeekOfMonth.LAST_WEEK,
-                day: DateTime.Field.Day.SUNDAY,
+                daysOfWeek: DateTime.Field.DaysOfWeek.SUNDAY,
                 hour: 2
             },
             stop: {
                 month: DateTime.Field.Month.OCTOBER,
                 week: DateTime.Field.WeekOfMonth.LAST_WEEK,
-                day: DateTime.Field.Day.SUNDAY,
+                daysOfWeek: DateTime.Field.DaysOfWeek.SUNDAY,
                 hour: 3
             }
         }

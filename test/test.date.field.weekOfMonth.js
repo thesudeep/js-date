@@ -13,13 +13,13 @@ DateTime.Field.WeekOfMonth.Test.testGetMillis_Mon_Second = function() {
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMillis_Sun_Second = function() {
-    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.SUNDAY).millis(time(2000, 1, 2));
+    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.DaysOfWeek.SUNDAY).millis(time(2000, 1, 2));
 
     assertEquals(DateTime.MILLIS_PER_DAY, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMillis_Thu_Second = function() {
-    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.THURSDAY).millis(time(2000, 1, 6));
+    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.DaysOfWeek.THURSDAY).millis(time(2000, 1, 6));
 
     assertEquals(5 * DateTime.MILLIS_PER_DAY, week.millis());
 };
@@ -31,37 +31,37 @@ DateTime.Field.WeekOfMonth.Test.testGetMillis_Mon_Six = function() {
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMillis_value_Mon_6_Weeks = function() {
-    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.MONDAY, 2012, 4, 1).value(6);
+    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.DaysOfWeek.MONDAY, 2012, 4, 1).value(6);
 
     assertEquals(2 * DateTime.MILLIS_PER_DAY + 4 * DateTime.MILLIS_PER_WEEK, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMillis_value_Mon_6_Weeks = function() {
     assertFail(function() {
-        DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.MONDAY, 2000, 4, 1).value(6);
+        DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.DaysOfWeek.MONDAY, 2000, 4, 1).value(6);
     });
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMillis_value_Sun_6_Weeks = function() {
-    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.SUNDAY, 2000, 4, 1).value(6);
+    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.DaysOfWeek.SUNDAY, 2000, 4, 1).value(6);
 
     assertEquals(2 * DateTime.MILLIS_PER_DAY + 4 * DateTime.MILLIS_PER_WEEK, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMillis_value_Sun_6_Weeks = function() {
     assertFail(function() {
-        DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.SUNDAY, 2012, 4, 1).value(6);
+        DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.DaysOfWeek.SUNDAY, 2012, 4, 1).value(6);
     });
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetMillis_value_Mon_Last_Weeks = function() {
-    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.MONDAY, 2000, 1, 1).value(DateTime.Field.WeekOfMonth.LAST_WEEK);
+    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.DaysOfWeek.MONDAY, 2000, 1, 1).value(DateTime.Field.WeekOfMonth.LAST_WEEK);
 
     assertEquals(2 * DateTime.MILLIS_PER_DAY + 4 * DateTime.MILLIS_PER_WEEK, week.millis());
 };
 
 DateTime.Field.WeekOfMonth.Test.testGetValue_value_Last_Weeks = function() {
-    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.Day.MONDAY, 2000, 2, 1).value(DateTime.Field.WeekOfMonth.LAST_WEEK);
+    var week = DateTime.Field.WeekOfMonth.Test.createWoM(DateTime.Field.DaysOfWeek.MONDAY, 2000, 2, 1).value(DateTime.Field.WeekOfMonth.LAST_WEEK);
 
     assertEquals(DateTime.Field.WeekOfMonth.FIFTH_WEEK, week.value());
 };
@@ -94,28 +94,28 @@ DateTime.Field.WeekOfMonth.Test.testValidate_negative = function() {
     });
 };
 
-DateTime.Field.WeekOfMonth.Test.createWoM = function(firstDay, year, month, date) {
-    return new DateTime.Field.WeekOfMonth(DateTime.Field.WeekOfMonth.Test.mockCalendar(firstDay, year, month, date));
+DateTime.Field.WeekOfMonth.Test.createWoM = function(firstDay, year, month, daysOfMonth) {
+    return new DateTime.Field.WeekOfMonth(DateTime.Field.WeekOfMonth.Test.mockCalendar(firstDay, year, month, daysOfMonth));
 };
 
-DateTime.Field.WeekOfMonth.Test.mockCalendar = function(firstDay, year, month, date) {
-    firstDay = DateTime.exists(firstDay, DateTime.Field.Day.MONDAY);
+DateTime.Field.WeekOfMonth.Test.mockCalendar = function(firstDay, year, month, daysOfMonth) {
+    firstDay = DateTime.exists(firstDay, DateTime.Field.DaysOfWeek.MONDAY);
     year = DateTime.exists(year, 2000);
     month = DateTime.exists(month, 1);
-    date = DateTime.exists(date, 1);
+    daysOfMonth = DateTime.exists(daysOfMonth, 1);
 
     return mock({
-        time: time(year, month, date),
-        year: mock({
+        time: time(year, month, daysOfMonth),
+        withYear: mock({
             isLeap: ((year & 3) === 0 && (year % 100 !== 0 || year % 400 === 0)),
             millis: time(year, 1, 1)
         }),
-        month: mock({
+        withMonth: mock({
             isLeap: ((year & 3) === 0 && (year % 100 !== 0 || year % 400 === 0)),
             millis: time(year, month, 1) - time(year, 1, 1),
             duration: time(year, month + 1, 1) - time(year, month, 1)
         }),
-        firstDay: firstDay
+        withFirstWeekDay: firstDay
     });
 };
 

@@ -160,11 +160,11 @@ DateTime.Field.Month.Test.testValidate_negative = function() {
     });
 };
 
-DateTime.Field.Month.Test.createMonth = function(year, month, date) {
-    return new DateTime.Field.Month(DateTime.Field.Month.Test.mockCalendar(year, month, date));
+DateTime.Field.Month.Test.createMonth = function(year, month, daysOfMonth) {
+    return new DateTime.Field.Month(DateTime.Field.Month.Test.mockCalendar(year, month, daysOfMonth));
 };
 
-DateTime.Field.Month.Test.mockCalendar = function(year, month, date) {
+DateTime.Field.Month.Test.mockCalendar = function(year, month, daysOfMonth) {
     year = DateTime.exists(year, 0);
     month = DateTime.exists(month, 1);
 
@@ -172,19 +172,19 @@ DateTime.Field.Month.Test.mockCalendar = function(year, month, date) {
 
     var calendar = mock({
         time: time(year, month, 1),
-        year: mock({
+        withYear: mock({
             millis: time(year, 1, 1),
             isLeap: ((y & 3) === 0 && (y % 100 !== 0 || y % 400 === 0))
         }),
-        date: mock({
-            value: date
+        withDayOfMonth: mock({
+            value: daysOfMonth
         })
     });
 
-    if (date !== undefined) {
-        calendar._date = date;
+    if (daysOfMonth !== undefined) {
+        calendar._date = daysOfMonth;
 
-        calendar.date().value = (function(cal) {
+        calendar.withDayOfMonth().value = (function(cal) {
             return function(val) {
                 if (val === undefined) {
                     return cal._date;
