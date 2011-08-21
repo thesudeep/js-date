@@ -105,35 +105,35 @@ DateTime.Calendar.Test.testDate_Zero = function() {
 };
 
 DateTime.Calendar.Test.testPlusDate_Positive = function() {
-    var calendar = new DateTime.Calendar(0).date(31).plusDate(28).plusDate(1);
+    var calendar = new DateTime.Calendar(time(2011, 2, 3, 4, 5, 6, 7)).plusDay(38);
 
-    assertEquals(1970, calendar.year());
+    assertEquals(2011, calendar.year());
     assertEquals(DateTime.Field.Month.MARCH, calendar.month());
-    assertEquals(1, calendar.date());
+    assertEquals(13, calendar.date());
 };
 
 DateTime.Calendar.Test.testPlusDate_PositiveSmall = function() {
-    var calendar = new DateTime.Calendar(0).date(5).plusDate(1);
+    var calendar = new DateTime.Calendar(time(2011, 2, 3, 4, 5, 6, 7)).plusDay(1);
 
-    assertEquals(1970, calendar.year());
-    assertEquals(DateTime.Field.Month.JANUARY, calendar.month());
-    assertEquals(6, calendar.date());
+    assertEquals(2011, calendar.year());
+    assertEquals(DateTime.Field.Month.FEBRUARY, calendar.month());
+    assertEquals(4, calendar.date());
 };
 
 DateTime.Calendar.Test.testPlusDate_Negative = function() {
-    var calendar = new DateTime.Calendar(0).date(10).plusDate(-5);
+    var calendar = new DateTime.Calendar(time(2011, 2, 3, 4, 5, 6, 7)).plusDay(-5);
 
-    assertEquals(1970, calendar.year());
+    assertEquals(2011, calendar.year());
     assertEquals(DateTime.Field.Month.JANUARY, calendar.month());
-    assertEquals(5, calendar.date());
+    assertEquals(29, calendar.date());
 };
 
 DateTime.Calendar.Test.testPlusDate_Zero = function() {
-    var calendar = new DateTime.Calendar(0).date(1).plusDate(0);
+    var calendar = new DateTime.Calendar(time(2011, 2, 3, 4, 5, 6, 7)).plusDay(0);
 
-    assertEquals(1970, calendar.year());
-    assertEquals(DateTime.Field.Month.JANUARY, calendar.month());
-    assertEquals(1, calendar.date());
+    assertEquals(2011, calendar.year());
+    assertEquals(DateTime.Field.Month.FEBRUARY, calendar.month());
+    assertEquals(3, calendar.date());
 };
 
 DateTime.Calendar.Test.testDay_Positive = function() {

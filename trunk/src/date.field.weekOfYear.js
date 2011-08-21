@@ -60,9 +60,6 @@ DateTime.Field.WeekOfYear = function(calendar) {
 
         return self;
     };
-
-    adjustDelta();
-    this.millis(calendar.time());
 };
 
 DateTime.Field.WeekOfYear.MIN_WEEK = 1;

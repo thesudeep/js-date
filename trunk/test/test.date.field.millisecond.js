@@ -1,17 +1,5 @@
 DateTime.Field.Millisecond.Test = {};
 
-DateTime.Field.Millisecond.Test.testCreation = function() {
-    var millisecond = new DateTime.Field.Millisecond(mock({time: 123097143}));
-
-    assertEquals(143, millisecond.value());
-};
-
-DateTime.Field.Millisecond.Test.testCreation_Empty = function() {
-    assertFail(function () {
-        new DateTime.Field.Millisecond();
-    });
-};
-
 DateTime.Field.Millisecond.Test.testSetValue = function() {
     var millisecond = DateTime.Field.Millisecond.Test.createMillis().value(1);
 
@@ -40,18 +28,6 @@ DateTime.Field.Millisecond.Test.testSetMills_negative = function() {
     var millisecond = DateTime.Field.Millisecond.Test.createMillis().millis(-62130512882031);
 
     assertEquals(969, millisecond.value());
-};
-
-DateTime.Field.Millisecond.Test.testMaxMills_Constructor_OK = function() {
-    var millisecond = DateTime.Field.Millisecond.Test.createMillis(DateTime.Field.Millisecond.MAX_MILLS);
-
-    assertEquals(DateTime.Field.Millisecond.MAX_MILLS, millisecond.value());
-};
-
-DateTime.Field.Millisecond.Test.testMinMills_Constructor_OK = function() {
-    var millisecond = DateTime.Field.Millisecond.Test.createMillis(DateTime.Field.Millisecond.MIN_MILLS);
-
-    assertEquals(DateTime.Field.Millisecond.MIN_MILLS, millisecond.value());
 };
 
 DateTime.Field.Millisecond.Test.testMaxMills_Value_OK = function() {

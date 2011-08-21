@@ -19,43 +19,37 @@ DateTime.Calendar = function(time, timeZone) {
 
     var firstDay = timeZone.firstDay(instant);
 
-    var fields = {
-        year: DateTime.Field.Year,
-        month: DateTime.Field.Month,
-        date: DateTime.Field.Date,
-
-        hour: DateTime.Field.Hour,
-        minute: DateTime.Field.Minute,
-        second: DateTime.Field.Second,
-        ms: DateTime.Field.Millisecond,
-
-        day: DateTime.Field.Day,
-        weekOfMonth: DateTime.Field.WeekOfMonth,
-        weekOfYear: DateTime.Field.WeekOfYear
-    };
-
     function BaseCalendar() {
+        var me = this;
+
         this.time = function() {
             return instant + timeZone.offset(instant);
+        };
+
+        this.year = function() {
+            return me._year;
+        };
+
+        this.month = function() {
+            return me._month;
         };
 
         this.firstDay = function() {
             return firstDay;
         };
 
-        for (var name in fields) {
-            this[name] = (function(name, Clazz) {
-                return function() {
-                    var obj = this["_" + name];
+        this._year = new DateTime.Field.Year(this);
+        this._month = new DateTime.Field.Month(this);
+        this._date = new DateTime.Field.Date(this);
 
-                    if (obj === undefined) {
-                        obj = (this["_" + name] = new Clazz(this));
-                    }
+        this._hour = new DateTime.Field.Hour(this);
+        this._minute = new DateTime.Field.Minute(this);
+        this._second = new DateTime.Field.Second(this);
+        this._ms = new DateTime.Field.Millisecond(this);
 
-                    return obj;
-                };
-            })(name, fields[name]);
-        }
+        this._day = new DateTime.Field.Day(this);
+        this._weekOfMonth = new DateTime.Field.WeekOfMonth(this);
+        this._weekOfYear = new DateTime.Field.WeekOfYear(this);
     }
 
     function _get(fieldName, args, fn) {
@@ -63,10 +57,12 @@ DateTime.Calendar = function(time, timeZone) {
             calendar = new BaseCalendar();
         }
 
-        var field = calendar[fieldName].call(calendar);
+        var field = calendar["_" + fieldName];
+
+        field.millis(calendar.time());
 
         if (args.length === 0) {
-            return field.millis(calendar.time()).value();
+            return field.value();
         }
 
         instant -= field.millis();
@@ -116,8 +112,8 @@ DateTime.Calendar = function(time, timeZone) {
         return _get("weekOfMonth", arguments);
     };
 
-    this.plusDate = function(date) {
-        self.date(self.date() + DateTime.validateInt(date));
+    this.plusDay = function(days) {
+        self.date(self.date() + DateTime.validateInt(days));
 
         return self;
     };

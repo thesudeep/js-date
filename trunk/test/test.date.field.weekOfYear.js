@@ -1,17 +1,5 @@
 DateTime.Field.WeekOfYear.Test = {};
 
-DateTime.Field.WeekOfYear.Test.testCreation = function() {
-    var week = new DateTime.Field.WeekOfYear(DateTime.Field.WeekOfYear.Test.mockCalendar());
-
-    assertEquals(1, week.value());
-};
-
-DateTime.Field.WeekOfYear.Test.testCreation_Empty = function() {
-    assertFail(function() {
-        new DateTime.Field.WeekOfYear();
-    });
-};
-
 DateTime.Field.WeekOfYear.Test.testSetValue = function() {
     var week = DateTime.Field.WeekOfYear.Test.createWoY().value(2);
 

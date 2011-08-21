@@ -93,8 +93,6 @@ DateTime.Field.Year = function(calendar) {
 
         return self;
     };
-
-    this.millis(calendar.time());
 };
 
 DateTime.Field.Year.EPOCH = 1970;

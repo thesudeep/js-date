@@ -1,17 +1,5 @@
 DateTime.Field.WeekOfMonth.Test = {};
 
-DateTime.Field.WeekOfMonth.Test.testCreation = function() {
-    var week = new DateTime.Field.WeekOfMonth(DateTime.Field.WeekOfMonth.Test.mockCalendar());
-
-    assertEquals(DateTime.Field.WeekOfMonth.FIRST_WEEK, week.value());
-};
-
-DateTime.Field.WeekOfMonth.Test.testCreation_Empty = function() {
-    assertFail(function () {
-        new DateTime.Field.WeekOfMonth();
-    });
-};
-
 DateTime.Field.WeekOfMonth.Test.testSetValue = function() {
     var week = DateTime.Field.WeekOfMonth.Test.createWoM().value(DateTime.Field.WeekOfMonth.FIRST_WEEK);
 

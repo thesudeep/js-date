@@ -22,8 +22,6 @@ DateTime.Field.Day = function(calendar) {
 
         return self;
     };
-
-    this.millis(calendar.time());
 };
 
 /** Constant (1) representing Monday, the first day of the week (ISO) */

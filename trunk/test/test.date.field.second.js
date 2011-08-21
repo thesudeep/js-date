@@ -1,17 +1,5 @@
 DateTime.Field.Second.Test = {};
 
-DateTime.Field.Second.Test.testCreation = function() {
-    var second = new DateTime.Field.Second(mock({time: time(2000, 1, 1, 0, 0, 10)}));
-
-    assertEquals(10, second.value());
-};
-
-DateTime.Field.Second.Test.testCreation_Empty = function() {
-    assertFail(function () {
-        new DateTime.Field.Second();
-    });
-};
-
 DateTime.Field.Second.Test.testSetValue = function() {
     var second = DateTime.Field.Second.Test.createSecond().value(1);
 
@@ -40,18 +28,6 @@ DateTime.Field.Second.Test.testSetMills_negative = function() {
     var second = DateTime.Field.Second.Test.createSecond().millis(time(2000, 1, 1, 0, 0, 58));
 
     assertEquals(58, second.value());
-};
-
-DateTime.Field.Second.Test.testMaxSecond_Constructor_OK = function() {
-    var second = DateTime.Field.Second.Test.createSecond(DateTime.Field.Second.MAX_SECOND);
-
-    assertEquals(DateTime.Field.Second.MAX_SECOND, second.value());
-};
-
-DateTime.Field.Second.Test.testMinSecond_Constructor_OK = function() {
-    var second = DateTime.Field.Second.Test.createSecond(DateTime.Field.Second.MIN_SECOND);
-
-    assertEquals(DateTime.Field.Second.MIN_SECOND, second.value());
 };
 
 DateTime.Field.Second.Test.testMaxSecond_Value_OK = function() {
