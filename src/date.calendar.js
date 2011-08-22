@@ -84,7 +84,7 @@ DateTime.Calendar = function(time, timeZone) {
             return field.value();
         }
 
-        instant += timeZone.offset(instant);
+//        instant += timeZone.offset(instant);
         instant -= field.millis();
         instant += field.value(args[0]).millis();
 
@@ -92,7 +92,7 @@ DateTime.Calendar = function(time, timeZone) {
             instant += fn.call(self, instant);
         }
 
-        instant -= timeZone.offset(instant);
+//        instant -= timeZone.offset(instant);
 
         return self;
     }

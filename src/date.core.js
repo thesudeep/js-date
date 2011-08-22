@@ -81,10 +81,16 @@ DateTime.SECONDS_PER_WEEK = DateTime.SECONDS_PER_DAY * DateTime.DAYS_PER_WEEK;
 /** Milliseconds in a typical week (ISO). Due to time zone offset changes, the number of milliseconds per week can vary. */
 DateTime.MILLIS_PER_WEEK = DateTime.MILLIS_PER_DAY * DateTime.DAYS_PER_WEEK;
 
-Date.prototype.calendar = function(timeZone) {
+Date.prototype.calendar = function(convert, timeZone) {
     timeZone = DateTime.exists(timeZone, DateTime.TimeZone.DEFAULT);
 
-    return new DateTime.Calendar(this.getTime(), timeZone);
+    var time = this.getTime();
+
+    if (convert) {
+        time -= timeZone.offset(time) + this.getTimezoneOffset();
+    }
+
+    return new DateTime.Calendar(time, timeZone);
 };
 
 /**
