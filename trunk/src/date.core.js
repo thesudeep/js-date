@@ -87,7 +87,7 @@ Date.prototype.calendar = function(convert, timeZone) {
     var time = this.getTime();
 
     if (convert) {
-        time -= timeZone.offset(time) + this.getTimezoneOffset();
+        time -= timeZone.offset(time) + this.getTimezoneOffset() * DateTime.MILLIS_PER_MINUTE;
     }
 
     return new DateTime.Calendar(time, timeZone);
