@@ -152,5 +152,11 @@ Date.prototype.toString = function(pattern) {
  * @return {Date} date object
  */
 Date.parse = function(value, pattern) {
+    if (typeof(value) !== "string") {
+        value = String(value);
+    }
+
+    pattern = DateTime.exists(pattern, "yyyy-MM-ddTHH:mm:ss");
+
     return new DateTime.Formatter(pattern).parse(value).toDate();
 };
