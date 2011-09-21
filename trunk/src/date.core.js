@@ -132,9 +132,25 @@ Date.prototype.toUTCString = function() {
     return this.calendar(DateTime.TimeZone.UTC).toString("yyyy-MM-ddTHH:mm:ss");
 };
 
-/** Converts a Date object to a string */
+/**
+ * Converts a Date object to a string
+ *
+ * @param {String=} pattern format pattern for string conversion. Default pattern is <code>yyyy-MM-ddTHH:mm:ss Z</code>.
+ * @return {String} formatted string representation of the date.
+ */
 Date.prototype.toString = function(pattern) {
     pattern = DateTime.exists(pattern, "yyyy-MM-ddTHH:mm:ss Z");
 
     return this.calendar().toString(pattern);
+};
+
+/**
+ * Parses a string representation of a Date object into Date object.
+ *
+ * @param {String} value string value which should be parsed.
+ * @param {String=} pattern conversion pattern. Default pattern is <code>yyyy-MM-ddTHH:mm:ss Z</code>.
+ * @return {Date} date object
+ */
+Date.parse = function(value, pattern) {
+    return new DateTime.Formatter(pattern).parse(value).toDate();
 };

@@ -303,6 +303,12 @@ DateTime.Calendar = function(time, timeZone) {
         return new DateTime.Formatter(pattern).format(self);
     };
 
+    this.toString = function(pattern) {
+        pattern = DateTime.exists(pattern, "yyyy-MM-ddTHH:mm:ss Z");
+
+        return new DateTime.Formatter(pattern).format(self);
+    };
+
     var calendar = new BaseCalendar();
 };
 
