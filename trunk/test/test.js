@@ -57,8 +57,8 @@ function assertEquals(expected, actual) {
     if (expected != actual) {
         var message = "Expected (" + expected + ") but was (" + actual + ")";
 
-        if (expected > 365 * DateTime.MILLIS_PER_DAY) {
-            message += ". -- " + new Date(expected).toUTCString() + " -> " + new Date(actual).toUTCString();
+        if (expected > DateTime.Field.Year.MILLIS_PER_NORMAL_YEAR) {
+            message += ". -- " + new Date(expected).toUTCString() + "Z -> " + new Date(actual).toUTCString() + "Z";
         }
 
         fail(message);

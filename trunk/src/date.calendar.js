@@ -77,14 +77,17 @@ DateTime.Calendar = function(time, timeZone) {
         return self;
     }
 
-    function withField(field, args, fn) {
+    function withField(duration, field, args, fn) {
         field.millis(calendar.time());
 
         if (args.length === 0) {
             return field.value();
         }
 
-//        instant += timeZone.offset(instant);
+        if (!duration || duration > timeZone.dstShift(instant)) {
+            instant += timeZone.offset(instant);
+        }
+
         instant -= field.millis();
         instant += field.value(args[0]).millis();
 
@@ -92,7 +95,9 @@ DateTime.Calendar = function(time, timeZone) {
             instant += fn.call(self, instant);
         }
 
-//        instant -= timeZone.offset(instant);
+        if (!duration || duration > timeZone.dstShift(instant)) {
+            instant -= timeZone.offset(instant);
+        }
 
         return self;
     }
@@ -124,7 +129,7 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.withYear = function(year) {
-        return withField(calendar._year, arguments, adjustMonth);
+        return withField(0, calendar._year, arguments, adjustMonth);
     };
 
     this.plusYears = function(years) {
@@ -142,7 +147,7 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.withMonth = function(month) {
-        return withField(calendar._month, arguments, adjustDayOfMonth);
+        return withField(0, calendar._month, arguments, adjustDayOfMonth);
     };
 
     this.plusMonths = function(months) {
@@ -169,11 +174,11 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.withWeekOfYear = function(weekOfYear) {
-        return withField(calendar._weekOfYear, arguments);
+        return withField(DateTime.MILLIS_PER_WEEK, calendar._weekOfYear, arguments);
     };
 
     this.withWeekOfMonth = function(week) {
-        return withField(calendar._weekOfMonth, arguments);
+        return withField(DateTime.MILLIS_PER_WEEK, calendar._weekOfMonth, arguments);
     };
 
     this.plusWeeks = function(weeks) {
@@ -185,11 +190,11 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.withDayOfMonth = function(daysOfMonth) {
-        return withField(calendar._dayOfMonth, arguments);
+        return withField(DateTime.MILLIS_PER_DAY, calendar._dayOfMonth, arguments);
     };
 
     this.withDayOfWeek = function(daysOfWeek) {
-        return withField(calendar._dayOfWeek, arguments);
+        return withField(DateTime.MILLIS_PER_DAY, calendar._dayOfWeek, arguments);
     };
 
     this.plusDays = function(days) {
@@ -201,7 +206,7 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.withHourOfDay = function(hour) {
-        return withField(calendar._hourOfDay, arguments);
+        return withField(DateTime.MILLIS_PER_HOUR, calendar._hourOfDay, arguments);
     };
 
     this.plusHours = function(hours) {
@@ -213,7 +218,7 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.withMinuteOfHour = function(minute) {
-        return withField(calendar._minuteOfHour, arguments);
+        return withField(DateTime.MILLIS_PER_MINUTE, calendar._minuteOfHour, arguments);
     };
 
     this.plusMinutes = function(minutes) {
@@ -225,7 +230,7 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.withSecondOfMinute = function(second) {
-        return withField(calendar._secondOfMinute, arguments);
+        return withField(DateTime.MILLIS_PER_SECOND, calendar._secondOfMinute, arguments);
     };
 
     this.plusSeconds = function(seconds) {
@@ -237,7 +242,7 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.withMillisOfSecond = function(millis) {
-        return withField(calendar._millisOfSecond, arguments);
+        return withField(1, calendar._millisOfSecond, arguments);
     };
 
     this.plusMillis = function(millis) {
@@ -272,7 +277,7 @@ DateTime.Calendar = function(time, timeZone) {
     };
 
     this.reset = function() {
-        instant = timeZone.offset(0);
+        instant = -timeZone.offset(0);
 
         return self;
     };

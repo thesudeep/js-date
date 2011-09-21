@@ -129,7 +129,7 @@ Date.prototype.toTimeString = function() {
 
 /** Converts a Date object to a string, according to universal time */
 Date.prototype.toUTCString = function() {
-    return this.calendar(DateTime.TimeZone.UTC).toString("yyyy-MM-ddTHH:mm:ss");
+    return this.calendar(false, DateTime.TimeZone.UTC).toString("yyyy-MM-ddTHH:mm:ss");
 };
 
 /**

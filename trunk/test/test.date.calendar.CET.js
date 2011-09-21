@@ -48,6 +48,24 @@ DateTime.Calendar.Test.CET.testCreation_AfterDST = function() {
     assertEquals(0, calendar.withMillisOfSecond());
 };
 
+DateTime.Calendar.Test.CET.testCreation_WithReset = function() {
+    var calendar = new DateTime.Calendar(0, DateTime.TimeZone.CET).reset();
+
+    assertEquals(time(1969, 12, 31, 23), calendar.time());
+};
+
+DateTime.Calendar.Test.CET.testGetTime_Date = function() {
+    var calendar = new DateTime.Calendar(0, DateTime.TimeZone.CET).withYear(2011).withMonth(8).withDayOfMonth(1);
+
+    assertEquals(time(2011, 7, 31, 23), calendar.time());
+};
+
+DateTime.Calendar.Test.CET.testGetTime_DateReset = function() {
+    var calendar = new DateTime.Calendar(0, DateTime.TimeZone.CET).reset().withYear(2011).withMonth(8).withDayOfMonth(1);
+
+    assertEquals(time(2011, 7, 31, 22), calendar.time());
+};
+
 DateTime.Calendar.Test.CET.testGetTime_BeforeDST = function() {
     var calendar = new DateTime.Calendar(0, DateTime.TimeZone.CET).withYear(2011).withMonth(3).withDayOfMonth(27).withHourOfDay(1).withMinuteOfHour(59).withSecondOfMinute(59).withMillisOfSecond(999);
 
