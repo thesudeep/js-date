@@ -271,6 +271,12 @@ DateTime.Calendar = function(time, timeZone) {
         return self;
     };
 
+    this.reset = function() {
+        instant = timeZone.offset(0);
+
+        return self;
+    };
+
     this.withZone = function(tz) {
         if (arguments.length === 0) {
             return timeZone;

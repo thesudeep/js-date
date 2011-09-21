@@ -309,7 +309,7 @@ DateTime.Formatter = (function() {
 
         this.parse = function(value) {
             var j = 0;
-            var calendar = new DateTime.Calendar(0, DateTime.TimeZone.DEFAULT);
+            var calendar = new DateTime.Calendar(0).reset();
 
             for (var i in a) {
                 j = a[i].parse(j, value, calendar);
