@@ -61,7 +61,7 @@ BaseDurationField.prototype.isSupported = function() {
  * @return {number} the value of the field, in the units of the field, which may be negative
  */
 BaseDurationField.prototype.getValue = function(duration, instant) {
-    return FieldUtils.safeToInt(this.getValue(duration, instant));
+    return duration / this.getUnitMillis();
 };
 
 /**
@@ -81,8 +81,8 @@ BaseDurationField.prototype.getMillis = function(value) {
  * @param {number} subtrahendInstant
  * @return {number}
  */
-BaseDurationField.prototype.getDifference = function(minuendInstant,subtrahendInstant) {
-    return FieldUtils.safeToInt(this.getDifference(minuendInstant, subtrahendInstant));
+BaseDurationField.prototype.getDifference = function(minuendInstant, subtrahendInstant) {
+    return this.getDifference(minuendInstant, subtrahendInstant);
 };
 
 /**

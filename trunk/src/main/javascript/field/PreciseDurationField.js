@@ -58,6 +58,12 @@ PreciseDurationField.prototype.add = function(instant, value) {
     return FieldUtils.safeAdd(instant, addition);
 };
 
+PreciseDurationField.prototype.getDifference = function(minuendInstant, subtrahendInstant) {
+    var difference = FieldUtils.safeSubtract(minuendInstant, subtrahendInstant);
+
+    return Math.floor(difference / this._unitMillis);
+}
+
 /**
  * Compares this duration field to another.
  * Two fields are equal if of the same type and duration.

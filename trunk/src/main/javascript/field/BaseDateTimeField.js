@@ -12,6 +12,7 @@
  * @author Brian S O'Neill
  * @since 1.0
  * @see DecoratedDateTimeField
+ * @param {DateTimeFieldType} type
  */
 BaseDateTimeField = function(type) {
     this._super.constructor();
