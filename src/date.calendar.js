@@ -63,15 +63,19 @@ DateTime.Calendar = function(time, timeZone) {
 
     function plusField(duration, value, fn) {
         if (value) {
+/*
             if (!duration || duration > timeZone.dstShift(instant)) {
                 instant += timeZone.offset(instant);
             }
+*/
 
             instant += !fn ? duration * value : fn.call(self, value);
 
+/*
             if (!duration || duration > timeZone.dstShift(instant)) {
                 instant -= timeZone.offset(instant);
             }
+*/
         }
 
         return self;
@@ -84,20 +88,21 @@ DateTime.Calendar = function(time, timeZone) {
             return field.value();
         }
 
-        if (!duration || duration > timeZone.dstShift(instant)) {
-            instant += timeZone.offset(instant);
-        }
-
-        instant -= field.millis();
-        instant += field.value(args[0]).millis();
+        var offset = timeZone.offset(instant);
+        var diff = -field.millis() + field.value(args[0]).millis();
 
         if (fn) {
-            instant += fn.call(self, instant);
+            diff += fn.call(self, instant + diff + offset);
         }
 
-        if (!duration || duration > timeZone.dstShift(instant)) {
-            instant -= timeZone.offset(instant);
+        offset -= timeZone.offset(instant + diff);
+        diff += offset;
+
+        if (diff >= 0 && diff < Math.abs(offset)) {
+            throw new Error("Invalid date time instance");
         }
+
+        instant += diff;
 
         return self;
     }

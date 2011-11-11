@@ -73,9 +73,9 @@ DateTime.Calendar.Test.CET.testGetTime_BeforeDST = function() {
 };
 
 DateTime.Calendar.Test.CET.testGetTime_NotExistent = function() {
-    var calendar = new DateTime.Calendar(0, DateTime.TimeZone.CET).withYear(2011).withMonth(3).withDayOfMonth(27).withHourOfDay(2).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
-
-    assertEquals(time(2011, 3, 27, 1, 0, 0, 0), calendar.time());
+    assertFail(function() {
+        new DateTime.Calendar(0, DateTime.TimeZone.CET).withYear(2011).withMonth(3).withDayOfMonth(27).withHourOfDay(2).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
+    });
 };
 
 DateTime.Calendar.Test.CET.testGetTime_StartDST = function() {
@@ -126,4 +126,43 @@ DateTime.Calendar.Test.CET.testSetDate_DiffStopDST = function() {
     var calendarAfter = new DateTime.Calendar(0, DateTime.TimeZone.CET).withYear(2011).withMonth(10).withDayOfMonth(31).withHourOfDay(0).withMinuteOfHour(0).withSecondOfMinute(0).withMillisOfSecond(0);
 
     assertEquals(DateTime.MILLIS_PER_DAY + DateTime.MILLIS_PER_HOUR, calendarAfter.time() - calendarBefore.time());
+};
+
+DateTime.Calendar.Test.CET.testDelta_BeforeDST = function() {
+    var calendar = new DateTime.Calendar(time(2011, 3, 27, 0, 59, 59, 999), DateTime.TimeZone.CET);
+
+    assertEquals(3, calendar.plusMillis(1).withHourOfDay());
+};
+
+DateTime.Calendar.Test.CET.testDelta_LessNotExistent = function() {
+    assertFail(function() {
+        new DateTime.Calendar(time(2011, 3, 27, 0, 59, 59, 999), DateTime.TimeZone.CET).withHourOfDay(2);
+    });
+};
+
+DateTime.Calendar.Test.CET.testDelta_MoreNotExistent = function() {
+    assertFail(function() {
+        new DateTime.Calendar(time(2011, 3, 27, 1, 0, 0, 0), DateTime.TimeZone.CET).withHourOfDay(2);
+    });
+};
+
+DateTime.Calendar.Test.CET.testDelta_StartDST = function() {
+    var calendar = new DateTime.Calendar(time(2011, 3, 27, 1, 0, 0, 0), DateTime.TimeZone.CET);
+
+    assertEquals(1, calendar.minusMillis(1).withHourOfDay());
+    assertEquals(3, calendar.plusMillis(1).withHourOfDay());
+};
+
+DateTime.Calendar.Test.CET.testDelta_StopDST = function() {
+    var calendar = new DateTime.Calendar(time(2011, 10, 30, 0, 59, 59, 999), DateTime.TimeZone.CET);
+
+    assertEquals(2, calendar.plusMillis(1).withHourOfDay());
+    assertEquals(2, calendar.minusMillis(1).withHourOfDay());
+};
+
+DateTime.Calendar.Test.CET.testDelta_AfterDST = function() {
+    var calendar = new DateTime.Calendar(time(2011, 10, 30, 2, 0, 0, 0), DateTime.TimeZone.CET);
+
+    assertEquals(2, calendar.minusMillis(1).withHourOfDay());
+    assertEquals(3, calendar.plusMillis(1).withHourOfDay());
 };

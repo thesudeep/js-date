@@ -1,3 +1,7 @@
+
+MAX_INTEGRAL = 9007199254740992;
+MIN_INTEGRAL = - MAX_INTEGRAL;
+
 /**
  * Validate given value as an undefined value.
  *

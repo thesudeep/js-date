@@ -195,23 +195,23 @@ BaseChronology.prototype.get = function(period, duration) {
 /**
  * Adds the period to the instant, specifying the number of times to add.
  *
- * @param period  the period to add, null means add nothing
+ * @param {ReadablePeriod|ReadableDuration|number} value  the period to add, null means add nothing
  * @param instant  the instant to add to
  * @param scalar  the number of times to add
  * @return the updated instant
  */
-BaseChronology.prototype.add = function(period, instant, scalar) {
-    if (period && scalar !== 0) {
-        if (period instanceof ReadablePeriod) {
-            for (var i = 0, isize = period.size(); i < isize; i++) {
-                var value = period.getValue(i); // use long to allow for multiplication (fits OK)
+BaseChronology.prototype.add = function(value, instant, scalar) {
+    if (value && scalar !== 0) {
+        if (value instanceof ReadablePeriod) {
+            for (var i = 0, isize = value.size(); i < isize; i++) {
+                var value = value.getValue(i); // use long to allow for multiplication (fits OK)
 
                 if (value != 0) {
-                    instant = period.getFieldType(i).getField(this).add(instant, value * scalar);
+                    instant = value.getFieldType(i).getField(this).add(instant, value * scalar);
                 }
             }
         } else {
-            var add = FieldUtils.safeMultiply(duration, scalar);
+            var add = FieldUtils.safeMultiply(value, scalar);
 
             return FieldUtils.safeAdd(instant, add);
         }
