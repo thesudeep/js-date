@@ -63,19 +63,15 @@ DateTime.Calendar = function(time, timeZone) {
 
     function plusField(duration, value, fn) {
         if (value) {
-/*
             if (!duration || duration > timeZone.dstShift(instant)) {
                 instant += timeZone.offset(instant);
             }
-*/
 
             instant += !fn ? duration * value : fn.call(self, value);
 
-/*
             if (!duration || duration > timeZone.dstShift(instant)) {
                 instant -= timeZone.offset(instant);
             }
-*/
         }
 
         return self;

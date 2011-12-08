@@ -166,3 +166,9 @@ DateTime.Calendar.Test.CET.testDelta_AfterDST = function() {
     assertEquals(2, calendar.minusMillis(1).withHourOfDay());
     assertEquals(3, calendar.plusMillis(1).withHourOfDay());
 };
+
+DateTime.Calendar.Test.CET.testPlusDay_AfterDST = function() {
+    var calendar = new DateTime.Calendar(time(2011, 10, 29, 22, 0, 0, 0), DateTime.TimeZone.CET);
+
+    assertEquals(time(2011, 10, 30, 23, 0, 0, 0), calendar.plusDays(1).time());
+};
