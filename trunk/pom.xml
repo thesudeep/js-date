@@ -19,13 +19,13 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/javascript</directory>
+                <directory>src/main/old</directory>
                 <filtering>true</filtering>
             </resource>
         </resources>
         <testResources>
             <testResource>
-                <directory>src/test/javascript</directory>
+                <directory>src/test/old</directory>
                 <filtering>true</filtering>
             </testResource>
             <testResource>
@@ -40,8 +40,8 @@
                 <artifactId>jasmine-maven-plugin</artifactId>
                 <version>1.0.2-beta-5</version>
                 <configuration>
-                    <jsSrcDir>src/main/javascript</jsSrcDir>
-                    <jsTestSrcDir>src/test/javascript</jsTestSrcDir>
+                    <jsSrcDir>src/main/old</jsSrcDir>
+                    <jsTestSrcDir>src/test/old</jsTestSrcDir>
                     <preloadSources>
                         <preloadSource>utils.js</preloadSource>
 
@@ -92,7 +92,7 @@
                 <artifactId>yuicompressor-maven-plugin</artifactId>
                 <version>1.2</version>
                 <configuration>
-                    <sourceDirectory>src/main/javascript</sourceDirectory>
+                    <sourceDirectory>src/main/old</sourceDirectory>
                     <!--
                                         <aggregations>
                                             <aggregation></aggregation>
