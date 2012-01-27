@@ -19,13 +19,17 @@
     <build>
         <resources>
             <resource>
-                <directory>src/main/old</directory>
+                <directory>src/main/javascript</directory>
                 <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>false</filtering>
             </resource>
         </resources>
         <testResources>
             <testResource>
-                <directory>src/test/old</directory>
+                <directory>src/test/javascript</directory>
                 <filtering>true</filtering>
             </testResource>
             <testResource>
@@ -40,27 +44,15 @@
                 <artifactId>jasmine-maven-plugin</artifactId>
                 <version>1.0.2-beta-5</version>
                 <configuration>
-                    <jsSrcDir>src/main/old</jsSrcDir>
-                    <jsTestSrcDir>src/test/old</jsTestSrcDir>
+                    <jsSrcDir>src/main/javascript</jsSrcDir>
+                    <jsTestSrcDir>src/test/javascript</jsTestSrcDir>
                     <preloadSources>
-                        <preloadSource>utils.js</preloadSource>
-
-                        <preloadSource>old/date.core.js</preloadSource>
-                        <preloadSource>old/date.field.js</preloadSource>
-                        <preloadSource>old/date.field.year.js</preloadSource>
-                        <preloadSource>old/date.field.month.js</preloadSource>
-                        <preloadSource>old/date.field.dayOfMonth.js</preloadSource>
-                        <preloadSource>old/date.field.hour.js</preloadSource>
-                        <preloadSource>old/date.field.minute.js</preloadSource>
-                        <preloadSource>old/date.field.second.js</preloadSource>
-                        <preloadSource>old/date.field.millisecond.js</preloadSource>
-                        <preloadSource>old/date.field.dayOfWeek.js</preloadSource>
-                        <preloadSource>old/date.field.weekOfYear.js</preloadSource>
-                        <preloadSource>old/date.field.weekOfMonth.js</preloadSource>
-                        <preloadSource>old/date.timezone.js</preloadSource>
-                        <preloadSource>old/date.timezone.CET.js</preloadSource>
-                        <preloadSource>old/date.calendar.js</preloadSource>
-                        <preloadSource>old/date.formatter.js</preloadSource>
+                        <!-- Test prerequisites -->
+                        <!--<preloadSource>utils.js</preloadSource>-->
+                        <!-- Testing modules -->
+                        <preloadSource>Utils.js</preloadSource>
+                        <!-- Test substitutions -->
+                        <!--<preloadSource>utils.js</preloadSource>-->
                     </preloadSources>
                 </configuration>
                 <executions>
@@ -92,7 +84,7 @@
                 <artifactId>yuicompressor-maven-plugin</artifactId>
                 <version>1.2</version>
                 <configuration>
-                    <sourceDirectory>src/main/old</sourceDirectory>
+                    <sourceDirectory>src/main/javascript</sourceDirectory>
                     <!--
                                         <aggregations>
                                             <aggregation></aggregation>
