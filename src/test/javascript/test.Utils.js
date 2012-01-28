@@ -5,7 +5,7 @@
  * @since 26.01.2012
  */
 
-describe("Utils.inherits...", function() {
+describe("Utils.inherits()...", function() {
     var Parent = function() {};
     var Child =  Utils.inherits(function() {}, Parent);
 
@@ -60,7 +60,7 @@ describe("Utils.inherits...", function() {
     });
 });
 
-describe("Utils.isUndefined...", function() {
+describe("Utils.isUndefined()...", function() {
     var f = Utils.isUndefined;
     var undef;
 
@@ -93,7 +93,7 @@ describe("Utils.isUndefined...", function() {
     });
 });
 
-describe("Utils.isDefined...", function() {
+describe("Utils.isDefined()...", function() {
     var f = Utils.isDefined;
     var undef;
 
@@ -126,7 +126,7 @@ describe("Utils.isDefined...", function() {
     });
 });
 
-describe("Utils.isNull...", function() {
+describe("Utils.isNull()...", function() {
     var f = Utils.isNull;
     var undef;
 
@@ -159,7 +159,7 @@ describe("Utils.isNull...", function() {
     });
 });
 
-describe("Utils.isNotNull...", function() {
+describe("Utils.isNotNull()...", function() {
     var f = Utils.isNotNull;
     var undef;
 
@@ -192,7 +192,7 @@ describe("Utils.isNotNull...", function() {
     });
 });
 
-describe("Utils.isExist...", function() {
+describe("Utils.isExist()...", function() {
     var f = Utils.isExist;
     var undef;
 
@@ -225,7 +225,7 @@ describe("Utils.isExist...", function() {
     });
 });
 
-describe("Utils.isNotExist...", function() {
+describe("Utils.isNotExist()...", function() {
     var f = Utils.isNotExist;
     var undef;
 
@@ -258,7 +258,7 @@ describe("Utils.isNotExist...", function() {
     });
 });
 
-describe("Utils.isNumeric...", function() {
+describe("Utils.isNumeric()...", function() {
     var f = Utils.isNumeric;
     var undef;
 
@@ -323,7 +323,7 @@ describe("Utils.isNumeric...", function() {
     });
 });
 
-describe("Utils.getMillis...", function() {
+describe("Utils.getMillis()...", function() {
     var f = Utils.getMillis;
     var t = function (val) {
         return function() {return f(val)}
@@ -384,10 +384,10 @@ describe("Utils.getMillis...", function() {
     });
 
     it("should NOT be null in case of null", function() {
-        expect(f(null) !== null).toBeTruthy();
+        expect(f(null)).not.toBeNull();
     });
 
     it("should NOT be null in case of undefined", function() {
-        expect(f(undef) !== null).toBeTruthy();
+        expect(f(undef)).not.toBeNull();
     });
 });
