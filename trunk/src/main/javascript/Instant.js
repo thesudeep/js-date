@@ -6,19 +6,90 @@
  * @since 26.01.12
  * @class Simple presentation of a time instant.
  * @constructor
+ * @private
+ *
+ * @param {Number} instant milliseconds.
  */
 Instant = function(instant) {
     /**
-     * @type {number}
+     * @type {Number}
      * @private
      */
-    this._instant = Utils.getMillis(instant);
+    this._instant = instant;
+};
+
+/**
+ * Convenient method for new {@link Instant} instances creation. Use it rather than direct constructor execution.
+ *
+ * @param {Number|String|Date|Instant|DateTime} [instant] milliseconds, {@link Instant}, {@link Date} or {@link DateTime} object.
+ * @return {Instant} new or recycled instance of the class.
+ * @throws {Error} in case given instant parameter cannot be converted.
+ * @static
+ * @public
+ */
+Instant.to = function(instant) {
+    if (instant instanceof DateTime) {
+        return instant.toInstant();
+    }
+
+    if (instant instanceof Instant) {
+        return instant;
+    }
+
+    return new Instant(Utils.getMillis(instant));
+};
+
+
+/**
+ * Comparator method. Uses general comparator convention. Optional argument can be skipped, in this case instance will
+ * be compared to current time.
+ *
+ * @param {Number|String|Date|Instant|DateTime} [instant] milliseconds, {@link Instant}, {@link Date} or {@link DateTime} object.
+ * @return {Number} <code>1</code> - in case passed instant is after this instance,
+ *                  <code>0</code> - if they are equal,
+ *                  <code>-1</code> - otherwise.
+ * @throws {Error} in case given instant parameter cannot be converted.
+ * @public
+ */
+Instant.prototype.compareTo = function(instant) {
+    var millis = Utils.getMillis(instant);
+
+    instant = this._instant;
+
+    return instant === millis ? 0 : (instant < millis ? -1 : 1);
 };
 
 /**
  * Returns number of milliseconds of the instant.
  *
- * @return {number} milliseconds
+ * @param {Number|String|Date|Instant|DateTime} instant milliseconds, {@link Instant}, {@link Date} or {@link DateTime} object.
+ * @return {Number} milliseconds
+ * @public
+ */
+Instant.prototype.equals = function(instant) {
+    try {
+        return this._instant === Utils.getMillis(instant);
+    } catch (e) {
+        return false;
+    }
+};
+
+/**
+ * Returns text representation of an instant. Optional argument <code>pattern</code> can be specified to use custom
+ * date format, by default ISO format is used. Keep in mind that formatted date would be in UTC time zone.
+ *
+ * @param {String} [pattern] pattern of the output string.
+ * @return {Number} milliseconds
+ * @public
+ */
+Instant.prototype.toString = function(pattern) {
+    return String(this._instant); //TODO<vpolischuk>: Replace it by formatter
+};
+
+/**
+ * Returns number of milliseconds of the instant.
+ *
+ * @return {Number} milliseconds
  * @public
  */
 Instant.prototype.toMillis = function() {
