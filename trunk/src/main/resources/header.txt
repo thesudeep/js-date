@@ -1,2 +1,0 @@
-(function(){
-    var Utils, Instant, DateTime;

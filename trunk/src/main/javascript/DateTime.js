@@ -2,10 +2,12 @@
  * JSDoc here
  *
  * @author Victor Polischuk
- * @since 27.01.12
+ * @constructor
+ * @class Class description
+ * @public
  */
-DateTime = function() {
+function DateTime() {
     //TODO<vpolischuk>: implement it
-};
+}
 
-Utils.inherits(DateTime, Instant);
+inherits(DateTime, Instant);

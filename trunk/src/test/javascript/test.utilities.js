@@ -5,9 +5,16 @@
  * @since 26.01.2012
  */
 
+describe("Utils.VOID...", function() {
+    it("should be undefined", function() {
+        expect(VOID).toBeUndefined();
+    });
+
+});
+
 describe("Utils.inherits()...", function() {
     var Parent = function() {};
-    var Child =  Utils.inherits(function() {}, Parent);
+    var Child =  inherits(function() {}, Parent);
 
     Parent.prototype.parentMethod = function() {};
     Parent.parentFunction = function() {};
@@ -61,8 +68,7 @@ describe("Utils.inherits()...", function() {
 });
 
 describe("Utils.isUndefined()...", function() {
-    var f = Utils.isUndefined;
-    var undef;
+    var f = isUndefined;
 
     it("should be negative in case of Number", function() {
         expect(f(1)).toBeFalsy();
@@ -89,13 +95,12 @@ describe("Utils.isUndefined()...", function() {
     });
 
     it("should be positive in case of undefined", function() {
-        expect(f(undef)).toBeTruthy();
+        expect(f(VOID)).toBeTruthy();
     });
 });
 
 describe("Utils.isDefined()...", function() {
-    var f = Utils.isDefined;
-    var undef;
+    var f = isDefined;
 
     it("should be positive in case of Number", function() {
         expect(f(1)).toBeTruthy();
@@ -122,13 +127,12 @@ describe("Utils.isDefined()...", function() {
     });
 
     it("should be negative in case of undefined", function() {
-        expect(f(undef)).toBeFalsy();
+        expect(f(VOID)).toBeFalsy();
     });
 });
 
 describe("Utils.isNull()...", function() {
-    var f = Utils.isNull;
-    var undef;
+    var f = isNull;
 
     it("should be negative in case of Number", function() {
         expect(f(1)).toBeFalsy();
@@ -155,13 +159,12 @@ describe("Utils.isNull()...", function() {
     });
 
     it("should be negative in case of undefined", function() {
-        expect(f(undef)).toBeFalsy();
+        expect(f(VOID)).toBeFalsy();
     });
 });
 
 describe("Utils.isNotNull()...", function() {
-    var f = Utils.isNotNull;
-    var undef;
+    var f = isNotNull;
 
     it("should be positive in case of Number", function() {
         expect(f(1)).toBeTruthy();
@@ -188,13 +191,12 @@ describe("Utils.isNotNull()...", function() {
     });
 
     it("should be positive in case of undefined", function() {
-        expect(f(undef)).toBeTruthy();
+        expect(f(VOID)).toBeTruthy();
     });
 });
 
 describe("Utils.isExist()...", function() {
-    var f = Utils.isExist;
-    var undef;
+    var f = isExist;
 
     it("should be positive in case of Number", function() {
         expect(f(1)).toBeTruthy();
@@ -221,13 +223,12 @@ describe("Utils.isExist()...", function() {
     });
 
     it("should be negative in case of undefined", function() {
-        expect(f(undef)).toBeFalsy();
+        expect(f(VOID)).toBeFalsy();
     });
 });
 
 describe("Utils.isNotExist()...", function() {
-    var f = Utils.isNotExist;
-    var undef;
+    var f = isNotExist;
 
     it("should be negative in case of Number", function() {
         expect(f(1)).toBeFalsy();
@@ -254,13 +255,12 @@ describe("Utils.isNotExist()...", function() {
     });
 
     it("should be positive in case of undefined", function() {
-        expect(f(undef)).toBeTruthy();
+        expect(f(VOID)).toBeTruthy();
     });
 });
 
 describe("Utils.isNumeric()...", function() {
-    var f = Utils.isNumeric;
-    var undef;
+    var f = isNumeric;
 
     it("should be positive in case of positive integer", function() {
         expect(f(1)).toBeTruthy();
@@ -319,17 +319,16 @@ describe("Utils.isNumeric()...", function() {
     });
 
     it("should be negative in case of undefined", function() {
-        expect(f(undef)).toBeFalsy();
+        expect(f(VOID)).toBeFalsy();
     });
 });
 
 describe("Utils.getMillis()...", function() {
-    var f = Utils.getMillis;
+    var f = getMillis;
     var t = function (val) {
         return function() {return f(val)}
     };
     var m = "Cannot be converted into number of milliseconds";
-    var undef;
 
     it("should be equal to the positive integer passed in", function() {
         expect(f(123123)).toBe(123123);
@@ -388,6 +387,6 @@ describe("Utils.getMillis()...", function() {
     });
 
     it("should NOT be null in case of undefined", function() {
-        expect(f(undef)).not.toBeNull();
+        expect(f(VOID)).not.toBeNull();
     });
 });

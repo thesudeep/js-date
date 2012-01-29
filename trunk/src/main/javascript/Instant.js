@@ -3,20 +3,19 @@
  * only milliseconds from/to Unix EPOCH.
  *
  * @author Victor Polischuk
- * @since 26.01.12
  * @class Simple presentation of a time instant.
- * @constructor
- * @private
  *
  * @param {Number} instant milliseconds.
+ * @constructor
+ * @public
  */
-Instant = function(instant) {
+function Instant(instant) {
     /**
      * @type {Number}
      * @private
      */
     this._instant = instant;
-};
+}
 
 /**
  * Convenient method for new {@link Instant} instances creation. Use it rather than direct constructor execution.
@@ -36,7 +35,7 @@ Instant.to = function(instant) {
         return instant;
     }
 
-    return new Instant(Utils.getMillis(instant));
+    return new Instant(getMillis(instant));
 };
 
 
@@ -52,7 +51,7 @@ Instant.to = function(instant) {
  * @public
  */
 Instant.prototype.compareTo = function(instant) {
-    var millis = Utils.getMillis(instant);
+    var millis = getMillis(instant);
 
     instant = this._instant;
 
@@ -68,7 +67,7 @@ Instant.prototype.compareTo = function(instant) {
  */
 Instant.prototype.equals = function(instant) {
     try {
-        return this._instant === Utils.getMillis(instant);
+        return this._instant === getMillis(instant);
     } catch (e) {
         return false;
     }
