@@ -34,8 +34,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.linked.directory>${project.build.directory}/.generated</project.linked.directory>
-        <project.linked.artifact>${project.linked.directory}/${project.build.finalName}.js</project.linked.artifact>
+
+        <project.resources.directory>${project.build.directory}/.resources</project.resources.directory>
+        <project.linker.directory>${project.build.directory}/.generated</project.linker.directory>
+        <project.linker.artifact>${project.linker.directory}/${project.build.finalName}.js</project.linker.artifact>
     </properties>
 
     <build>
@@ -46,6 +48,10 @@
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.js</include>
+                    <include>**/*.txt</include>
+                </includes>
                 <filtering>true</filtering>
             </resource>
         </resources>
@@ -65,6 +71,33 @@
         </testResources>
 
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <id>resources-only</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.resources.directory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>js-only</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>com.github.searls</groupId>
                 <artifactId>jasmine-maven-plugin</artifactId>
@@ -114,7 +147,7 @@
                 <version>1.0.0</version>
                 <configuration>
                     <!--<compilation_level>ADVANCED_OPTIMIZATIONS</compilation_level>-->
-                    <js_dir>${project.linked.directory}</js_dir>
+                    <js_dir>${project.linker.directory}</js_dir>
                     <js_output_dir>${project.build.directory}</js_output_dir>
                     <version>min</version>
                 </configuration>
@@ -143,18 +176,36 @@
                         <aggregation>
                             <removeIncluded>false</removeIncluded>
                             <insertNewLine>true</insertNewLine>
-                            <output>${project.linked.artifact}</output>
+                            <output>${project.linker.directory}/${project.build.finalName}.js</output>
                             <inputDir>${basedir}/src/main/javascript</inputDir>
                             <includes>
-                                <include>${basedir}/src/main/resources/license.js</include>
-                                <include>${basedir}/src/main/resources/wrap-header.txt</include>
+                                <include>${project.resources.directory}/license.js</include>
+                                <include>${project.resources.directory}/wrap-header.txt</include>
 
                                 <include>utilities.js</include>
+
+                                <include>Enum.js</include>
                                 <include>Instant.js</include>
+                                <include>Chronology.js</include>
                                 <include>DateTime.js</include>
 
-                                <include>${basedir}/src/main/resources/interface.js</include>
-                                <include>${basedir}/src/main/resources/wrap-footer.txt</include>
+                                <include>periodtype/PeriodType.js</include>
+
+                                <include>period/Period.js</include>
+
+                                <include>fieldtype/FieldType.js</include>
+                                <include>fieldtype/AbsoluteFieldType.js</include>
+                                <include>fieldtype/RelativeFieldType.js</include>
+
+                                <include>field/Field.js</include>
+                                <include>field/BasicField.js</include>
+
+                                <include>partial/PartialField.js</include>
+                                <include>partial/PartialInstant.js</include>
+                                <include>partial/DefaultPartialInstant.js</include>
+
+                                <include>${project.resources.directory}/interface.js</include>
+                                <include>${project.resources.directory}/wrap-footer.txt</include>
                             </includes>
                         </aggregation>
                     </aggregations>
