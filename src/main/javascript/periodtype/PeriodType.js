@@ -29,7 +29,7 @@ PeriodType.values = function () {
 
 /**
  * @param {String} name
- * @return {Enum}
+ * @return {PeriodType}
  * @constant
  * @static
  * @public

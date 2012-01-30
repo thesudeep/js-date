@@ -241,8 +241,8 @@
                 <configuration>
                     <jsDir>src/main/javascript</jsDir>
                     <!--<jsDir>${project.linked.directory}</jsDir>-->
-                    <includePrivate>true</includePrivate>
-                    <includeUndocumented>true</includeUndocumented>
+                    <includePrivate>false</includePrivate>
+                    <includeUndocumented>false</includeUndocumented>
                     <excludes>
                         **/utilities.js
                     </excludes>
