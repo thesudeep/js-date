@@ -1,42 +1,44 @@
+goog.provide("PartialField");
+
 /**
  * JSDoc here
  *
  * @author Victor Polischuk
  * @class Class description
  *
- * @param {Number} [fieldValue]
- * @param {Number} [millisValue]
- * @param {Boolean} [leap]
+ * @param {number=} fieldValue
+ * @param {number=} millisValue
+ * @param {boolean=} leap
  * @constructor
- * @private
+ * @public
  */
-function PartialField(fieldValue, millisValue, leap) {
+var PartialField = function (fieldValue, millisValue, leap) {
     /**
-     * @type {Number}
+     * @type {number}
      * @private
      */
-    this._f = fieldValue;
+    this._f = fieldValue || 0;
     /**
-     * @type {Number}
+     * @type {number}
      * @private
      */
-    this._m = millisValue;
+    this._m = millisValue || 0;
     /**
-     * @type {Boolean}
+     * @type {boolean}
      * @private
      */
-    this._l = leap;
-}
+    this._l = leap === true;
+};
 
 /**
- * @return {Number}
+ * @return {number}
  */
 PartialField.prototype.getField = function() {
     return this._f;
 };
 
 /**
- * @param {Number} fieldValue
+ * @param {number} fieldValue
  * @return {PartialField}
  */
 PartialField.prototype.setField = function(fieldValue) {
@@ -45,14 +47,14 @@ PartialField.prototype.setField = function(fieldValue) {
 };
 
 /**
- * @return {Number}
+ * @return {number}
  */
 PartialField.prototype.getMillis = function() {
     return this._m;
 };
 
 /**
- * @param {Number} millisValue
+ * @param {number} millisValue
  * @return {PartialField}
  */
 PartialField.prototype.setMillis = function(millisValue) {
@@ -61,14 +63,14 @@ PartialField.prototype.setMillis = function(millisValue) {
 };
 
 /**
- * @return {Boolean}
+ * @return {boolean}
  */
 PartialField.prototype.isLeap = function() {
     return this._l;
 };
 
 /**
- * @param {Number} leap
+ * @param {boolean} leap
  * @return {PartialField}
  */
 PartialField.prototype.setLeap = function(leap) {

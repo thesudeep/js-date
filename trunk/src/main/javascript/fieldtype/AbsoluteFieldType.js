@@ -1,15 +1,22 @@
+goog.provide("AbsoluteFieldType");
+
+goog.require("PeriodType");
+goog.require("FieldType");
+goog.require("BasicField");
+
 /**
  * JSDoc here
  *
  * @author Victor Polischuk
  * @class Class description
  *
- * @param {PeriodType} innerPeriodType
+ * @param {PeriodType} periodType
  * @constructor
  * @public
+ * @extends FieldType
  */
-function AbsoluteFieldType(periodType) {
-    this.chain(periodType.name());
+var AbsoluteFieldType = function (periodType) {
+    AbsoluteFieldType.superClass_.constructor.call(this, periodType.name());
 
     /**
      * @type {PeriodType}
@@ -18,12 +25,12 @@ function AbsoluteFieldType(periodType) {
     this._absolute = periodType;
 }
 
-inherits(AbsoluteFieldType, FieldType);
+goog.inherits(AbsoluteFieldType, FieldType);
 
 /**
  *
- * @param {Number} fieldValue
- * @return {Field}
+ * @param {number} fieldValue
+ * @return {!Field}
  * @public
  * @override
  */
@@ -31,5 +38,13 @@ AbsoluteFieldType.prototype.toField = function(fieldValue) {
     return new BasicField(this, fieldValue);
 };
 
+/**
+ * @const
+ * @public
+ */
 FieldType.YEARS = new AbsoluteFieldType(PeriodType.YEAR);
+/**
+ * @const
+ * @public
+ */
 FieldType.MONTHS = new AbsoluteFieldType(PeriodType.MONTH);

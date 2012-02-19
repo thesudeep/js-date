@@ -6,9 +6,9 @@
  */
 
 describe("Instant.to()...", function() {
-    var f = Instant.to;
+    var f = jsd8.Instant.to;
     var t = function(val) { return function() { return f(val); };};
-    var instant = new Instant(123123);
+    var instant = new jsd8.Instant(123123);
 
     it("should return the same Instant", function() {
         expect(f(instant)).toBe(instant);

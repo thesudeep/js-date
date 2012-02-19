@@ -1,3 +1,7 @@
+goog.provide("BasicField");
+
+goog.require("Field");
+
 /**
  * JSDoc here
  *
@@ -5,18 +9,19 @@
  * @class Class description
  *
  * @param {FieldType} type
- * @param {Number} value
+ * @param {number} value
  * @constructor
  * @public
+ * @extends Field
  */
-function BasicField(type, value) {
-    this.chain(type);
+var BasicField = function (type, value) {
+    BasicField.superClass_.constructor.call(this, type);
 
     /**
-     * @type {Number}
+     * @type {number}
      * @private
      */
     this._value = value;
 }
 
-inherits(BasicField, Field);
+goog.inherits(BasicField, Field);

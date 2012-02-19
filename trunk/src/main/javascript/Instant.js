@@ -1,3 +1,5 @@
+goog.provide("Instant");
+
 /**
  * Simple presentation of a time instant. Does not contain time zone or chronology,
  * only milliseconds from/to Unix EPOCH.
@@ -5,46 +7,41 @@
  * @author Victor Polischuk
  * @class Simple presentation of a time instant.
  *
- * @param {Number} instant milliseconds.
+ * @param {number} instant milliseconds.
  * @constructor
  * @public
  */
-function Instant(instant) {
+var Instant = function(instant) {
     /**
-     * @type {Number}
+     * @type {number}
      * @private
      */
     this._instant = instant;
-}
+};
 
 /**
  * Convenient method for new {@link Instant} instances creation. Use it rather than direct constructor execution.
  *
- * @param {Number|String|Date|Instant|DateTime} [instant] milliseconds, {@link Instant}, {@link Date} or {@link DateTime} object.
- * @return {Instant} new or recycled instance of the class.
+ * @param {?(number|string|Date|Instant)} instant milliseconds, {@link Instant} or {@link Date} object.
+ * @return {!Instant} new or recycled instance of the class.
  * @throws {Error} in case given instant parameter cannot be converted.
  * @static
  * @public
  */
 Instant.to = function(instant) {
-    if (instant instanceof DateTime) {
-        return instant.toInstant();
-    }
-
     if (instant instanceof Instant) {
-        return instant;
+        return instant.toInstant();
     }
 
     return new Instant(getMillis(instant));
 };
 
-
 /**
  * Comparator method. Uses general comparator convention. Optional argument can be skipped, in this case instance will
  * be compared to current time.
  *
- * @param {Number|String|Date|Instant|DateTime} [instant] milliseconds, {@link Instant}, {@link Date} or {@link DateTime} object.
- * @return {Number} <code>1</code> - in case passed instant is after this instance,
+ * @param {?(number|string|Date|Instant)} instant milliseconds, {@link Instant} or {@link Date} object.
+ * @return {number} <code>1</code> - in case passed instant is after this instance,
  *                  <code>0</code> - if they are equal,
  *                  <code>-1</code> - otherwise.
  * @throws {Error} in case given instant parameter cannot be converted.
@@ -59,10 +56,10 @@ Instant.prototype.compareTo = function(instant) {
 };
 
 /**
- * Returns number of milliseconds of the instant.
+ * Indicates whether some other object is "equal to" this one.
  *
- * @param {Number|String|Date|Instant|DateTime} instant milliseconds, {@link Instant}, {@link Date} or {@link DateTime} object.
- * @return {Number} milliseconds
+ * @param {?(number|string|Date|Instant)} instant milliseconds, {@link Instant} or {@link Date} object.
+ * @return {boolean} <code>true</code> if this object is equal to given argument; <code>false</code> otherwise.
  * @public
  */
 Instant.prototype.equals = function(instant) {
@@ -77,8 +74,8 @@ Instant.prototype.equals = function(instant) {
  * Returns text representation of an instant. Optional argument <code>pattern</code> can be specified to use custom
  * date format, by default ISO format is used. Keep in mind that formatted date would be in UTC time zone.
  *
- * @param {String} [pattern] pattern of the output string.
- * @return {Number} milliseconds
+ * @param {?string} pattern pattern of the output string.
+ * @return {string} string representation of the instant.
  * @public
  */
 Instant.prototype.toString = function(pattern) {
@@ -88,7 +85,7 @@ Instant.prototype.toString = function(pattern) {
 /**
  * Returns number of milliseconds of the instant.
  *
- * @return {Number} milliseconds
+ * @return {!number} milliseconds
  * @public
  */
 Instant.prototype.toMillis = function() {
@@ -96,20 +93,9 @@ Instant.prototype.toMillis = function() {
 };
 
 /**
- * Returns {@link DateTime} instance using default {@link DateTimeZone} and {@link Chronology}.
- *
- * @return {DateTime} fully operational instance of {@link DateTime}.
- * @public
- * @see DateTime
- */
-Instant.prototype.toDateTime = function() {
-    return null; //TODO<vpolischuk>: use DateTime here.
-};
-
-/**
  * Returns itself. The method can be overridden in children implementation.
  *
- * @return {Instant} time instant as {@link Instant} object.
+ * @return {!Instant} time instant as {@link Instant} object.
  * @public
  */
 Instant.prototype.toInstant = function() {
@@ -119,7 +105,7 @@ Instant.prototype.toInstant = function() {
 /**
  * Returns standard ECMAScript {@link Date} instance.
  *
- * @return {Date} standard {@link Date} object.
+ * @return {!Date} standard {@link Date} object.
  * @public
  * @see Date
  */

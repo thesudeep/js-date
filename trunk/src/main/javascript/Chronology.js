@@ -1,3 +1,8 @@
+goog.provide("Chronology");
+
+goog.require("FieldType");
+goog.require("PartialInstant");
+
 /**
  * JSDoc here
  *
@@ -6,17 +11,15 @@
  * @class Class description
  * @public
  */
-function Chronology() {
+var Chronology = function () {
 }
 
 /**
  *
- * @param {Number} instant
- * @param {FieldType} fieldType
- * @param {PartialInstant} [context]
- * @return {PartialInstant}
+ * @param {number} instant
+ * @param {!FieldType} fieldType
+ * @param {?PartialInstant} context
+ * @return {!PartialInstant}
  * @private
  */
-Chronology.prototype.toPartialInstant = function(instant, fieldType, context) {
-    throwUnimplementedMethodError();
-};
+Chronology.prototype.toPartialInstant = goog.abstractMethod;

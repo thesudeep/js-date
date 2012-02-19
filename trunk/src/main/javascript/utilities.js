@@ -1,45 +1,50 @@
 /**
  * Undefined constant to avoid overriding <code>undefined</code> variable
  *
- * @constant
+ * @const
  * @private
  */
 var VOID = (function () {
 })();
 
-/**
- *
- * @param {Function} child
- * @param {Function} parent
- */
-function inherits(child, parent) {
-    function F() {
-    }
+var inherits = goog.inherits;
 
-    F.prototype = parent.prototype;
-
-    child.prototype = new F();
-    child.prototype.constructor = child;
-    child._super = parent.prototype;
-
-    /**
-     * @type {Function}
-     * @private
-     */
-    child.prototype.chain = function () {
-        return parent.prototype.constructor.apply(this, arguments)
-    };
-
-    /**
-     * @type {Function}
-     * @private
-     */
-    child.prototype.overridden = function () {
-        return parent.prototype;
-    };
-
-    return child;
-}
+///**
+// *
+// * @param {Function} child
+// * @param {Function} parent
+// */
+//function inherits(child, parent) {
+//    /**
+//     * @constructor
+//     */
+//    function F() {
+//    }
+//
+//    F.prototype = parent.prototype;
+//
+//    child.prototype = new F();
+//    child.prototype.constructor = child;
+//    child._super = parent.prototype;
+//
+//    /**
+//     * @type {Function}
+//     * @private
+//     */
+//    child.prototype.chain = function () {
+//        return parent.prototype.constructor.apply(this, arguments)
+//    };
+//
+//    /**
+//     * @type {Function}
+//     * @private
+//     */
+//    child.prototype.overridden = function () {
+//        return parent.prototype;
+//    };
+//
+//    return child;
+//}
 
 /**
  * @return {Function}
@@ -60,9 +65,9 @@ function getOrCreateCacheRecord(cache, key) {
 
 /**
  *
- * @param {Number|String|Date} left
- * @param {Number|String|Date} right
- * @return {Number}
+ * @param {(number|string|Date)} left
+ * @param {(number|string|Date)} right
+ * @return {number}
  */
 function comparator(left, right) {
     return left === right ? 0 : (left < right ? -1 : 1);
@@ -145,8 +150,8 @@ function currentTimeInMillis() {
  * Returns milliseconds of an argument value or current time if argument undefined or <code>null</code>. If
  * conversion is not possible exception will be thrown.
  *
- * @param {Number|String|Date|Instant|DateTime} instant milliseconds, {@link Instant}, {@link Date} or {@link DateTime} object.
- * @return {Number} milliseconds of passed given object
+ * @param {(number|string|Date|Instant)} instant milliseconds, {@link Instant} or {@link Date} object.
+ * @return {number} milliseconds of passed given object
  * @throws {Error} if conversion to milliseconds is impossible.
  */
 function getMillis(instant) {
@@ -154,8 +159,8 @@ function getMillis(instant) {
         return currentTimeInMillis();
     }
 
-    if (isNumeric(instant)) {
-        return parseInt(instant, 10);
+    if (goog.isNumber(instant)) {
+        return instant;
     }
 
     if (instant instanceof Date) {
@@ -163,7 +168,11 @@ function getMillis(instant) {
     }
 
     if (instant instanceof Instant) {
-        return instant.getTime();
+        return instant.toMillis();
+    }
+
+    if (goog.isString(instant) && /^[\-\+]?\d*\.?\d+$/.test(instant)) {
+        return parseInt(instant, 10);
     }
 
     throw new Error("Cannot be converted into number of milliseconds");

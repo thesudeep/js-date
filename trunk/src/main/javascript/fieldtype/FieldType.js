@@ -1,16 +1,18 @@
+goog.provide("FieldType");
+
 /**
  * JSDoc here
  *
  * @author Victor Polischuk
  * @class Class description
  *
- * @param {String}
+ * @param {string} name
  * @constructor
  * @public
  */
-function FieldType(name) {
+var FieldType = function (name) {
     /**
-     * @type {String}
+     * @type {string}
      * @private
      */
     this._name = name;
@@ -18,21 +20,17 @@ function FieldType(name) {
 
 /**
  *
- * @param {Number} fieldValue
- * @return {Field}
+ * @param {number} fieldValue
+ * @return {!Field}
  * @public
  */
-FieldType.prototype.toField = function(fieldValue) {
-    throwUnimplementedMethodError();
-};
+FieldType.prototype.toField = goog.abstractMethod;
 
 /**
  *
- * @param {Number} instant
+ * @param {number} instant
  * @param {PartialInstant} context
- * @return {Field}
+ * @return {!Field}
  * @private
  */
-FieldType.prototype.withMillis = function(instant, context) {
-    throwUnimplementedMethodError();
-};
+FieldType.prototype.withMillis = goog.abstractMethod;

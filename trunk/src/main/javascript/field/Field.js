@@ -1,3 +1,5 @@
+goog.provide("Field");
+
 /**
  * JSDoc here
  *
@@ -8,7 +10,7 @@
  * @constructor
  * @public
  */
-function Field(type) {
+var Field = function (type) {
     /**
      * @type {FieldType}
      * @private
@@ -18,11 +20,9 @@ function Field(type) {
 
 /**
  *
- * @param {Number} instant
- * @param {Chronology} [chronology]
- * @return {Number}
+ * @param {number} instant
+ * @param {?Chronology} chronology
+ * @return {number}
  * @public
  */
-Field.prototype.toMillis = function(instant, chronology) {
-    throwUnimplementedMethodError();
-};
+Field.prototype.toMillis = goog.abstractMethod;
