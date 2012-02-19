@@ -4,7 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.google.code.jsd8</groupId>
     <artifactId>jsd8</artifactId>
-    <packaging>pom</packaging>
+    <packaging>jsar</packaging>
     <version>2.0.0-a1</version>
     <name>Javascript date/time manipulation library</name>
 
@@ -96,6 +96,16 @@
                             <outputDirectory>${project.build.outputDirectory}</outputDirectory>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>test-resources</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>testResources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
             <plugin>
@@ -103,9 +113,16 @@
                 <artifactId>jasmine-maven-plugin</artifactId>
                 <version>1.1.0</version>
                 <configuration>
-                    <jsSrcDir>src/main/javascript</jsSrcDir>
+                    <jsSrcDir>${project.build.directory}/javascriptFramework/output/compiled</jsSrcDir>
                     <jsTestSrcDir>src/test/javascript</jsTestSrcDir>
                     <preloadSources>
+<!--
+                        <preloadSource>${project.build.testOutputDirectory}/goog.base.setup.js</preloadSource>
+                        <preloadSource>${project.build.testOutputDirectory}/goog.base-r1129.js</preloadSource>
+                        <preloadSource>${project.build.testOutputDirectory}/goog.base.override.js</preloadSource>
+-->
+
+<!--
                         <preloadSource>utilities.js</preloadSource>
 
                         <preloadSource>Enum.js</preloadSource>
@@ -127,6 +144,7 @@
                         <preloadSource>partial/PartialField.js</preloadSource>
                         <preloadSource>partial/PartialInstant.js</preloadSource>
                         <preloadSource>partial/DefaultPartialInstant.js</preloadSource>
+-->
                     </preloadSources>
                 </configuration>
                 <executions>
@@ -142,11 +160,43 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>com.github.jlgrock.javascript-framework</groupId>
+                <artifactId>jsar-maven-plugin</artifactId>
+                <version>1.10.3</version>
+                <extensions>true</extensions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.jlgrock.javascript-framework</groupId>
+                <artifactId>jspreprocessor-maven-plugin</artifactId>
+                <version>1.10.3</version>
+                <configuration>
+                    <sourceDirectory>${project.build.outputDirectory}</sourceDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.jlgrock.javascript-framework</groupId>
+                <artifactId>closure-compiler-maven-plugin</artifactId>
+                <version>1.10.3</version>
+                <configuration>
+                    <compileLevel>ADVANCED_OPTIMIZATIONS</compileLevel>
+                    <compiledFilename></compiledFilename>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.jlgrock.javascript-framework</groupId>
+                <artifactId>closure-testing-maven-plugin</artifactId>
+                <version>1.10.3</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+<!--
+            <plugin>
                 <groupId>com.dasberg.maven.plugins</groupId>
                 <artifactId>maven-closure-compiler-plugin</artifactId>
                 <version>1.0.0</version>
                 <configuration>
-                    <!--<compilation_level>ADVANCED_OPTIMIZATIONS</compilation_level>-->
+                    <compilation_level>ADVANCED_OPTIMIZATIONS</compilation_level>
                     <js_dir>${project.linker.directory}</js_dir>
                     <js_output_dir>${project.build.directory}</js_output_dir>
                     <version>min</version>
@@ -160,18 +210,20 @@
                     </execution>
                 </executions>
             </plugin>
+-->
+<!--
             <plugin>
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>yuicompressor-maven-plugin</artifactId>
                 <version>1.2</version>
                 <configuration>
-                    <!--<sourceDirectory>${project.linked.directory}</sourceDirectory>-->
+                    &lt;!&ndash;<sourceDirectory>${project.linked.directory}</sourceDirectory>&ndash;&gt;
                     <preProcessAggregates>true</preProcessAggregates>
                     <statistics>true</statistics>
                     <excludes>
                         <exclude>**/*.js</exclude>
                     </excludes>
-                    <!--<jswarn>false</jswarn>-->
+                    &lt;!&ndash;<jswarn>false</jswarn>&ndash;&gt;
                     <aggregations>
                         <aggregation>
                             <removeIncluded>false</removeIncluded>
@@ -219,6 +271,7 @@
                     </execution>
                 </executions>
             </plugin>
+-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>

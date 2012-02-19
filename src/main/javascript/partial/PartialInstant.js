@@ -1,3 +1,7 @@
+goog.provide("PartialInstant");
+
+goog.require("PartialField");
+
 /**
  * JSDoc here
  *
@@ -5,54 +9,51 @@
  * @class Class description
  *
  * @constructor
- * @interface
- * @private
+ * @public
  */
-function PartialInstant() {
+var PartialInstant = function () {
     this._fields = {
 
     };
     /**
-     * @type {Field}
+     * @type {PartialField}
      * @private
      */
     this._year = new PartialField();
     /**
-     * @type {Field}
+     * @type {PartialField}
      * @private
      */
     this._month = new PartialField();
     /**
-     * @type {Field}
+     * @type {PartialField}
      * @private
      */
     this._date = new PartialField();
     /**
-     * @type {Field}
+     * @type {PartialField}
      * @private
      */
     this._hour = null;
     /**
-     * @type {Field}
+     * @type {PartialField}
      * @private
      */
     this._minute = null;
     /**
-     * @type {Field}
+     * @type {PartialField}
      * @private
      */
     this._second = null;
     /**
-     * @type {Field}
+     * @type {PartialField}
      * @private
      */
     this._millis = null;
 }
 
 /**
- * @return {Number}
+ * @return {number}
  * @throws {Error}
  */
-PartialInstant.prototype.toInstant = function() {
-    throwUnimplementedMethodError();
-};
+PartialInstant.prototype.toInstant = goog.abstractMethod;

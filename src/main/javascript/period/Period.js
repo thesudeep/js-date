@@ -1,3 +1,7 @@
+goog.provide("Period");
+
+goog.require("PeriodType");
+
 /**
  * JSDoc here
  *
@@ -8,15 +12,15 @@
  * @constructor
  * @public
  */
-function Period(type) {
+var Period = function (type) {
 
 }
 
 /**
  *
- * @param {Number} instant
- * @param {Chronology} [chronology]
- * @return {Number}
+ * @param {number} instant
+ * @param {?Chronology} chronology
+ * @return {number}
  * @public
  */
-Period.prototype.toMillis = throwUnimplementedMethodError;
+Period.prototype.toMillis = goog.abstractMethod;

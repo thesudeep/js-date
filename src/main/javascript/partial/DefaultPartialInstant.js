@@ -1,3 +1,8 @@
+goog.provide("DefaultPartialInstant");
+
+goog.require("PartialInstant");
+goog.require("PartialField");
+
 /**
  * JSDoc here
  *
@@ -5,55 +10,55 @@
  * @class Class description
  *
  * @constructor
- * @interface
- * @private
+ * @public
+ * @extends PartialInstant
  */
-function DefaultPartialInstant() {
-    this.chain();
+var DefaultPartialInstant = function () {
+    DefaultPartialInstant.superClass_.constructor.call(this);
 
     this._fields = {
         //ToDO
     };
-    /**
-     * @type {Field}
-     * @private
-     */
-    this._year = new PartialField();
-    /**
-     * @type {Field}
-     * @private
-     */
-    this._month = new PartialField();
-    /**
-     * @type {Field}
-     * @private
-     */
-    this._date = new PartialField();
-    /**
-     * @type {Field}
-     * @private
-     */
-    this._hour = null;
-    /**
-     * @type {Field}
-     * @private
-     */
-    this._minute = null;
-    /**
-     * @type {Field}
-     * @private
-     */
-    this._second = null;
-    /**
-     * @type {Field}
-     * @private
-     */
-    this._millis = null;
+//    /**
+//     * @type {PartialField}
+//     * @private
+//     */
+//    this._year = new PartialField();
+//    /**
+//     * @type {PartialField}
+//     * @private
+//     */
+//    this._month = new PartialField();
+//    /**
+//     * @type {PartialField}
+//     * @private
+//     */
+//    this._date = new PartialField();
+//    /**
+//     * @type {PartialField}
+//     * @private
+//     */
+//    this._hour = null;
+//    /**
+//     * @type {PartialField}
+//     * @private
+//     */
+//    this._minute = null;
+//    /**
+//     * @type {PartialField}
+//     * @private
+//     */
+//    this._second = null;
+//    /**
+//     * @type {PartialField}
+//     * @private
+//     */
+//    this._millis = null;
 }
 
-inherits(DefaultPartialInstant, PartialInstant);
+goog.inherits(DefaultPartialInstant, PartialInstant);
 
 /**
- * @return {Number}
+ * @return {number}
  */
-PartialInstant.prototype.toInstant = throwUnimplementedMethodError;
+DefaultPartialInstant.prototype.toInstant = goog.abstractMethod;

@@ -1,3 +1,9 @@
+goog.provide("RelativeFieldType");
+
+goog.require("PeriodType");
+goog.require("FieldType");
+goog.require("BasicField");
+
 /**
  * JSDoc here
  *
@@ -5,18 +11,19 @@
  * @class Class description
  *
  * @param {PeriodType} innerPeriodType
- * @param {PeriodType} [outerPeriodType]
+ * @param {PeriodType} outerPeriodType
  * @constructor
  * @public
+ * @extends FieldType
  */
-function RelativeFieldType(innerPeriodType, outerPeriodType) {
+var RelativeFieldType = function (innerPeriodType, outerPeriodType) {
     if (innerPeriodType.compareTo(outerPeriodType) < 0) {
         throwPeriodTypesInvalidError()
     }
 
     var name = innerPeriodType.name() + "S_IN_" + outerPeriodType.name();
 
-    this.chain(name);
+    RelativeFieldType.superClass_.constructor.call(this, name);
 
     /**
      * @type {PeriodType}
@@ -30,12 +37,12 @@ function RelativeFieldType(innerPeriodType, outerPeriodType) {
     this._outer = outerPeriodType;
 }
 
-inherits(RelativeFieldType, FieldType);
+goog.inherits(RelativeFieldType, FieldType);
 
 /**
  *
- * @param {Number} fieldValue
- * @return {Field}
+ * @param {number} fieldValue
+ * @return {!Field}
  * @public
  * @override
  */
