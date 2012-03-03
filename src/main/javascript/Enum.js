@@ -1,5 +1,7 @@
 goog.provide("Enum");
 
+goog.require("Errors");
+
 /**
  * Cache for already registered {@link Enum}s. Object has type: <code>{Class: {String: Enum}}</code>.
  * It means that cache key is a class/function of an {@link Enum} type, cache value is a map (object) with a
@@ -33,7 +35,7 @@ function cacheEnum(e) {
 
     var current = getOrCreateCacheRecord(ENUM_CACHE, clazz);
 
-    isDefined(current[name]) && throwEnumCreationError();
+    isDefined(current[name]) && Errors.throwEnumAlreadyExists();
 
     current[name] = e;
 }
@@ -61,7 +63,7 @@ var Enum = function(ordinal, name) {
      * @type {Function}
      * @private
      */
-    this._clazz = getClass();
+    this._clazz = this.constructor;
     /**
      * Index in queue of enumerations, can be seen as a priority or weight, but, basically, used only in sorting purpose.
      * @type {number}
@@ -91,8 +93,8 @@ var Enum = function(ordinal, name) {
  * @public
  */
 Enum.COMPARATOR = function(left, right) {
-    (isNotExist(left) || isNotExist(right)) && throwNullPointerError();
-    (left._clazz !== right._clazz) && throwClassCastError();
+    (isNotExist(left) || isNotExist(right)) && Errors.throwNullPointer();
+    (left._clazz !== right._clazz) && Errors.throwClassCast();
 
     return comparator(left._ordinal, right._ordinal);
 };
@@ -110,7 +112,7 @@ Enum.COMPARATOR = function(left, right) {
 Enum.values = function(clazz) {
     var cache = ENUM_CACHE[clazz];
 
-    isUndefined(cache) && throwEnumInvalidError();
+    isUndefined(cache) && Errors.throwInvalidEnum();
 
     /**
      * @type {Array.<Enum>}
@@ -142,7 +144,7 @@ Enum.values = function(clazz) {
 Enum.valueOf = function(clazz, name) {
     var cache = ENUM_CACHE[clazz];
 
-    isUndefined(cache) && throwEnumInvalidError();
+    isUndefined(cache) && Errors.throwInvalidEnum();
 
     return cache[name] || null;
 };

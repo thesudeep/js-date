@@ -3,6 +3,7 @@ goog.provide("RelativeFieldType");
 goog.require("PeriodType");
 goog.require("FieldType");
 goog.require("BasicField");
+goog.require("Errors");
 
 /**
  * JSDoc here
@@ -18,7 +19,7 @@ goog.require("BasicField");
  */
 var RelativeFieldType = function (innerPeriodType, outerPeriodType) {
     if (innerPeriodType.compareTo(outerPeriodType) < 0) {
-        throwPeriodTypesInvalidError()
+        Errors.throwInvalidPeriodTypes();
     }
 
     var name = innerPeriodType.name() + "S_IN_" + outerPeriodType.name();
@@ -50,5 +51,12 @@ RelativeFieldType.prototype.toField = function(fieldValue) {
     return new BasicField(this, fieldValue);
 };
 
+/**
+ * @type {RelativeFieldType}
+ */
 FieldType.YEARS_IN_MILLENIUM = new RelativeFieldType(PeriodType.YEAR, PeriodType.MILLENIUM);
+
+/**
+ * @type {RelativeFieldType}
+ */
 FieldType.MONTHS_IN_YEAR = new RelativeFieldType(PeriodType.MONTH, PeriodType.YEAR);

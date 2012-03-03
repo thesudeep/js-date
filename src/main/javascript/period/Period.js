@@ -8,13 +8,21 @@ goog.require("PeriodType");
  * @author Victor Polischuk
  * @class Class description
 
- * @param {PeriodType} type
  * @constructor
  * @public
  */
-var Period = function (type) {
+var Period = function () {
 
-}
+};
+
+/**
+ *
+ * @param {PeriodType=} type
+ * @return {number}
+ * @throws {Error} in case given period type is unsupported by the implementation
+ * @public
+ */
+Period.prototype.get = goog.abstractMethod;
 
 /**
  *
