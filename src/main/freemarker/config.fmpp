@@ -1,10 +1,10 @@
 sources: "main.ftl",
-outputFile: "${project.js.outputDirectory}/${project.build.finalName}-min.js",
+outputFile: "${project.js.outputDirectory}/${project.build.finalName}.${project.build.revision}-min.js",
 sourceEncoding: "${project.build.sourceEncoding}",
 outputEncoding: "${project.build.sourceEncoding}",
 data: {
     license: "MIT.LICENSE",
-    body: "/@compiled/${project.build.finalName}.js"
+    body: "/@compiled/${project.build.finalName}.${project.build.revision}.js"
 },
 freemarkerLinks: {
     compiled: "${project.js.outputDirectory}"
