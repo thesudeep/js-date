@@ -98,6 +98,7 @@ window["jsd8"] = {
     "PeriodType": PeriodType,
     "version": {
         "api": 2,
-        "full": "${project.version}"
+        "revision": ${project.build.revision},
+        "full": "${project.version}.${project.build.revision}"
     }
 };
