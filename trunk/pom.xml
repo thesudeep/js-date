@@ -22,20 +22,25 @@
             <version>2.11.0</version>
             <scope>test</scope>
         </dependency>
-
-        <!--
-                <dependency>
-                    <groupId>com.google.javascript</groupId>
-                    <artifactId>closure-compiler</artifactId>
-                    <version>r1592</version>
-                </dependency>
-        -->
+        <dependency>
+            <groupId>net.sourceforge.fmpp</groupId>
+            <artifactId>fmpp</artifactId>
+            <version>0.9.14</version>
+        </dependency>
     </dependencies>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <project.resources.directory>${project.build.directory}/.resources</project.resources.directory>
+        <javascript.plugin.version>1.10.4</javascript.plugin.version>
+        <jasmine.plugin.version>1.1.0</jasmine.plugin.version>
+
+        <project.fmpp.sourceDirectory>${project.build.sourceDirectory}/../freemarker</project.fmpp.sourceDirectory>
+        <project.fmpp.outputDirectory>${project.build.directory}/freemarker</project.fmpp.outputDirectory>
+
+        <project.js.frameworkDirectory>${project.build.directory}/javascriptFramework</project.js.frameworkDirectory>
+        <project.js.outputDirectory>${project.js.frameworkDirectory}/output/compiled</project.js.outputDirectory>
+
         <project.linker.directory>${project.build.directory}/.generated</project.linker.directory>
         <project.linker.artifact>${project.linker.directory}/${project.build.finalName}.js</project.linker.artifact>
     </properties>
@@ -46,15 +51,8 @@
                 <directory>src/main/javascript</directory>
                 <filtering>true</filtering>
             </resource>
-            <resource>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>**/*.js</include>
-                    <include>**/*.txt</include>
-                </includes>
-                <filtering>true</filtering>
-            </resource>
         </resources>
+
         <testResources>
             <testResource>
                 <directory>src/test/javascript</directory>
@@ -74,78 +72,114 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.5</version>
                 <executions>
                     <execution>
-                        <id>resources-only</id>
+                        <id>freemarker-resources</id>
                         <phase>generate-resources</phase>
                         <goals>
-                            <goal>resources</goal>
+                            <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.resources.directory}</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>js-only</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>resources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.outputDirectory}</outputDirectory>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>test-resources</id>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>testResources</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}</directory>
+                                    <includes>
+                                        <include>*.LICENSE</include>
+                                    </includes>
+                                    <filtering>false</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>${project.fmpp.sourceDirectory}</directory>
+                                    <includes>
+                                        <include>**/*.fmpp</include>
+                                    </includes>
+                                    <filtering>true</filtering>
+                                </resource>
+                                <resource>
+                                    <directory>${project.fmpp.sourceDirectory}</directory>
+                                    <includes>
+                                        <include>**/*.ftl</include>
+                                    </includes>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
+                            <useDefaultDelimiters>false</useDefaultDelimiters>
+                            <delimiters>
+                                <delimiter>${*}</delimiter>
+                            </delimiters>
+                            <outputDirectory>${project.fmpp.outputDirectory}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
+            <!-- Google Closures Compiler plugins -->
+            <plugin>
+                <groupId>com.github.jlgrock.javascript-framework</groupId>
+                <artifactId>jsar-maven-plugin</artifactId>
+                <version>${javascript.plugin.version}</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <excludes>
+                        <exclude>**/${project.build.finalName}.js</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.jlgrock.javascript-framework</groupId>
+                <artifactId>jspreprocessor-maven-plugin</artifactId>
+                <version>${javascript.plugin.version}</version>
+                <configuration>
+                    <sourceDirectory>${project.build.outputDirectory}</sourceDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.jlgrock.javascript-framework</groupId>
+                <artifactId>closure-compiler-maven-plugin</artifactId>
+                <version>${javascript.plugin.version}</version>
+                <configuration>
+                    <compileLevel>ADVANCED_OPTIMIZATIONS</compileLevel>
+                    <compiledFilename>${project.build.finalName}.js</compiledFilename>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.jlgrock.javascript-framework</groupId>
+                <artifactId>closure-testing-maven-plugin</artifactId>
+                <version>${javascript.plugin.version}</version>
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+            <!-- Freemarker pre-processor plugin. Needed to wrap content of the generated minified file -->
+            <plugin>
+                <groupId>com.googlecode.fmpp-maven-plugin</groupId>
+                <artifactId>fmpp-maven-plugin</artifactId>
+                <version>1.0</version>
+                <configuration>
+                    <cfgFile>${project.fmpp.outputDirectory}/config.fmpp</cfgFile>
+                    <outputDirectory>${project.js.outputDirectory}</outputDirectory>
+                    <templateDirectory>${project.fmpp.outputDirectory}</templateDirectory>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- BDD testing plugin -->
             <plugin>
                 <groupId>com.github.searls</groupId>
                 <artifactId>jasmine-maven-plugin</artifactId>
-                <version>1.1.0</version>
+                <version>${jasmine.plugin.version}</version>
                 <configuration>
-                    <jsSrcDir>${project.build.directory}/javascriptFramework/output/compiled</jsSrcDir>
+                    <jsSrcDir>${project.js.outputDirectory}</jsSrcDir>
                     <jsTestSrcDir>src/test/javascript</jsTestSrcDir>
-                    <preloadSources>
-<!--
-                        <preloadSource>${project.build.testOutputDirectory}/goog.base.setup.js</preloadSource>
-                        <preloadSource>${project.build.testOutputDirectory}/goog.base-r1129.js</preloadSource>
-                        <preloadSource>${project.build.testOutputDirectory}/goog.base.override.js</preloadSource>
--->
-
-<!--
-                        <preloadSource>utilities.js</preloadSource>
-
-                        <preloadSource>Enum.js</preloadSource>
-                        <preloadSource>Instant.js</preloadSource>
-                        <preloadSource>Chronology.js</preloadSource>
-                        <preloadSource>DateTime.js</preloadSource>
-
-                        <preloadSource>periodtype/PeriodType.js</preloadSource>
-
-                        <preloadSource>period/Period.js</preloadSource>
-
-                        <preloadSource>fieldtype/FieldType.js</preloadSource>
-                        <preloadSource>fieldtype/AbsoluteFieldType.js</preloadSource>
-                        <preloadSource>fieldtype/RelativeFieldType.js</preloadSource>
-
-                        <preloadSource>field/Field.js</preloadSource>
-                        <preloadSource>field/BasicField.js</preloadSource>
-
-                        <preloadSource>partial/PartialField.js</preloadSource>
-                        <preloadSource>partial/PartialInstant.js</preloadSource>
-                        <preloadSource>partial/DefaultPartialInstant.js</preloadSource>
--->
-                    </preloadSources>
+                    <sourceExcludes>
+                        <sourceExclude>${project.build.finalName}.js</sourceExclude>
+                    </sourceExcludes>
                 </configuration>
                 <executions>
                     <execution>
@@ -159,119 +193,7 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>com.github.jlgrock.javascript-framework</groupId>
-                <artifactId>jsar-maven-plugin</artifactId>
-                <version>1.10.3</version>
-                <extensions>true</extensions>
-            </plugin>
-            <plugin>
-                <groupId>com.github.jlgrock.javascript-framework</groupId>
-                <artifactId>jspreprocessor-maven-plugin</artifactId>
-                <version>1.10.3</version>
-                <configuration>
-                    <sourceDirectory>${project.build.outputDirectory}</sourceDirectory>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.github.jlgrock.javascript-framework</groupId>
-                <artifactId>closure-compiler-maven-plugin</artifactId>
-                <version>1.10.3</version>
-                <configuration>
-                    <compileLevel>ADVANCED_OPTIMIZATIONS</compileLevel>
-                    <compiledFilename></compiledFilename>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.github.jlgrock.javascript-framework</groupId>
-                <artifactId>closure-testing-maven-plugin</artifactId>
-                <version>1.10.3</version>
-                <configuration>
-                    <skipTests>true</skipTests>
-                </configuration>
-            </plugin>
-<!--
-            <plugin>
-                <groupId>com.dasberg.maven.plugins</groupId>
-                <artifactId>maven-closure-compiler-plugin</artifactId>
-                <version>1.0.0</version>
-                <configuration>
-                    <compilation_level>ADVANCED_OPTIMIZATIONS</compilation_level>
-                    <js_dir>${project.linker.directory}</js_dir>
-                    <js_output_dir>${project.build.directory}</js_output_dir>
-                    <version>min</version>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>pre-integration-test</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
--->
-<!--
-            <plugin>
-                <groupId>net.alchim31.maven</groupId>
-                <artifactId>yuicompressor-maven-plugin</artifactId>
-                <version>1.2</version>
-                <configuration>
-                    &lt;!&ndash;<sourceDirectory>${project.linked.directory}</sourceDirectory>&ndash;&gt;
-                    <preProcessAggregates>true</preProcessAggregates>
-                    <statistics>true</statistics>
-                    <excludes>
-                        <exclude>**/*.js</exclude>
-                    </excludes>
-                    &lt;!&ndash;<jswarn>false</jswarn>&ndash;&gt;
-                    <aggregations>
-                        <aggregation>
-                            <removeIncluded>false</removeIncluded>
-                            <insertNewLine>true</insertNewLine>
-                            <output>${project.linker.directory}/${project.build.finalName}.js</output>
-                            <inputDir>${basedir}/src/main/javascript</inputDir>
-                            <includes>
-                                <include>${project.resources.directory}/license.js</include>
-                                <include>${project.resources.directory}/wrap-header.txt</include>
-
-                                <include>utilities.js</include>
-
-                                <include>Enum.js</include>
-                                <include>Instant.js</include>
-                                <include>Chronology.js</include>
-                                <include>DateTime.js</include>
-
-                                <include>periodtype/PeriodType.js</include>
-
-                                <include>period/Period.js</include>
-
-                                <include>fieldtype/FieldType.js</include>
-                                <include>fieldtype/AbsoluteFieldType.js</include>
-                                <include>fieldtype/RelativeFieldType.js</include>
-
-                                <include>field/Field.js</include>
-                                <include>field/BasicField.js</include>
-
-                                <include>partial/PartialField.js</include>
-                                <include>partial/PartialInstant.js</include>
-                                <include>partial/DefaultPartialInstant.js</include>
-
-                                <include>${project.resources.directory}/interface.js</include>
-                                <include>${project.resources.directory}/wrap-footer.txt</include>
-                            </includes>
-                        </aggregation>
-                    </aggregations>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compress</goal>
-                            <goal>jslint</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
--->
+            <!-- Others -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>

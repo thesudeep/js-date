@@ -51,7 +51,7 @@ PeriodType.prototype["compareTo"] = PeriodType.prototype.compareTo;
 
 RelativeFieldType.prototype["toField"] = RelativeFieldType.prototype.toField;
 
-window["jsd8"] = {
+goog.global["jsd8"] = {
     "Instant": Instant,
     "DateTime": DateTime,
     "Chronology": Chronology,
