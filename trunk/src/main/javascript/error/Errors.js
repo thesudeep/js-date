@@ -15,7 +15,8 @@ var Errors = {
     MESSAGE_ENUM_ALREADY_EXISTS: "New Enum cannot be created because such enum already exists",
     MESSAGE_INVALID_ENUM: "The method cannot be executed for non-initialized Enum classes (check lazy loading)",
     MESSAGE_CLASS_CAST: "Class cast exception",
-    MESSAGE_NULL_POINTER: "Null pointer exception"
+    MESSAGE_NULL_POINTER: "Null pointer exception",
+    MESSAGE_PROGRAMMER_ERROR: "Something went wrong because of developer stupidity"
 };
 
 /**
@@ -65,4 +66,11 @@ Errors.throwClassCast = function () {
  */
 Errors.throwNullPointer = function () {
     throw new Error(Errors.MESSAGE_NULL_POINTER);
+};
+
+/**
+ * @throws {Error}
+ */
+Errors.throwProgrammerError = function () {
+    throw new Error(Errors.MESSAGE_PROGRAMMER_ERROR);
 };

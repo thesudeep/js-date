@@ -7,6 +7,7 @@ goog.require("Errors");
  * It means that cache key is a class/function of an {@link Enum} type, cache value is a map (object) with a
  * <code>name</code> as a key and <code>true</code> as a value.
  *
+ * @type {!Object.<string, Object.<string, !Enum>>}
  * @const
  * @private
  */
@@ -17,6 +18,7 @@ var ENUM_CACHE = {};
  * It means that cache key is a class/function of an {@link Enum} type, cache value is a list of registered enumerations of
  * such type
  *
+ * @type {!Object.<string, Array.<Enum>>}
  * @const
  * @private
  */
@@ -25,7 +27,7 @@ var ENUM_VALUES_CACHE = {};
 /**
  * Put given {@link Enum} in {@link ENUM_CACHE}, or throws an exception if such enumeration is already there.
  *
- * @param {Enum} e
+ * @param {!Enum} e
  * @throws {Error}
  * @private
  */
@@ -33,9 +35,9 @@ function cacheEnum(e) {
     var clazz = e._clazz;
     var name = e._name;
 
-    var current = getOrCreateCacheRecord(ENUM_CACHE, clazz);
+    var current = getOrCreateObject(ENUM_CACHE, clazz);
 
-    isDefined(current[name]) && Errors.throwEnumAlreadyExists();
+    current[name] && Errors.throwEnumAlreadyExists();
 
     current[name] = e;
 }
@@ -50,20 +52,22 @@ function cacheEnum(e) {
  * @author Victor Polischuk
  * @class Basic class for all enumeration implementations.
  *
+ * @param {string} clazz enumeration class name.
  * @param {number} ordinal index in queue of enumerations, can be seen as a priority or weight, but, basically,
  * used only in sorting purpose.
  * @param {string} name unique name of the enumeration instance.
  * @throws {Error} in case name is not unique and such enumeration is already existing.
  * @constructor
+ * @implements {_Enum}
  * @public
  */
-var Enum = function(ordinal, name) {
+var Enum = function(clazz, ordinal, name) {
     /**
-     * Enumeration class.
-     * @type {Function}
+     * Enumeration class name.
+     * @type {string}
      * @private
      */
-    this._clazz = this.constructor;
+    this._clazz = clazz;
     /**
      * Index in queue of enumerations, can be seen as a priority or weight, but, basically, used only in sorting purpose.
      * @type {number}
@@ -78,22 +82,17 @@ var Enum = function(ordinal, name) {
     this._name = name;
 
     cacheEnum(this);
-}
+};
 
 /**
  * Basic and universal comparator for any enum, in case it keeps "ordinal" convention and comparing by ordinal is enough.
  *
- * @param {Enum} left left comparable
- * @param {Enum} right right comparable
- * @return {number} <code>1</code> - in case passed enumeration has bigger ordinal,
- *                  <code>0</code> - if they are equal,
- *                  <code>-1</code> - otherwise.
+ * @type {!function(!Enum,!Enum):number}
  * @const
- * @static
  * @public
  */
 Enum.COMPARATOR = function(left, right) {
-    (isNotExist(left) || isNotExist(right)) && Errors.throwNullPointer();
+    left && right || Errors.throwNullPointer();
     (left._clazz !== right._clazz) && Errors.throwClassCast();
 
     return comparator(left._ordinal, right._ordinal);
@@ -102,23 +101,20 @@ Enum.COMPARATOR = function(left, right) {
 /**
  * Returns all enumerations of the given class.
  *
- * @param {Function} clazz enumeration class.
- * @return {Array.<Enum>} list of the registered enumerations.
+ * @param {string} className enumeration class.
+ * @return {!Array.<Enum>} list of the registered enumerations.
  * @throws {Error} in case given class does not associated to {@link Enum}
- * @const
  * @static
  * @public
  */
-Enum.values = function(clazz) {
-    var cache = ENUM_CACHE[clazz];
-
-    isUndefined(cache) && Errors.throwInvalidEnum();
+Enum.values = function(className) {
+    var cache = ENUM_CACHE[className] || Errors.throwInvalidEnum();
 
     /**
-     * @type {Array.<Enum>}
+     * @type {!Array.<Enum>}
      * @private
      */
-    var list = ENUM_VALUES_CACHE[clazz] || (ENUM_VALUES_CACHE[clazz] = []);
+    var list = ENUM_VALUES_CACHE[className] || (ENUM_VALUES_CACHE[className] = []);
 
     if (list.length === 0) {
         for (var key in cache) {
@@ -134,29 +130,79 @@ Enum.values = function(clazz) {
 /**
  * Return registered instance of the enumeration by its name.
  *
- * @param {Function} clazz enumeration class.
  * @param {string} name unique name of the enumeration instance.
+ * @param {string} className enumeration class.
  * @return {Enum} registered enumeration or <code>null</code> if such name does not exist.
  * @throws {Error} in case given class does not associated to {@link Enum}
  * @static
  * @public
  */
-Enum.valueOf = function(clazz, name) {
-    var cache = ENUM_CACHE[clazz];
+Enum.valueOf = function(name, className) {
+    var cache = ENUM_CACHE[className];
 
     isUndefined(cache) && Errors.throwInvalidEnum();
 
     return cache[name] || null;
 };
 
+///**
+// * Enumeration class name. Should be unique among all enumerations.
+// *
+// * @return {string} unique class name
+// * @public
+// */
+//Enum.prototype.getClass = function() {
+//    return this._clazz;
+//};
+
 /**
- * Enumeration unique name.
+ * Enumeration unique name. Should be unique inside current enumeration class.
  *
  * @return {string} unique name
  * @public
+ * @override
  */
 Enum.prototype.name = function () {
     return this._name;
+};
+
+/**
+ * Enumeration ordinal. Should be unique inside current enumeration class.
+ *
+ * @return {number} ordinal
+ * @public
+ * @override
+ */
+Enum.prototype.ordinal = function () {
+    return this._ordinal;
+};
+
+/**
+ * Strictly compares passed instance on equality to current.
+ *
+ * @param {Object} that enumeration.
+ * @return {boolean} <code>true</code> - in case given enumeration is the same as current,
+ *                   <code>false</code> - otherwise
+ * @public
+ * @override
+ */
+Enum.prototype.equals = function (that) {
+    return this === that;
+};
+
+/**
+ * Comparing given enumeration to the current one.
+ *
+ * @param {!Enum} that enumeration of the same class.
+ * @return {number} <code>1</code> - in case passed enumeration has bigger ordinal,
+ *                  <code>0</code> - if they are equal,
+ *                  <code>-1</code> - otherwise.
+ * @throws {Error} if enumeration are not the same class, or given parameter is not an enumeration at all.
+ * @public
+ * @override
+ */
+Enum.prototype.compareTo = function (that) {
+    return Enum.COMPARATOR(this, that);
 };
 
 /**
@@ -166,32 +212,5 @@ Enum.prototype.name = function () {
  * @public
  */
 Enum.prototype.toString = function () {
-    return this.name();
-};
-
-/**
- * Strictly compares passed instance on equality to current.
- *
- * @param {Enum} that enumeration.
- * @return {boolean} <code>true</code> - in case given enumeration is the same as current,
- *                   <code>false</code> - otherwise
- * @public
- */
-Enum.prototype.equals = function (that) {
-    return this === that;
-};
-
-/**
- * Comparing given enumeration to the current one.
- *
- * @param {Enum} that enumeration of the same class.
- * @return {number} <code>1</code> - in case passed enumeration has bigger ordinal,
- *                  <code>0</code> - if they are equal,
- *                  <code>-1</code> - otherwise.
- * @throws {Error} if enumeration are not the same class, or given parameter is not an enumeration at all.
- * @public
- * @see Enum.COMPARATOR
- */
-Enum.prototype.compareTo = function (that) {
-    return Enum.COMPARATOR(this, that);
+    return this._clazz + "." + this.name();
 };

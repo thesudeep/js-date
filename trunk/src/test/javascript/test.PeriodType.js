@@ -85,22 +85,20 @@
     describe("PeriodType.prototype.toPeriod()...", function () {
         var type = PeriodType.MONTH;
 
-        for (var i = 0; i < 13; i++) {
-            (function (n, inst) {
-                it("should always return the same instance for " + n, function () {
-                    expect(inst.toPeriod(n)).toBe(inst.toPeriod(n));
-                });
-            })(i, type);
-        }
-
-        it("should not return the same instance for values higher than 12", function () {
-            expect(type.toPeriod(13)).not.toBe(type.toPeriod(13));
+        it("should always return the same instance for 0", function () {
+            expect(type.toPeriod(0)).toBe(type.toPeriod(0));
         });
 
-        it("should throw an error in case of negative value", function () {
-            expect(function () {
-                return type.toPeriod(-1);
-            }).toThrow();
+        it("should always return the same instance for 1", function () {
+            expect(type.toPeriod(1)).toBe(type.toPeriod(1));
+        });
+
+        it("should not return the same instance for values higher than 1", function () {
+            expect(type.toPeriod(2)).not.toBe(type.toPeriod(2));
+        });
+
+        it("should return negative period in case of negative value", function () {
+            expect(type.toPeriod(-1)).toBe(type.one().negate());
         });
     });
 
@@ -128,135 +126,4 @@
         });
     });
 
-    describe("PeriodType.prototype.two()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.two()).toBe(type.two());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.two()).toBe(type.toPeriod(2));
-        });
-    });
-
-    describe("PeriodType.prototype.three()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.three()).toBe(type.three());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.three()).toBe(type.toPeriod(3));
-        });
-    });
-
-    describe("PeriodType.prototype.four()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.four()).toBe(type.four());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.four()).toBe(type.toPeriod(4));
-        });
-    });
-
-    describe("PeriodType.prototype.five()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.five()).toBe(type.five());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.five()).toBe(type.toPeriod(5));
-        });
-    });
-
-    describe("PeriodType.prototype.six()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.six()).toBe(type.six());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.six()).toBe(type.toPeriod(6));
-        });
-    });
-
-    describe("PeriodType.prototype.seven()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.seven()).toBe(type.seven());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.seven()).toBe(type.toPeriod(7));
-        });
-    });
-
-    describe("PeriodType.prototype.eight()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.eight()).toBe(type.eight());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.eight()).toBe(type.toPeriod(8));
-        });
-    });
-
-    describe("PeriodType.prototype.nine()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.nine()).toBe(type.nine());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.nine()).toBe(type.toPeriod(9));
-        });
-    });
-
-    describe("PeriodType.prototype.ten()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.ten()).toBe(type.ten());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.ten()).toBe(type.toPeriod(10));
-        });
-    });
-
-    describe("PeriodType.prototype.eleven()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.eleven()).toBe(type.eleven());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.eleven()).toBe(type.toPeriod(11));
-        });
-    });
-
-    describe("PeriodType.prototype.twelve()...", function () {
-        var type = PeriodType.MONTH;
-
-        it("should always return the same instance", function () {
-            expect(type.twelve()).toBe(type.twelve());
-        });
-
-        it("should return the same instance as toPeriod method", function () {
-            expect(type.twelve()).toBe(type.toPeriod(12));
-        });
-    });
 })();

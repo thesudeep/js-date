@@ -2,19 +2,18 @@
  * Undefined constant to avoid overriding <code>undefined</code> variable
  *
  * @const
- * @private
+ * @public
  */
 var VOID = (function () {
 })();
 
 /**
- *
- * @param {Object} cache
- * @param {*} key
- * @return {*}
+ * @param {!Object} object
+ * @param {string} key
+ * @return {!Object}
  */
-function getOrCreateCacheRecord(cache, key) {
-    return cache[key] || (cache[key] = {});
+function getOrCreateObject(object, key) {
+    return object[key] || (object[key] = {});
 }
 
 /**
@@ -91,12 +90,6 @@ function isNumeric(value) {
 }
 
 /**
- * @return {number}
- */
-function currentTimeInMillis() {
-    return new Date().getTime();
-}
-/**
  * Returns milliseconds of an argument value or current time if argument undefined or <code>null</code>. If
  * conversion is not possible exception will be thrown.
  *
@@ -106,7 +99,7 @@ function currentTimeInMillis() {
  */
 function getMillis(instant) {
     if (isNotExist(instant)) {
-        return currentTimeInMillis();
+        return goog.now();
     }
 
     if (goog.isNumber(instant)) {
@@ -127,3 +120,5 @@ function getMillis(instant) {
 
     throw new Error("Cannot be converted into number of milliseconds");
 }
+
+var jsd8 = getOrCreateObject(window, "jsd8");

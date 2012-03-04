@@ -52,6 +52,8 @@
         <javascript.plugin.version>1.10.4</javascript.plugin.version>
         <jasmine.plugin.version>1.1.0</jasmine.plugin.version>
 
+        <project.api.sourceDirectory>${project.build.sourceDirectory}/../externs</project.api.sourceDirectory>
+
         <project.fmpp.sourceDirectory>${project.build.sourceDirectory}/../freemarker</project.fmpp.sourceDirectory>
         <project.fmpp.outputDirectory>${project.build.directory}/freemarker</project.fmpp.outputDirectory>
 
@@ -65,7 +67,13 @@
     <build>
         <resources>
             <resource>
+                <directory>src/main/externs</directory>
+                <targetPath>api</targetPath>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
                 <directory>src/main/javascript</directory>
+                <targetPath>core</targetPath>
                 <filtering>true</filtering>
             </resource>
         </resources>
@@ -73,10 +81,6 @@
         <testResources>
             <testResource>
                 <directory>src/test/javascript</directory>
-                <filtering>true</filtering>
-            </testResource>
-            <testResource>
-                <directory>src/test/resources</directory>
                 <filtering>true</filtering>
             </testResource>
             <testResource>
@@ -102,6 +106,7 @@
                     <doCheck>false</doCheck>
                     <doUpdate>false</doUpdate>
                     <useLastCommittedRevision>true</useLastCommittedRevision>
+                    <getRevisionOnlyOnce>true</getRevisionOnlyOnce>
                     <buildNumberPropertyName>project.build.revision</buildNumberPropertyName>
                     <revisionOnScmFailure>undefined</revisionOnScmFailure>
                     <providerImplementations>
@@ -159,18 +164,14 @@
                 <artifactId>jsar-maven-plugin</artifactId>
                 <version>${javascript.plugin.version}</version>
                 <extensions>true</extensions>
-                <configuration>
-                    <excludes>
-                        <exclude>**/${project.build.finalName}.${project.build.revision}.js</exclude>
-                    </excludes>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>com.github.jlgrock.javascript-framework</groupId>
                 <artifactId>jspreprocessor-maven-plugin</artifactId>
                 <version>${javascript.plugin.version}</version>
                 <configuration>
-                    <sourceDirectory>${project.build.outputDirectory}</sourceDirectory>
+                    <sourceDirectory>${project.build.outputDirectory}/core</sourceDirectory>
+                    <externsDirectory>${project.build.outputDirectory}/api</externsDirectory>
                 </configuration>
             </plugin>
             <plugin>
@@ -179,7 +180,9 @@
                 <version>${javascript.plugin.version}</version>
                 <configuration>
                     <compileLevel>ADVANCED_OPTIMIZATIONS</compileLevel>
-                    <compiledFilename>${project.build.finalName}.${project.build.revision}.js</compiledFilename>
+                    <compiledFilename>
+                        ${project.build.finalName}.${project.build.revision}-body.temp.js
+                    </compiledFilename>
                 </configuration>
             </plugin>
             <plugin>
@@ -218,7 +221,7 @@
                     <jsSrcDir>${project.js.outputDirectory}</jsSrcDir>
                     <jsTestSrcDir>src/test/javascript</jsTestSrcDir>
                     <sourceExcludes>
-                        <sourceExclude>${project.build.finalName}.${project.build.revision}.js</sourceExclude>
+                        <sourceExclude>*.temp.js</sourceExclude>
                     </sourceExcludes>
                 </configuration>
                 <executions>
@@ -228,8 +231,33 @@
                             <goal>resources</goal>
                             <goal>testResources</goal>
                             <goal>test</goal>
-                            <goal>preparePackage</goal>
                         </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Clean temporary compilation results -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <version>2.4.1</version>
+                <executions>
+                    <execution>
+                        <id>clean-temporary</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>clean</goal>
+                        </goals>
+                        <configuration>
+                            <excludeDefaultDirectories>true</excludeDefaultDirectories>
+                            <filesets>
+                                <fileset>
+                                    <directory>${project.js.outputDirectory}</directory>
+                                    <includes>
+                                        <include>*.temp.js</include>
+                                    </includes>
+                                </fileset>
+                            </filesets>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -250,26 +278,11 @@
     <reporting>
         <plugins>
             <plugin>
-                <groupId>gr.abiss.mvn.plugins</groupId>
-                <artifactId>maven-jstools-plugin</artifactId>
-                <version>0.7</version>
+                <groupId>com.github.jlgrock.javascript-framework</groupId>
+                <artifactId>jsdocs-maven-plugin</artifactId>
+                <version>${javascript.plugin.version}</version>
                 <configuration>
-                    <jsDir>src/main/javascript</jsDir>
-                    <!--<jsDir>${project.linked.directory}</jsDir>-->
-                    <includePrivate>false</includePrivate>
-                    <includeUndocumented>false</includeUndocumented>
-                    <excludes>
-                        **/utilities.js
-                    </excludes>
                 </configuration>
-                <reportSets>
-                    <reportSet>
-                        <reports>
-                            <report>jslint</report>
-                            <report>jsdoc</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
             </plugin>
         </plugins>
     </reporting>

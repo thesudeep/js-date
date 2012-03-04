@@ -10,6 +10,7 @@ goog.provide("Instant");
  * @param {number} instant milliseconds.
  * @constructor
  * @public
+ * @implements {_Instant}
  */
 var Instant = function(instant) {
     /**
