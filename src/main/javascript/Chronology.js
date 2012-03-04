@@ -12,7 +12,42 @@ goog.require("PartialInstant");
  * @public
  */
 var Chronology = function () {
-}
+};
+
+/**
+ * @param {?Chronology} chronology
+ * @static
+ * @public
+ */
+Chronology.setDefault = function (chronology) {
+    /**
+     * @type {!Chronology}
+     * @private
+     */
+    Chronology.DEFAULT = chronology || Chronology.getSystemDefault && Chronology.getSystemDefault() || new Chronology();
+};
+
+/**
+ * @return {!Chronology}
+ * @static
+ * @public
+ */
+Chronology.getDefault = function () {
+    if (isUndefined(Chronology.DEFAULT)) {
+        Chronology.setDefault(null);
+    }
+
+    return Chronology.DEFAULT;
+};
+
+/**
+ *
+ * @param {number} instant
+ * @param {!Period} periodType
+ * @return {number}
+ * @public
+ */
+Chronology.prototype.computePeriod = goog.abstractMethod;
 
 /**
  *
@@ -20,6 +55,6 @@ var Chronology = function () {
  * @param {!FieldType} fieldType
  * @param {?PartialInstant} context
  * @return {!PartialInstant}
- * @private
+ * @public
  */
 Chronology.prototype.toPartialInstant = goog.abstractMethod;

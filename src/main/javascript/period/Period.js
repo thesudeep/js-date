@@ -1,19 +1,33 @@
 goog.provide("Period");
 
-goog.require("PeriodType");
-
 /**
  * JSDoc here
  *
  * @author Victor Polischuk
  * @class Class description
-
+ *
  * @constructor
  * @public
+ * @implements {_Period}
  */
 var Period = function () {
-
 };
+
+/**
+ *
+ * @return {!Period}
+ * @public
+ * @override
+ */
+Period.prototype.negate = goog.abstractMethod;
+
+/**
+ *
+ * @return {!Array.<PeriodField>}
+ * @public
+ * @override
+ */
+Period.prototype.list = goog.abstractMethod;
 
 /**
  *
@@ -21,14 +35,16 @@ var Period = function () {
  * @return {number}
  * @throws {Error} in case given period type is unsupported by the implementation
  * @public
+ * @override
  */
 Period.prototype.get = goog.abstractMethod;
 
 /**
  *
  * @param {number} instant
- * @param {?Chronology} chronology
+ * @param {Chronology=} chronology
  * @return {number}
  * @public
+ * @override
  */
 Period.prototype.toMillis = goog.abstractMethod;

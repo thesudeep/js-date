@@ -1,7 +1,8 @@
 goog.provide("SinglePeriod");
+goog.provide("SinglePeriod.Negative");
 
-goog.require("PeriodType");
-goog.require("Period");
+goog.require("BasePeriod");
+goog.require("BasePeriod.Negative");
 
 /**
  * JSDoc here
@@ -11,9 +12,11 @@ goog.require("Period");
 
  * @param {!PeriodType} type
  * @param {number} value
+
  * @constructor
- * @private
- * @extends {Period}
+ * @public
+ * @implements {PeriodField}
+ * @extends {BasePeriod}
  */
 var SinglePeriod = function (type, value) {
     SinglePeriod.superClass_.constructor.call(this);
@@ -28,156 +31,60 @@ var SinglePeriod = function (type, value) {
     this._value = value;
 };
 
-goog.inherits(SinglePeriod, Period);
+goog.inherits(SinglePeriod, BasePeriod);
 
-/**
- * @param {PeriodType=} type
- * @return {number}
- * @public
- * @override
- */
+/** @override */
+SinglePeriod.prototype.getType = function () {
+    return this._type;
+};
+
+/** @override */
+SinglePeriod.prototype.negate = function() {
+    return this._negative || (this._negative = new SinglePeriod.Negative(this));
+};
+
+/** @override */
+SinglePeriod.prototype.list = function () {
+    return [this]
+};
+
+/** @override */
 SinglePeriod.prototype.get = function (type) {
     type && type !== this._type && Errors.throwUnsupportedPeriodType();
 
     return this._value;
 };
 
-/**
- *
- * @param {number} instant
- * @param {?Chronology} chronology
- * @return {number}
- * @public
- * @override
- */
-SinglePeriod.prototype.toMillis = function (instant, chronology) {
+//------------------------ Inner class section -----------------------
 
+/**
+ * JSDoc here
+ *
+ * @class Private implementation of negative period
+ * @param {!Period} period
+ *
+ * @constructor
+ * @public
+ * @implements {PeriodField}
+ * @extends {BasePeriod.Negative}
+ */
+SinglePeriod.Negative = function(period) {
+    SinglePeriod.Negative.superClass_.constructor.call(this, period);
 };
 
-/**
- *
- * @param {number} value
- * @return {!Period}
- * @throws {Error} in case period value is negative
- * @public
- */
-PeriodType.prototype.toPeriod = function(value) {
-    value < 0 && Errors.throwNegaivePeriodValue();
+goog.inherits(SinglePeriod.Negative, BasePeriod.Negative);
 
-    switch (value) {
-        case 0: return this.zero();
-        case 1: return this.one();
-        case 2: return this.two();
-        case 3: return this.three();
-        case 4: return this.four();
-        case 5: return this.five();
-        case 6: return this.six();
-        case 7: return this.seven();
-        case 8: return this.eight();
-        case 9: return this.nine();
-        case 10: return this.ten();
-        case 11: return this.eleven();
-        case 12: return this.twelve();
-        default: return new SinglePeriod(this, value);
-    }
+/** @override */
+SinglePeriod.Negative.prototype.getType = function () {
+    return this._negative.getType();
 };
 
-/**
- * @return {!Period}
- * @const
- * @public
- */
-PeriodType.prototype.one = singlePeriodTypeFactory(1);
+/** @override */
+SinglePeriod.Negative.prototype.list = function () {
+    return [this];
+};
 
-/**
- * @return {!Period}
- * @const
- * @public
- */
-PeriodType.prototype.two = singlePeriodTypeFactory(2);
-
-/**
- * @return {!Period}
- * @const
- * @public
- */
-PeriodType.prototype.three = singlePeriodTypeFactory(3);
-
-/**
- * @return {!Period}
- * @const
- * @public
- */
-PeriodType.prototype.four = singlePeriodTypeFactory(4);
-
-/**
- * @return {!Period}
- * @const
- * @public
- */
-PeriodType.prototype.five = singlePeriodTypeFactory(5);
-
-/**
- * @return {!Period}
- * @const
- * @public
- */
-PeriodType.prototype.six = singlePeriodTypeFactory(6);
-
-/**
- * @return {!Period}
- * @const
- * @public
- */
-PeriodType.prototype.seven = singlePeriodTypeFactory(7);
-
-/**
- * @return {!Period}
- * @const
- * @public
- */
-PeriodType.prototype.eight = singlePeriodTypeFactory(8);
-
-/**
- * @return {!Period}
- * @const
- * @static
- * @public
- */
-PeriodType.prototype.nine = singlePeriodTypeFactory(9);
-
-/**
- * @return {!Period}
- * @const
- * @public
- */
-PeriodType.prototype.ten = singlePeriodTypeFactory(10);
-
-/**
- * @return {!Period}
- * @const
- * @static
- * @public
- */
-PeriodType.prototype.eleven = singlePeriodTypeFactory(11);
-
-/**
- * @return {!Period}
- * @const
- * @public
- */
-PeriodType.prototype.twelve = singlePeriodTypeFactory(12);
-
-/**
- *
- * @param {number} value
- * @return {function(this:PeriodType):!Period}
- * @private
- */
-function singlePeriodTypeFactory(value) {
-    return function () {
-        var key = String(value);
-
-        return this[key] || (this[key] = new SinglePeriod(this, value));
-    };
-}
+/** @override */
+SinglePeriod.Negative.prototype.get = function () {
+    return -this._negative.get();
+};

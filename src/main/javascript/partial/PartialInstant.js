@@ -12,48 +12,11 @@ goog.require("PartialField");
  * @public
  */
 var PartialInstant = function () {
-    this._fields = {
-
-    };
-    /**
-     * @type {PartialField}
-     * @private
-     */
-    this._year = new PartialField();
-    /**
-     * @type {PartialField}
-     * @private
-     */
-    this._month = new PartialField();
-    /**
-     * @type {PartialField}
-     * @private
-     */
-    this._date = new PartialField();
-    /**
-     * @type {PartialField}
-     * @private
-     */
-    this._hour = null;
-    /**
-     * @type {PartialField}
-     * @private
-     */
-    this._minute = null;
-    /**
-     * @type {PartialField}
-     * @private
-     */
-    this._second = null;
-    /**
-     * @type {PartialField}
-     * @private
-     */
-    this._millis = null;
-}
+};
 
 /**
+ * @param {number} instant
+ * @param {Chronology=} chronology
  * @return {number}
- * @throws {Error}
  */
-PartialInstant.prototype.toInstant = goog.abstractMethod;
+PartialInstant.prototype.toMillis = goog.abstractMethod;
