@@ -1,3 +1,4 @@
+goog.require("jsd8");
 goog.require("PeriodType");
 goog.require("Chronology");
 goog.require("Instant");

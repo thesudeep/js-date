@@ -1,3 +1,5 @@
+goog.provide("jsd8");
+
 /**
  * Undefined constant to avoid overriding <code>undefined</code> variable
  *
