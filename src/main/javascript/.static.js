@@ -1,3 +1,4 @@
+goog.require("jsd8");
 goog.require("PartialField");
 goog.require("PartialInstant");
 goog.require("FieldType");
