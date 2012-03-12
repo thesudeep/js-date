@@ -54,7 +54,7 @@ RelativeFieldType.prototype.toField = function(fieldValue) {
 /**
  * @type {!RelativeFieldType}
  */
-FieldType.YEARS_IN_MILLENIUM = new RelativeFieldType(PeriodType.YEAR, PeriodType.MILLENIUM);
+FieldType.YEARS_IN_MILLENNIUM = new RelativeFieldType(PeriodType.YEAR, PeriodType.MILLENNIUM);
 
 /**
  * @type {!RelativeFieldType}

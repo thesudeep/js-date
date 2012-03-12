@@ -19,7 +19,7 @@ goog.require("SinglePeriod");
  * @public
  */
 var PeriodType = function (ordinal, name) {
-    PeriodType.superClass_.constructor.call(this, PeriodType.CLASS, ordinal, name);
+    PeriodType.superClass_.constructor.call(this, ordinal, name);
 
     /**
      * @type {!Period}
@@ -29,12 +29,7 @@ var PeriodType = function (ordinal, name) {
 };
 
 goog.inherits(PeriodType, Enum);
-
-/**
- * @type {string}
- * @private
- */
-PeriodType.CLASS = "PeriodType";
+registerClass(PeriodType, "PeriodType");
 
 /**
  * @type {!Period}
@@ -49,7 +44,7 @@ PeriodType.ZERO = new ZeroPeriod();
  * @public
  */
 PeriodType.values = function () {
-    return Enum.values(PeriodType.CLASS);
+    return Enum.values(obtainClass(PeriodType));
 };
 
 /**
@@ -59,7 +54,7 @@ PeriodType.values = function () {
  * @public
  */
 PeriodType.valueOf = function (name) {
-    return /** @type {PeriodType} */ (Enum.valueOf(name, PeriodType.CLASS));
+    return /** @type {PeriodType} */ (Enum.valueOf(name, obtainClass(PeriodType)));
 };
 
 /**
@@ -116,7 +111,7 @@ PeriodType.prototype.toPeriod = function (value) {
  * @static
  * @public
  */
-PeriodType.MILLENIUM = new PeriodType(1000, "MILLENIUM");
+PeriodType.MILLENNIUM = new PeriodType(1000, "MILLENNIUM");
 /**
  * @type {!PeriodType}
  * @const

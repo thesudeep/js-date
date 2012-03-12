@@ -1,5 +1,7 @@
 goog.provide("Instant");
 
+goog.require("Class");
+
 /**
  * Simple presentation of a time instant. Does not contain time zone or chronology,
  * only milliseconds from/to Unix EPOCH.
@@ -10,6 +12,7 @@ goog.provide("Instant");
  * @param {number} instant milliseconds.
  * @constructor
  * @public
+ * @extends {Class}
  * @implements {_Instant}
  */
 var Instant = function(instant) {
@@ -19,6 +22,9 @@ var Instant = function(instant) {
      */
     this._instant = instant;
 };
+
+goog.inherits(Instant, Class);
+registerClass(Instant, "Instant");
 
 /**
  * Convenient method for new {@link Instant} instances creation. Use it rather than direct constructor execution.

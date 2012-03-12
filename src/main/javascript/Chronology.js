@@ -1,5 +1,6 @@
 goog.provide("Chronology");
 
+goog.require("Class");
 goog.require("FieldType");
 goog.require("PartialInstant");
 
@@ -10,9 +11,13 @@ goog.require("PartialInstant");
  * @constructor
  * @class Class description
  * @public
+ * @extends {Class}
  */
 var Chronology = function () {
 };
+
+goog.inherits(Chronology, Class);
+registerClass(Chronology, "Chronology");
 
 /**
  * @param {?Chronology} chronology
@@ -33,7 +38,7 @@ Chronology.setDefault = function (chronology) {
  * @public
  */
 Chronology.getDefault = function () {
-    if (isUndefined(Chronology.DEFAULT)) {
+    if (!Chronology.DEFAULT) {
         Chronology.setDefault(null);
     }
 

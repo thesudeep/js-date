@@ -9,8 +9,8 @@
     var PeriodType = jsd8.PeriodType;
 
     describe("PeriodType static API...", function () {
-        it("must have field MILLENIUM", function () {
-            expect(PeriodType.MILLENIUM).toBeDefined();
+        it("must have field MILLENNIUM", function () {
+            expect(PeriodType.MILLENNIUM).toBeDefined();
         });
 
         it("must have field CENTURY", function () {
