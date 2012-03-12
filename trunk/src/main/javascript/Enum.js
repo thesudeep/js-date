@@ -1,5 +1,6 @@
 goog.provide("Enum");
 
+goog.require("Class");
 goog.require("Errors");
 
 /**
@@ -58,16 +59,17 @@ function cacheEnum(e) {
  * @param {string} name unique name of the enumeration instance.
  * @throws {Error} in case name is not unique and such enumeration is already existing.
  * @constructor
+ * @extends {Class}
  * @implements {_Enum}
  * @public
  */
-var Enum = function(clazz, ordinal, name) {
+var Enum = function(ordinal, name) {
     /**
      * Enumeration class name.
      * @type {string}
      * @private
      */
-    this._clazz = clazz;
+    this._clazz = obtainClass(this.constructor);
     /**
      * Index in queue of enumerations, can be seen as a priority or weight, but, basically, used only in sorting purpose.
      * @type {number}
@@ -83,6 +85,9 @@ var Enum = function(clazz, ordinal, name) {
 
     cacheEnum(this);
 };
+
+goog.inherits(Enum, Class);
+registerClass(Enum, "Enum");
 
 /**
  * Basic and universal comparator for any enum, in case it keeps "ordinal" convention and comparing by ordinal is enough.

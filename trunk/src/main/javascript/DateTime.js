@@ -16,10 +16,7 @@ var DateTime = function () {
 }
 
 goog.inherits(DateTime, Instant);
-//inherits(DateTime, Instant);
-
-
-
+registerClass(DateTime, "DateTime");
 
 // Instant extends methods
 

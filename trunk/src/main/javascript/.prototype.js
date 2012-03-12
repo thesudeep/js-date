@@ -1,3 +1,5 @@
+goog.provide("exportPrototype");
+
 goog.require("jsd8");
 goog.require("PeriodType");
 goog.require("Chronology");
@@ -9,30 +11,32 @@ var symbolCount = 0;
 /**
  * @param {!(Function|Object)} symbol
  */
-var ensure = function(symbol) {
+var exportPrototype = function(symbol) {
     symbol && symbolCount++;
 };
 
-ensure(PeriodType.prototype.toPeriod);
-ensure(PeriodType.prototype.zero);
-ensure(PeriodType.prototype.one);
+exportPrototype(Class.prototype.getClass);
 
-ensure(Chronology.prototype.computePeriod);
-ensure(Chronology.prototype.toPartialInstant);
+exportPrototype(PeriodType.prototype.toPeriod);
+exportPrototype(PeriodType.prototype.zero);
+exportPrototype(PeriodType.prototype.one);
 
-ensure(Period.prototype.get);
-ensure(Period.prototype.list);
-ensure(Period.prototype.negate);
-ensure(Period.prototype.toMillis);
+exportPrototype(Chronology.prototype.computePeriod);
+exportPrototype(Chronology.prototype.toPartialInstant);
 
-ensure(SinglePeriod.prototype.getType);
+exportPrototype(Period.prototype.get);
+exportPrototype(Period.prototype.list);
+exportPrototype(Period.prototype.negate);
+exportPrototype(Period.prototype.toMillis);
 
-ensure(Instant.prototype.compareTo);
-ensure(Instant.prototype.equals);
-ensure(Instant.prototype.toDate);
-ensure(Instant.prototype.toDateTime);
-ensure(Instant.prototype.toInstant);
-ensure(Instant.prototype.toMillis);
+exportPrototype(SinglePeriod.prototype.getType);
+
+exportPrototype(Instant.prototype.compareTo);
+exportPrototype(Instant.prototype.equals);
+exportPrototype(Instant.prototype.toDate);
+exportPrototype(Instant.prototype.toDateTime);
+exportPrototype(Instant.prototype.toInstant);
+exportPrototype(Instant.prototype.toMillis);
 
 //AbsoluteFieldType.prototype["toField"] = AbsoluteFieldType.prototype.toField;
 
@@ -53,5 +57,5 @@ ensure(Instant.prototype.toMillis);
 
 //RelativeFieldType.prototype["toField"] = RelativeFieldType.prototype.toField;
 
-jsd8["symbols"] = symbolCount;
+symbols["prototype"] = symbolCount;
 

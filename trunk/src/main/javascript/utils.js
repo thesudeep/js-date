@@ -9,6 +9,8 @@ goog.provide("jsd8");
 var VOID = (function () {
 })();
 
+var CLASS = "CLASS";
+
 /**
  * @param {!Object} object
  * @param {string} key
@@ -16,6 +18,22 @@ var VOID = (function () {
  */
 function getOrCreateObject(object, key) {
     return object[key] || (object[key] = {});
+}
+
+/**
+ * @param {Function} clazz
+ * @return {string}
+ */
+function obtainClass(clazz) {
+    return clazz[CLASS] || "UnDeFiNeD";
+}
+
+/**
+ * @param {!Function} clazz
+ * @param {string} className
+ */
+function registerClass(clazz, className) {
+    clazz[CLASS] = className;
 }
 
 /**
@@ -124,3 +142,5 @@ function getMillis(instant) {
 }
 
 var jsd8 = getOrCreateObject(window, "jsd8");
+
+var symbols = jsd8["symbols"] = {};

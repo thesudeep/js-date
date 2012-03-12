@@ -9,6 +9,16 @@
     var Chronology = jsd8.Chronology;
     var PeriodType = jsd8.PeriodType;
 
+    describe("Chronology class...", function () {
+        it("must have static CLASS equals to Chronology", function () {
+            expect(Chronology.CLASS).toBe("Chronology");
+        });
+
+        it("must have instance method getClass() equals to Chronology", function () {
+            expect(new Chronology().getClass()).toBe("Chronology");
+        });
+    });
+
     describe("Chronology static API...", function () {
         it("must have method getDefault", function () {
             expect(Chronology.getDefault).toBeDefined();

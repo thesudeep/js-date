@@ -43,7 +43,7 @@ SystemChronology.prototype.computePeriod = function(instant, period) {
         var value = list[i].get();
 
         switch (periodType.ordinal()) {
-            case PeriodType.MILLENIUM.ordinal() :
+            case PeriodType.MILLENNIUM.ordinal() :
                 result.setFullYear(result.getFullYear() + value * 1000);
                 break;
             case PeriodType.CENTURY.ordinal() :

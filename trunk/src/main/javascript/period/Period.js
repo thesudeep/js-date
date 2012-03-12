@@ -1,5 +1,7 @@
 goog.provide("Period");
 
+goog.require("Class");
+
 /**
  * JSDoc here
  *
@@ -8,10 +10,14 @@ goog.provide("Period");
  *
  * @constructor
  * @public
+ * @extends {Class}
  * @implements {_Period}
  */
 var Period = function () {
 };
+
+goog.inherits(Period, Class);
+registerClass(Period, "Period");
 
 /**
  *
